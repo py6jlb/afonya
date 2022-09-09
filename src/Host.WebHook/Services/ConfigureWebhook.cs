@@ -1,12 +1,8 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Services.Dto;
+using Host.WebHook.Services.Dto;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
 
-namespace Services;
+namespace Host.WebHook.Services;
 
 public class ConfigureWebhook : IHostedService
 {

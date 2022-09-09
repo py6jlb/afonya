@@ -1,4 +1,4 @@
-namespace Services.Dto;
+namespace Host.WebHook.Services.Dto;
 
 public class BotConfiguration
 {
