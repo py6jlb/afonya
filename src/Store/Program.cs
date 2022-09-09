@@ -1,21 +1,16 @@
-var builder = WebApplication.CreateBuilder(args);
+using Store.Contexts;
+using Store.Contexts.Abstractions;
+using Store.Dto;
+using Store.Services;
+using Store.Services.Abstractions;
 
-// Add services to the container.
-builder.Services.AddRazorPages();
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.Configure<DbOptions>(builder.Configuration.GetSection("DbOptions"));
+builder.Services.AddSingleton<ILiteDbContext, DbContext>();
+builder.Services.AddTransient<IMoneyTransactionService, MoneyTransactionService>();
+builder.Services.AddControllers();
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-}
-app.UseStaticFiles();
-
 app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapRazorPages();
-
+app.MapControllers();
 app.Run();
