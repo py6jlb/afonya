@@ -1,10 +1,8 @@
-﻿using LiteDB;
+﻿namespace Store.Models;
 
-namespace Store.Entities;
-
-public class MoneyTransaction
+public class MoneyTransactionModel
 {
-    public ObjectId Id { get; set; }
+    public string? Id { get; set; }
     public float Value { get; set; }
     public string Sign { get; set; }
     public string CategoryName { get; set; }

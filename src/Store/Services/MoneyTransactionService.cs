@@ -31,7 +31,24 @@ public class MoneyTransactionService : IMoneyTransactionService
 
     public IEnumerable<MoneyTransaction> Get(MoneyTransactionFilter filter)
     {
-        throw new NotImplementedException();
+        var query = _db.GetCollection<MoneyTransaction>().Query();
+
+        filter.StartDate ??= DateTime.MinValue;
+        filter.EndDate ??= DateTime.MaxValue;
+
+        if (filter.IncludeDate)
+            query.Where(x => x.RegisterDate >= filter.StartDate && x.RegisterDate <= filter.EndDate);
+        else
+            query.Where(x => x.RegisterDate > filter.StartDate && x.RegisterDate < filter.EndDate);
+
+        if (string.IsNullOrWhiteSpace(filter.Category))
+            query.Where(x => x.CategoryName.Equals(filter.Category, StringComparison.InvariantCultureIgnoreCase));
+
+        if (string.IsNullOrWhiteSpace(filter.User))
+            query.Where(x => x.FromUserName.Equals(filter.User, StringComparison.InvariantCultureIgnoreCase));
+
+        var result = query.OrderBy(x => x.RegisterDate).ToEnumerable();
+        return result;
     }
 
     public MoneyTransaction Get(ObjectId id)

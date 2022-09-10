@@ -8,7 +8,7 @@ public interface IMoneyTransactionService
 {
     bool Delete(ObjectId id);
     IEnumerable<MoneyTransaction> Get(MoneyTransactionFilter filter);
-    MoneyTransaction Get(ObjectId id);
+    MoneyTransaction? Get(ObjectId id);
     ObjectId Insert(MoneyTransaction moneyTransaction);
     bool Update(MoneyTransaction moneyTransaction);
 }
