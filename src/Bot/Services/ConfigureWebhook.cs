@@ -1,22 +1,27 @@
-using Host.WebHook.Services.Dto;
+using Bot.Services.Dto;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
 
-namespace Host.WebHook.Services;
+namespace Bot.Services;
 
-public class ConfigureWebhook : IHostedService
+public class ConfigureWebHook : IHostedService
 {
-    private readonly ILogger<ConfigureWebhook> _logger;
+    private readonly ILogger<ConfigureWebHook> _logger;
     private readonly IServiceProvider _services;
     private readonly BotConfiguration _botConfig;
+    private readonly bool _useReverseProxy;
+    private readonly string _subdir;
 
-    public ConfigureWebhook(ILogger<ConfigureWebhook> logger,
-                            IServiceProvider serviceProvider,
-                            IConfiguration configuration)
+    public ConfigureWebHook(
+        ILogger<ConfigureWebHook> logger, 
+        IServiceProvider serviceProvider,
+        IConfiguration configuration)
     {
         _logger = logger;
         _services = serviceProvider;
         _botConfig = configuration.GetSection("BotConfiguration").Get<BotConfiguration>();
+        _ = bool.TryParse(configuration["USE_REVERSE_PROXY"], out _useReverseProxy);
+        _subdir = configuration["SUBDIR_PATH"] ?? "";
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -24,10 +29,11 @@ public class ConfigureWebhook : IHostedService
         using var scope = _services.CreateScope();
         var botClient = scope.ServiceProvider.GetRequiredService<ITelegramBotClient>();
 
-        var webhookAddress = @$"{_botConfig.HostAddress}/bot/{_botConfig.BotToken}";
-        _logger.LogInformation("Setting webhook: {webhookAddress}", webhookAddress);
-        await botClient.SetWebhookAsync(
-            url: webhookAddress,
+        var webHookAddress = _useReverseProxy ? 
+            $"{_botConfig.HostAddress}{_subdir}/bot/{_botConfig.BotToken}" : 
+            $"{_botConfig.HostAddress}/bot/{_botConfig.BotToken}";
+        _logger.LogInformation("Установка webHook: {webHookAddress}", webHookAddress);
+        await botClient.SetWebhookAsync(url: webHookAddress, 
             allowedUpdates: Array.Empty<UpdateType>(),
             cancellationToken: cancellationToken);
     }
@@ -36,7 +42,7 @@ public class ConfigureWebhook : IHostedService
     {
         using var scope = _services.CreateScope();
         var botClient = scope.ServiceProvider.GetRequiredService<ITelegramBotClient>();
-        _logger.LogInformation("Removing webhook");
+        _logger.LogInformation("Удаление webHook");
         await botClient.DeleteWebhookAsync(cancellationToken: cancellationToken);
     }
 }

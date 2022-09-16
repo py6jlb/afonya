@@ -6,7 +6,7 @@ using Telegram.Bot.Types.InlineQueryResults;
 using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Host.WebHook.Services;
+namespace Bot.Services;
 
 public class HandleUpdateService
 {

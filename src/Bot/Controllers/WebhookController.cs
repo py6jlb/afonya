@@ -1,10 +1,10 @@
-﻿using Host.WebHook.Services;
+﻿using Bot.Services;
 using Microsoft.AspNetCore.Mvc;
 using Telegram.Bot.Types;
 
-namespace Host.WebHook.Controllers;
+namespace Bot.Controllers;
 
-public class WebhookController : ControllerBase
+public class WebHookController : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> Post([FromServices] HandleUpdateService handleUpdateService,

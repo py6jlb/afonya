@@ -4,6 +4,7 @@ using Store.Dto;
 using Store.Entities;
 using Store.Models;
 using Store.Services.Abstractions;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Store.Controllers
 {
@@ -22,8 +23,13 @@ namespace Store.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<MoneyTransactionModel>> Get(DateTime? startDate, DateTime? endDate, 
-            string? user, string? category, bool include = false)
+        
+        public ActionResult<IEnumerable<MoneyTransactionModel>> Get(
+            [FromQuery, SwaggerParameter("Начало периода")]DateTime? startDate, 
+            [FromQuery, SwaggerParameter("Конец периода")]DateTime? endDate, 
+            [FromQuery, SwaggerParameter("Пользователь")]string? user, 
+            [FromQuery, SwaggerParameter("Код категории")]string? category, 
+            [FromQuery, SwaggerParameter("Включать начало и конец периода")]bool include = false)
         {
             var filter = new MoneyTransactionFilter
             {
@@ -65,7 +71,7 @@ namespace Store.Controllers
             };
             var id = _moneyTransaction.Insert(entity);
             entity.Id = id;
-            return entity;
+            return Ok(entity);
         }
 
         [HttpPut]
