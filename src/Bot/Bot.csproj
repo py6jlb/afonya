@@ -18,4 +18,8 @@
     <Folder Include="Extensions\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ExternalConfig\ExternalConfig.csproj" />
+  </ItemGroup>
+
 </Project>

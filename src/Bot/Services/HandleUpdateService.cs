@@ -2,7 +2,6 @@
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InlineQueryResults;
 using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
 
@@ -19,21 +18,21 @@ public class HandleUpdateService
         _logger = logger;
     }
 
-    public async Task EchoAsync(Update update)
+    public async Task HandleUpdate(Update update)
     {
         var handler = update.Type switch
         {
+            UpdateType.Message            => BotOnMessageReceived(update.Message!),
+            UpdateType.EditedMessage      => BotOnMessageReceived(update.EditedMessage!),
+            UpdateType.CallbackQuery      => BotOnCallbackQueryReceived(update.CallbackQuery!),
             // UpdateType.Unknown:
             // UpdateType.ChannelPost:
             // UpdateType.EditedChannelPost:
             // UpdateType.ShippingQuery:
             // UpdateType.PreCheckoutQuery:
             // UpdateType.Poll:
-            UpdateType.Message            => BotOnMessageReceived(update.Message!),
-            UpdateType.EditedMessage      => BotOnMessageReceived(update.EditedMessage!),
-            UpdateType.CallbackQuery      => BotOnCallbackQueryReceived(update.CallbackQuery!),
-            UpdateType.InlineQuery        => BotOnInlineQueryReceived(update.InlineQuery!),
-            UpdateType.ChosenInlineResult => BotOnChosenInlineResultReceived(update.ChosenInlineResult!),
+            //UpdateType.InlineQuery        => BotOnInlineQueryReceived(update.InlineQuery!),
+            //UpdateType.ChosenInlineResult => BotOnChosenInlineResultReceived(update.ChosenInlineResult!),
             _                             => UnknownUpdateHandlerAsync(update)
         };
 
@@ -51,7 +50,7 @@ public class HandleUpdateService
 
     private async Task BotOnMessageReceived(Message message)
     {
-        _logger.LogInformation("Receive message type: {MessageType}", message.Type);
+        _logger.LogInformation("Получено сообщение типа: {MessageType}", message.Type);
         if (message.Type != MessageType.Text)
             return;
 
@@ -60,10 +59,10 @@ public class HandleUpdateService
             "/inline"   => SendInlineKeyboard(_botClient, message),
             "/keyboard" => SendReplyKeyboard(_botClient, message),
             "/remove"   => RemoveKeyboard(_botClient, message),
-            "/photo"    => SendFile(_botClient, message),
             "/request"  => RequestContactAndLocation(_botClient, message),
             _           => Usage(_botClient, message)
         };
+
         Message sentMessage = await action;
         _logger.LogInformation("The message was sent with id: {SentMessageId}", sentMessage.MessageId);
 
@@ -151,12 +150,11 @@ public class HandleUpdateService
 
         static async Task<Message> Usage(ITelegramBotClient bot, Message message)
         {
-            const string usage = "Usage:\n" +
-                                 "/inline   - send inline keyboard\n" +
-                                 "/keyboard - send custom keyboard\n" +
-                                 "/remove   - remove custom keyboard\n" +
-                                 "/photo    - send a photo\n" +
-                                 "/request  - request location or contact";
+            const string usage = "Использование:\n" +
+                                 "/inline   - отправит инлайн клавиатуру\n" +
+                                 "/keyboard - отправит обычную клавиатуру\n" +
+                                 "/remove   - прячет клавиатуру\n" +
+                                 "/request  - запрос локации и контакта";
 
             return await bot.SendTextMessageAsync(chatId: message.Chat.Id,
                                                   text: usage,
@@ -176,37 +174,6 @@ public class HandleUpdateService
             text: $"Received {callbackQuery.Data}");
     }
 
-    #region Inline Mode
-
-    private async Task BotOnInlineQueryReceived(InlineQuery inlineQuery)
-    {
-        _logger.LogInformation("Received inline query from: {InlineQueryFromId}", inlineQuery.From.Id);
-
-        InlineQueryResult[] results = {
-            // displayed result
-            new InlineQueryResultArticle(
-                id: "3",
-                title: "TgBots",
-                inputMessageContent: new InputTextMessageContent(
-                    "hello"
-                )
-            )
-        };
-
-        await _botClient.AnswerInlineQueryAsync(inlineQueryId: inlineQuery.Id,
-                                                results: results,
-                                                isPersonal: true,
-                                                cacheTime: 0);
-    }
-
-    private Task BotOnChosenInlineResultReceived(ChosenInlineResult chosenInlineResult)
-    {
-        _logger.LogInformation("Received inline result: {ChosenInlineResultId}", chosenInlineResult.ResultId);
-        return Task.CompletedTask;
-    }
-
-    #endregion
-
     private Task UnknownUpdateHandlerAsync(Update update)
     {
         _logger.LogInformation("Unknown update type: {UpdateType}", update.Type);
@@ -215,13 +182,13 @@ public class HandleUpdateService
 
     public Task HandleErrorAsync(Exception exception)
     {
-        var ErrorMessage = exception switch
+        var errorMessage = exception switch
         {
             ApiRequestException apiRequestException => $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
             _ => exception.ToString()
         };
 
-        _logger.LogInformation("HandleError: {ErrorMessage}", ErrorMessage);
+        _logger.LogInformation("HandleError: {ErrorMessage}", errorMessage);
         return Task.CompletedTask;
     }
 }
