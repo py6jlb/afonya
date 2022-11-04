@@ -1,4 +1,5 @@
-﻿using Bot.Interfaces.Dto;
+﻿using Bot.Host.BasicAuth;
+using Bot.Interfaces.Dto;
 using Bot.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -20,7 +21,7 @@ namespace Bot.Host.Controllers
         }
 
         [HttpGet]
-        
+        [BasicAuth("Bot")]
         public ActionResult<IEnumerable<MoneyTransactionDto>> Get(
             [FromQuery, SwaggerParameter("Начало периода")]DateTime? startDate, 
             [FromQuery, SwaggerParameter("Конец периода")]DateTime? endDate, 
@@ -53,6 +54,7 @@ namespace Bot.Host.Controllers
         }
 
         [HttpPut]
+        [BasicAuth("Bot")]
         public ActionResult<bool> Put(MoneyTransactionDto data)
         {
             if (string.IsNullOrWhiteSpace(data.Id))

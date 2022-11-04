@@ -1,4 +1,5 @@
-﻿using Bot.Interfaces.Dto;
+﻿using Bot.Host.BasicAuth;
+using Bot.Interfaces.Dto;
 using Bot.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -19,6 +20,7 @@ public class CategoryController : ControllerBase
         _categoryService = categoryService;
     }
     
+    [BasicAuth("Bot")]
     public ActionResult<IEnumerable<CategoryDto>> Get([FromQuery, SwaggerParameter("Начало периода")]bool all = true)
     {
         var data = _categoryService.Get(!all);

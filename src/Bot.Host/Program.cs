@@ -22,6 +22,7 @@ builder.Services.AddSingleton<ILiteDbContext>(p =>
 
 builder.Services.AddHttpClient("tgwebhook")
     .AddTypedClient<ITelegramBotClient>(httpClient => new TelegramBotClient(botConfig.BotToken, httpClient));
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IHandleUpdateService, HandleUpdateService>();
 builder.Services.AddTransient<IMoneyTransactionService, MoneyTransactionService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();

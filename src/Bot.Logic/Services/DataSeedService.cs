@@ -27,20 +27,37 @@ public class DataSeedService : IHostedService
     {
         using var scope = _services.CreateScope();
         var categoryService = _services.GetRequiredService<ICategoryService>();
-        var notNull = categoryService.CategoriesExists();
-        if (notNull) return Task.CompletedTask;
-        
-        var categories = _configuration.GetSection("Categories")
-            .Get<CategoryDto[]>().Select(x => { x.IsActive = true; return x; });
-        foreach (var categoryDto in categories)
-        {
-            categoryService.AddCategory(categoryDto);
-        }
+        InitCategories(categoryService);
+        var userService = _services.GetRequiredService<IUserService>();
+        InitUsers(userService);
         return Task.CompletedTask;
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
+    }
+
+    private void InitCategories(ICategoryService srv)
+    {
+        var notNull = srv.CategoriesExists();
+        if (notNull) return;
+        
+        var categories = _configuration.GetSection("Categories")
+            .Get<CategoryDto[]>().Select(x => { x.IsActive = true; return x; });
+        foreach (var categoryDto in categories)
+        {
+            srv.AddCategory(categoryDto);
+        }
+    }
+
+    private void InitUsers(IUserService srv)
+    {
+        var notNull = srv.UsersExists();
+        var users = _configuration.GetSection("Users").Get<UserDto[]>();
+        foreach (var usersDto in users)
+        {
+            srv.AddUser(usersDto);
+        }
     }
 }

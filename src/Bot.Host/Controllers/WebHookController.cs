@@ -6,10 +6,17 @@ namespace Bot.Host.Controllers;
 
 public class WebHookController : ControllerBase
 {
-    [HttpPost]
-    public async Task<IActionResult> Post([FromServices] IHandleUpdateService handleUpdateService, [FromBody] Update update)
+    private readonly IHandleUpdateService _handleUpdateService;
+
+    public WebHookController(IHandleUpdateService handleUpdateService)
     {
-        await handleUpdateService.HandleUpdate(update);
+        _handleUpdateService = handleUpdateService;
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] Update update)
+    {
+        await _handleUpdateService.HandleUpdate(update);
         return Ok();
     }
 }
