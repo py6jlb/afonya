@@ -31,4 +31,24 @@ public class CategoryService : ICategoryService
             IsActive = x.IsActive
         });
     }
+
+    public bool CategoriesExists()
+    {
+        var res = _db.GetCollection<Category>().Count() > 0;
+        return res;
+    }
+
+    public string AddCategory(CategoryDto category)
+    {
+        var entity = new Category
+        {
+            Name = category.Name,
+            HumanName = category.HumanName,
+            Icon = category.Icon,
+            IsActive = category.IsActive
+        };
+
+        var res = _db.GetCollection<Category>().Insert(entity);
+        return res.ToString();
+    }
 }

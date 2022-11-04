@@ -36,7 +36,7 @@ public class ConfigureWebHook : IHostedService
         var webHookAddress = _useReverseProxy ? 
             $"{_botConfig.HostAddress}{_subdir}/bot/{_botConfig.BotToken}" : 
             $"{_botConfig.HostAddress}/bot/{_botConfig.BotToken}";
-        _logger.LogInformation("��������� webHook: {webHookAddress}", webHookAddress);
+        _logger.LogInformation("Set webHook: {webHookAddress}", webHookAddress);
         await botClient.SetWebhookAsync(url: webHookAddress, 
             allowedUpdates: Array.Empty<UpdateType>(),
             cancellationToken: cancellationToken);
@@ -46,7 +46,7 @@ public class ConfigureWebHook : IHostedService
     {
         using var scope = _services.CreateScope();
         var botClient = scope.ServiceProvider.GetRequiredService<ITelegramBotClient>();
-        _logger.LogInformation("�������� webHook");
+        _logger.LogInformation("Delete webHook");
         await botClient.DeleteWebhookAsync(cancellationToken: cancellationToken);
     }
 }

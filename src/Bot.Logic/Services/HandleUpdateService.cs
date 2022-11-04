@@ -1,9 +1,7 @@
 ﻿using System.Globalization;
-using Bot.Domain.Entities;
 using Bot.Interfaces.Dto;
 using Bot.Interfaces.Services;
 using Common.Extensions;
-using LiteDB;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Telegram.Bot;

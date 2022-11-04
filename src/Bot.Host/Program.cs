@@ -15,11 +15,14 @@ builder.Services.AddSwaggerGeneration();
 
 //DI
 builder.Services.AddHostedService<ConfigureWebHook>();
+builder.Services.AddHostedService<DataSeedService>();
+
 builder.Services.AddSingleton<ILiteDbContext>(p => 
     new DbContext(builder.Configuration.GetConnectionString("Default")));
+
 builder.Services.AddHttpClient("tgwebhook")
     .AddTypedClient<ITelegramBotClient>(httpClient => new TelegramBotClient(botConfig.BotToken, httpClient));
-builder.Services.AddScoped<HandleUpdateService>();
+builder.Services.AddScoped<IHandleUpdateService, HandleUpdateService>();
 builder.Services.AddTransient<IMoneyTransactionService, MoneyTransactionService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddControllers();
