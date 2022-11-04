@@ -4,6 +4,8 @@ public class MoneyTransactionDto
 {
     public string? Id { get; set; }
     public float Value { get; set; }
+    public int MessageId { get; set; }
+    public long ChatId { get; set; }
     public string Sign { get; set; }
     public string CategoryName { get; set; }
     public string CategoryHumanName { get; set; }

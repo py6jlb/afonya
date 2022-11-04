@@ -131,7 +131,7 @@ public class HandleUpdateService : IHandleUpdateService
         var isFloat = float.TryParse(msgText, NumberStyles.Any, CultureInfo.InvariantCulture, out var num);
         if (isFloat)
         {
-            var savedData = new MoneyTransaction
+            var savedData = new MoneyTransactionDto()
             {
                 FromUserName = message.From.Username,
                 Value = num,
@@ -182,7 +182,7 @@ public class HandleUpdateService : IHandleUpdateService
         var category = categoryCollection.First(x => x.Name == callbackData.Ctg);
         var msg = $"{callbackQuery.Message.Text}, в категории \"{category.HumanName}\" {category.Icon}";
 
-        var data = _moneyTransaction.Get(new ObjectId(callbackData.Id));
+        var data = _moneyTransaction.Get(callbackData.Id);
         if (data == null)
         {
             _logger.LogError("Отсуствуют данные для обновдления. {msq}", category);

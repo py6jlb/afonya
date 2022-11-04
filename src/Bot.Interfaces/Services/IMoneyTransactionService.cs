@@ -1,14 +1,12 @@
-﻿using Bot.Domain.Entities;
-using Bot.Interfaces.Dto;
-using LiteDB;
+﻿using Bot.Interfaces.Dto;
 
 namespace Bot.Interfaces.Services;
 
 public interface IMoneyTransactionService
 {
-    bool Delete(ObjectId id);
-    IEnumerable<MoneyTransaction> Get(MoneyTransactionFilter filter);
-    MoneyTransaction? Get(ObjectId id);
-    ObjectId Insert(MoneyTransaction moneyTransaction);
-    bool Update(MoneyTransaction moneyTransaction);
+    bool Delete(string id);
+    IEnumerable<MoneyTransactionDto> Get(MoneyTransactionFilter filter);
+    MoneyTransactionDto? Get(string id);
+    string Insert(MoneyTransactionDto moneyTransaction);
+    bool Update(MoneyTransactionDto moneyTransaction);
 }

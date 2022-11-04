@@ -1,7 +1,5 @@
-﻿using Bot.Domain.Entities;
-using Bot.Interfaces.Dto;
+﻿using Bot.Interfaces.Dto;
 using Bot.Interfaces.Services;
-using LiteDB;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -60,7 +58,7 @@ namespace Bot.Host.Controllers
             if (string.IsNullOrWhiteSpace(data.Id))
                 return BadRequest("Отсуствует id записи для обновления.");
 
-            var entity = _moneyTransaction.Get(new ObjectId(data.Id));
+            var entity = _moneyTransaction.Get(data.Id);
             if (entity == null) return NotFound("Запись для обновления отсуствует");
 
             entity.Value = data.Value;
