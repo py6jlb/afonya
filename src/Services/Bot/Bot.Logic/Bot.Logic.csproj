@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\Common.csproj" />
       <ProjectReference Include="..\Bot.Infrastructure\Bot.Infrastructure.csproj" />
-      <ProjectReference Include="..\Common\Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>

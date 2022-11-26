@@ -40,7 +40,7 @@ namespace Bot.Host.Controllers
 
             var data = _moneyTransaction.Get(filter).Select(x=> new MoneyTransactionDto
             {
-                Id = x.Id.ToString(), 
+                Id = x.Id?.ToString(), 
                 CategoryName = x.CategoryName, 
                 CategoryHumanName = x.CategoryHumanName, 
                 CategoryIcon = x.CategoryIcon, 
