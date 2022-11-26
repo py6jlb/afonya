@@ -7,17 +7,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{01
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{5CEBE690-CD30-477F-87F0-63CB87519527}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bot", "Bot", "{E95BFE4D-A215-4B56-9CCF-7E13349C06C4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MoneyBot", "MoneyBot", "{E95BFE4D-A215-4B56-9CCF-7E13349C06C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot.Domain", "Services\Bot\Bot.Domain\Bot.Domain.csproj", "{8A415F7F-7A08-491C-9BDC-3DE220868557}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyBot.Domain", "Services\Bot\MoneyBot.Domain\MoneyBot.Domain.csproj", "{8A415F7F-7A08-491C-9BDC-3DE220868557}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot.Interfaces", "Services\Bot\Bot.Interfaces\Bot.Interfaces.csproj", "{62C640F2-3BFD-44C8-9E40-AE0CEF104E95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyBot.Interfaces", "Services\Bot\MoneyBot.Interfaces\MoneyBot.Interfaces.csproj", "{62C640F2-3BFD-44C8-9E40-AE0CEF104E95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot.WebWorker", "Services\Bot\Bot.WebWorker\Bot.WebWorker.csproj", "{C8F6C330-934C-4ED1-AF63-D5089B3D8F20}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyBot.WebWorker", "Services\Bot\MoneyBot.WebWorker\MoneyBot.WebWorker.csproj", "{C8F6C330-934C-4ED1-AF63-D5089B3D8F20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot.Infrastructure", "Services\Bot\Bot.Infrastructure\Bot.Infrastructure.csproj", "{3BF4C73C-A134-47ED-A162-D313D7F8426D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyBot.Infrastructure", "Services\Bot\MoneyBot.Infrastructure\MoneyBot.Infrastructure.csproj", "{3BF4C73C-A134-47ED-A162-D313D7F8426D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot.Logic", "Services\Bot\Bot.Logic\Bot.Logic.csproj", "{9B6503CF-0A84-4E9B-9C90-22A9C2BB19CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyBot.Logic", "Services\Bot\MoneyBot.Logic\MoneyBot.Logic.csproj", "{9B6503CF-0A84-4E9B-9C90-22A9C2BB19CD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{3FC9CD1C-FB96-4A5E-BA1F-CB8A6FCAD131}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Web", "Services\Identity\Identity.Web\Identity.Web.csproj", "{4EBD9617-46FF-4D8D-AC32-54BACF671A36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +53,10 @@ Global
 		{9B6503CF-0A84-4E9B-9C90-22A9C2BB19CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B6503CF-0A84-4E9B-9C90-22A9C2BB19CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B6503CF-0A84-4E9B-9C90-22A9C2BB19CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EBD9617-46FF-4D8D-AC32-54BACF671A36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EBD9617-46FF-4D8D-AC32-54BACF671A36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EBD9617-46FF-4D8D-AC32-54BACF671A36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EBD9617-46FF-4D8D-AC32-54BACF671A36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,5 +71,7 @@ Global
 		{C8F6C330-934C-4ED1-AF63-D5089B3D8F20} = {E95BFE4D-A215-4B56-9CCF-7E13349C06C4}
 		{3BF4C73C-A134-47ED-A162-D313D7F8426D} = {E95BFE4D-A215-4B56-9CCF-7E13349C06C4}
 		{9B6503CF-0A84-4E9B-9C90-22A9C2BB19CD} = {E95BFE4D-A215-4B56-9CCF-7E13349C06C4}
+		{3FC9CD1C-FB96-4A5E-BA1F-CB8A6FCAD131} = {01AC8213-FE77-44CE-9102-00A2EB0AA16F}
+		{4EBD9617-46FF-4D8D-AC32-54BACF671A36} = {3FC9CD1C-FB96-4A5E-BA1F-CB8A6FCAD131}
 	EndGlobalSection
 EndGlobal

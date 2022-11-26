@@ -7,10 +7,18 @@ namespace Common.Extensions;
 
 public static class ReverseProxyExtensions
 {
-    public static WebApplication ConfigWithReverseProxy(this WebApplication app, IConfiguration config)
+    /// <summary>
+    /// Добавить реверсивный прокси
+    /// </summary>
+    /// <param name="app">приложение</param>
+    /// <param name="config">конфигурация</param>
+    public static WebApplication UseReverseProxy(this WebApplication app, IConfiguration config)
     {
         _ = bool.TryParse(config["USE_REVERSE_PROXY"], out var behindReverseProxy);
         if (!behindReverseProxy) return app;
+        
+        var subDirPath = config["SUBDIR"];
+        if (!string.IsNullOrWhiteSpace(subDirPath)) app.UsePathBase(new PathString(subDirPath));
         
         var forwardedHeaderOptions = new ForwardedHeadersOptions
         {
@@ -19,10 +27,8 @@ public static class ReverseProxyExtensions
         forwardedHeaderOptions.KnownNetworks.Clear();
         forwardedHeaderOptions.KnownProxies.Clear();
         app.UseForwardedHeaders(forwardedHeaderOptions);
-        var subDirPath = config["SUBDIR_PATH"];
-        
-        if (!string.IsNullOrWhiteSpace(subDirPath)) app.UsePathBase(new PathString(subDirPath));
 
         return app;
     }
+
 }
