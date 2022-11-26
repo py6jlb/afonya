@@ -19,38 +19,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2308db03-f33e-45b0-80c6-8c21dcc98dc3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/HttpClients/Abstractions/IManageService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/HttpClients/ManageService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/Pages/Manage.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/Pages/Users.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/appsettings.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Afonya/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Afonya/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/Afonya.WebUi.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.WebUi/Afonya.WebUi.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/App.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.WebUi/App.razor" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/Pages/Counter.razor" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/Pages/FetchData.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.WebUi/Pages/Categories.razor" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/Pages/Index.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.WebUi/Pages/Index.razor" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.WebUi/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/Pages/Manage.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.WebUi/Pages/Manage.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/Shared/MainLayout.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.WebUi/Shared/MainLayout.razor" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Afonya.WebUi/Shared/NavMenu.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.WebUi/Shared/NavMenu.razor" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/Shared/SurveyPrompt.razor" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/sample-data/weather.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Afonya.sln" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Afonya.MoneyBot.Interfaces.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Afonya.MoneyBot.Interfaces.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Dto/CategoryDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Shared/Contracts/CategoryDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Dto/MoneyTransactionDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Shared/Contracts/MoneyTransactionDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Dto/MoneyTransactionFilter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Shared/Contracts/MoneyTransactionFilter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Dto/UserDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Shared/Contracts/UserDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Services/ICategoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Services/ICategoryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Services/IMoneyTransactionService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Services/IMoneyTransactionService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Services/IUserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Services/IUserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/CategoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/CategoryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/DataSeedService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/DataSeedService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/HandleUpdateService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/HandleUpdateService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/MoneyTransactionService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/MoneyTransactionService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/UserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/UserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Controllers/DataController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Controllers/DataController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Controllers/ManageController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Controllers/ManageController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/Afonya.Identity.Web.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/Afonya.Identity.Web.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/Config/Config.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/Config/Config.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,7 +78,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected=".NET Launch Settings Profile.Afonya.WebUi">
+  <component name="RunManager" selected=".NET Launch Settings Profile.Afonya.Identity.Web: Identity.Web">
     <configuration name="Afonya.Identity.Web: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/Afonya.Identity.Web.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net6.0" />
@@ -168,7 +145,7 @@
       <workItem from="1669454880122" duration="10899000" />
       <workItem from="1669466102728" duration="217000" />
       <workItem from="1669466326800" duration="1567000" />
-      <workItem from="1669468192088" duration="3525000" />
+      <workItem from="1669468192088" duration="6485000" />
     </task>
     <servers />
   </component>

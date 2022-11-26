@@ -13,15 +13,14 @@
 <p>Этот компонент позволяет добавлять\удалять webHook телеграм, для бота.</p>
 
 <h3>Статус:</h3>
-<pre>@{_json}</pre>
+<pre>@Json</pre>
 
 @code {
-
-    private string _json = "";
+    private string Json;
     protected override async Task OnInitializedAsync()
     {
         var result = await ManageService.GetStatus();
-        _json = JsonSerializer.Serialize(result, new JsonSerializerOptions
+        Json = JsonSerializer.Serialize(result, new JsonSerializerOptions
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             PropertyNameCaseInsensitive = true,

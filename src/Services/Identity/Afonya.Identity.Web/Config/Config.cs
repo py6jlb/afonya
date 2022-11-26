@@ -26,6 +26,26 @@ public class Config
         });
     } 
     
+    public static IEnumerable<IdentityResource> GetIdentityResources()
+    {
+        return new IdentityResource[]
+        {
+            new IdentityResources.OpenId(),
+            new IdentityResources.Profile(),
+            // You may add other identity resources like address,phone... etc
+            //new IdentityResources.Address()
+        };
+    }
+    
+    public IEnumerable<ApiResource> GetApis()
+    {
+        return new ApiResource[]
+        {
+            new ApiResource("identity.api", "Identity API"),
+            new ApiResource("test.api","Test API")
+        };
+    }
+    
     private ICollection<string> CalcGrantType(string type)
     {
         return type switch
