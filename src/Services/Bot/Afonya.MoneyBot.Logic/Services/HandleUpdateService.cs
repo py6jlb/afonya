@@ -4,6 +4,7 @@ using Afonya.MoneyBot.Interfaces.Services;
 using Common.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Shared.Contracts;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;

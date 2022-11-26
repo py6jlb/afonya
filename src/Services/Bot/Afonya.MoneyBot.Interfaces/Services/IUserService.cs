@@ -1,4 +1,4 @@
-﻿using Afonya.MoneyBot.Interfaces.Dto;
+﻿using Shared.Contracts;
 
 namespace Afonya.MoneyBot.Interfaces.Services;
 

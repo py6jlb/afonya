@@ -1,4 +1,4 @@
-﻿namespace Afonya.MoneyBot.Interfaces.Dto;
+﻿namespace Shared.Contracts;
 
 public class CategoryDto
 {

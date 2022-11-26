@@ -1,10 +1,10 @@
 ﻿using Afonya.MoneyBot.Domain.Entities;
 using Afonya.MoneyBot.Interfaces;
-using Afonya.MoneyBot.Interfaces.Dto;
 using Afonya.MoneyBot.Interfaces.Services;
 using Common.Exceptions;
 using LiteDB;
 using Microsoft.Extensions.Logging;
+using Shared.Contracts;
 
 namespace Afonya.MoneyBot.Logic.Services;
 
@@ -12,7 +12,6 @@ public class CategoryService : ICategoryService
 {
     private readonly ILogger<CategoryService> _logger;
     private readonly LiteDatabase _db;
-    private ICategoryService _categoryServiceImplementation;
 
     public CategoryService(ILogger<CategoryService> logger, ILiteDbContext context)
     {

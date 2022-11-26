@@ -2,6 +2,7 @@
 using Afonya.MoneyBot.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts;
 using Swashbuckle.AspNetCore.Annotations;
 using Telegram.Bot;
 using Telegram.Bot.Types;

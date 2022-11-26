@@ -11,6 +11,7 @@
     <projectFile profileName="IIS Express">Services/Bot/Afonya.MoneyBot.WebWorker/Afonya.MoneyBot.WebWorker.csproj</projectFile>
     <projectFile profileName="Bot.Host">Services/Bot/Bot.WebWorker/Bot.WebWorker.csproj</projectFile>
     <projectFile profileName="IIS Express">Services/Bot/Bot.WebWorker/Bot.WebWorker.csproj</projectFile>
+    <projectFile profileName="IIS Express">Services/Identity/Afonya.Identity.Web/Afonya.Identity.Web.csproj</projectFile>
     <projectFile profileName="IIS Express">Services/Identity/Identity.Web/Identity.Web.csproj</projectFile>
     <projectFile profileName="Identity.Web">Services/Identity/Identity.Web/Identity.Web.csproj</projectFile>
     <projectFile profileName="IIS Express">WebUI/WebUI.csproj</projectFile>
@@ -18,87 +19,38 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2308db03-f33e-45b0-80c6-8c21dcc98dc3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Afonya/.idea/projectSettingsUpdater.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Afonya/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/Afonya.WebUi.csproj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/App.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/Pages/Counter.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/Pages/FetchData.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/Pages/Index.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/Program.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/Properties/launchSettings.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/Shared/MainLayout.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/Shared/MainLayout.razor.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/Shared/NavMenu.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/Shared/NavMenu.razor.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/Shared/SurveyPrompt.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/_Imports.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/css/app.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/css/bootstrap/bootstrap.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/css/bootstrap/bootstrap.min.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/css/open-iconic/FONT-LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/css/open-iconic/ICON-LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/css/open-iconic/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/css/open-iconic/font/css/open-iconic-bootstrap.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/css/open-iconic/font/fonts/open-iconic.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/css/open-iconic/font/fonts/open-iconic.otf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/css/open-iconic/font/fonts/open-iconic.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/css/open-iconic/font/fonts/open-iconic.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/css/open-iconic/font/fonts/open-iconic.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/icon-192.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/sample-data/weather.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/afonya.sln.DotSettings" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.afonya/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.afonya/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.afonya/.idea/.name" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.afonya/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Domain/Entities/Category.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Domain/Entities/Category.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Domain/Entities/MoneyTransaction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Domain/Entities/MoneyTransaction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Domain/Entities/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Domain/Entities/User.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Domain/MoneyBot.Domain.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Domain/Afonya.MoneyBot.Domain.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Infrastructure/Contexts/DbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Infrastructure/Contexts/DbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Infrastructure/MoneyBot.Infrastructure.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Infrastructure/Afonya.MoneyBot.Infrastructure.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Interfaces/Dto/BotConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Dto/BotConfiguration.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Interfaces/Dto/CallbackInfoDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Dto/CallbackInfoDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Interfaces/Dto/CategoryDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Dto/CategoryDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Interfaces/Dto/MoneyTransactionDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Dto/MoneyTransactionDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Interfaces/Dto/MoneyTransactionFilter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Dto/MoneyTransactionFilter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Interfaces/Dto/UserDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Dto/UserDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Interfaces/ILiteDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/ILiteDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Interfaces/MoneyBot.Interfaces.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Afonya.MoneyBot.Interfaces.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Interfaces/Services/ICategoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Services/ICategoryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Interfaces/Services/IHandleUpdateService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Services/IHandleUpdateService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Interfaces/Services/IMoneyTransactionService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Services/IMoneyTransactionService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Interfaces/Services/IUserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Services/IUserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Logic/MoneyBot.Logic.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Afonya.MoneyBot.Logic.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Logic/Services/CategoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/CategoryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Logic/Services/DataSeedService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/DataSeedService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Logic/Services/HandleUpdateService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/HandleUpdateService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Logic/Services/MoneyTransactionService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/MoneyTransactionService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.Logic/Services/UserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/UserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.WebWorker/.dockerignore" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/.dockerignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.WebWorker/Controllers/DataController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Controllers/DataController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.WebWorker/Controllers/ManageController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Controllers/ManageController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.WebWorker/Controllers/WebHookController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Controllers/WebHookController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.WebWorker/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.WebWorker/Extensions/StartupExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Extensions/StartupExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.WebWorker/Extensions/SwaggerExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Extensions/SwaggerExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.WebWorker/MoneyBot.WebWorker.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Afonya.MoneyBot.WebWorker.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.WebWorker/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.WebWorker/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Properties/launchSettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.WebWorker/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Bot/MoneyBot.WebWorker/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Identity/Identity.Web/Config/ApiScopeDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/Config/ApiScopeDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Identity/Identity.Web/Config/ClientDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/Config/ClientDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Identity/Identity.Web/Config/Config.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/Config/Config.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Identity/Identity.Web/Identity.Web.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/Afonya.Identity.Web.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Identity/Identity.Web/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Identity/Identity.Web/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/Properties/launchSettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Identity/Identity.Web/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Identity/Identity.Web/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Identity/Identity.Web/tempkey.jwk" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/tempkey.jwk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/afonya.sln" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.sln" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/HttpClients/Abstractions/IManageService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/HttpClients/ManageService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/Pages/Manage.razor" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/Pages/Users.razor" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Afonya/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Afonya/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/Afonya.WebUi.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.WebUi/Afonya.WebUi.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/App.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.WebUi/App.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/Pages/Counter.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/Pages/FetchData.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.WebUi/Pages/Categories.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/Pages/Index.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.WebUi/Pages/Index.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.WebUi/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/Shared/NavMenu.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.WebUi/Shared/NavMenu.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/Shared/SurveyPrompt.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Afonya.WebUi/wwwroot/sample-data/weather.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Afonya.sln" beforeDir="false" afterPath="$PROJECT_DIR$/Afonya.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Afonya.MoneyBot.Interfaces.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Afonya.MoneyBot.Interfaces.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Dto/CategoryDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Shared/Contracts/CategoryDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Dto/MoneyTransactionDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Shared/Contracts/MoneyTransactionDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Dto/MoneyTransactionFilter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Shared/Contracts/MoneyTransactionFilter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Dto/UserDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Shared/Contracts/UserDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Services/ICategoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Services/ICategoryService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Services/IMoneyTransactionService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Services/IMoneyTransactionService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Services/IUserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Interfaces/Services/IUserService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/CategoryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/CategoryService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/DataSeedService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/DataSeedService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/HandleUpdateService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/HandleUpdateService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/MoneyTransactionService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/MoneyTransactionService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/UserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.Logic/Services/UserService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Controllers/DataController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Controllers/DataController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Controllers/ManageController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Bot/Afonya.MoneyBot.WebWorker/Controllers/ManageController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +63,10 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/20227abb619fbfca9051caee791debb53b35b572a6b431c86c05fadf685deb/DiscoveryDocumentRequest.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/21da769e9e8c343b2cc16f473f02a7edeea03195b33b18632ca167415bdc4/Crypto.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/32fb21832d16cfbee4de6474102f8c66e5f1847c81c3ab3c50bed6a791be87/ServiceCollectionHostedServiceExtensions.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3f14fa5e143caaef74b5c58c69467c921571f6e53b914b7268121a740d12/HeadOutlet.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/444fdd1158778351de27b359b6ee252d3d563b29285b181ecb686460cd2fd68d/RemoteAuthenticationOptions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/470968f7061d52a388af1d51baaa152ff64781c0d50ab46f91f1f849999f/TelegramBotClientExtensions.ApiMethods.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/5c9ed85ae6f7dd90f9e43a625095d2ab70127bfb7aa2c0443d3e02ab1ab8/BaseAddressAuthorizationMessageHandler.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/5d98b469b4c02a799dce376c62a6462dad6dcb9b0f0b4a61d19df86f5d8dbcb/Secret.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/621b77a5ddcbccfff95ad1bfe69a252fd443bc43c1c15693111de532faef968/GrantType.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/657bfb09628fb89e75acd18c90789db476eec21a484e776d38a991f8fcc/ServiceDescriptor.cs" root0="SKIP_HIGHLIGHTING" />
@@ -135,17 +90,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "HotReloadSettingsPage",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager" selected=".NET Launch Settings Profile.Afonya.Identity.Web: Identity.Web">
+}]]></component>
+  <component name="RunManager" selected=".NET Launch Settings Profile.Afonya.WebUi">
+    <configuration name="Afonya.Identity.Web: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
+      <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/Afonya.Identity.Web.csproj" />
+      <option name="LAUNCH_PROFILE_TFM" value="net6.0" />
+      <option name="LAUNCH_PROFILE_NAME" value="IIS Express" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="GENERATE_APPLICATIONHOST_CONFIG" value="1" />
+      <option name="SHOW_IIS_EXPRESS_OUTPUT" value="0" />
+      <option name="SEND_DEBUG_REQUEST" value="1" />
+      <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
     <configuration name="Afonya.Identity.Web: Identity.Web" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/Services/Identity/Afonya.Identity.Web/Afonya.Identity.Web.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net6.0" />
@@ -169,7 +140,7 @@
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
-      <browser name="038c8007-22dd-4d84-b60b-76439a3b3064" />
+      <browser name="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" />
       <option name="GENERATE_APPLICATIONHOST_CONFIG" value="1" />
       <option name="SHOW_IIS_EXPRESS_OUTPUT" value="0" />
       <option name="SEND_DEBUG_REQUEST" value="1" />
@@ -179,6 +150,7 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue=".NET Launch Settings Profile.Afonya.Identity.Web: IIS Express" />
       <item itemvalue=".NET Launch Settings Profile.Afonya.Identity.Web: Identity.Web" />
       <item itemvalue=".NET Launch Settings Profile.Afonya.WebUi" />
       <item itemvalue="Compound.UI_Auth" />
@@ -195,7 +167,8 @@
       <workItem from="1669454423600" duration="442000" />
       <workItem from="1669454880122" duration="10899000" />
       <workItem from="1669466102728" duration="217000" />
-      <workItem from="1669466326800" duration="273000" />
+      <workItem from="1669466326800" duration="1567000" />
+      <workItem from="1669468192088" duration="3525000" />
     </task>
     <servers />
   </component>
@@ -217,5 +190,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

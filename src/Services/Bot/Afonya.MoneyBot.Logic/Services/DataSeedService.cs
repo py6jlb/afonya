@@ -1,9 +1,9 @@
-﻿using Afonya.MoneyBot.Interfaces.Dto;
-using Afonya.MoneyBot.Interfaces.Services;
+﻿using Afonya.MoneyBot.Interfaces.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Shared.Contracts;
 
 namespace Afonya.MoneyBot.Logic.Services;
 

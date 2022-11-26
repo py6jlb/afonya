@@ -1,7 +1,7 @@
-﻿using Afonya.MoneyBot.Interfaces.Dto;
-using Afonya.MoneyBot.Interfaces.Services;
+﻿using Afonya.MoneyBot.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Afonya.MoneyBot.WebWorker.Controllers

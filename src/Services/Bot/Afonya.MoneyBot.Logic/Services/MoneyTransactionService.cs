@@ -1,9 +1,9 @@
 ﻿using Afonya.MoneyBot.Domain.Entities;
 using Afonya.MoneyBot.Interfaces;
-using Afonya.MoneyBot.Interfaces.Dto;
 using Afonya.MoneyBot.Interfaces.Services;
 using LiteDB;
 using Microsoft.Extensions.Logging;
+using Shared.Contracts;
 
 namespace Afonya.MoneyBot.Logic.Services;
 
