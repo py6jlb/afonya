@@ -52,9 +52,7 @@ public class HandleUpdateService : IHandleUpdateService
         {
             await handler;
         }
-#pragma warning disable CA1031
         catch (Exception exception)
-#pragma warning restore CA1031
         {
             await HandleErrorAsync(exception);
         }
@@ -96,7 +94,7 @@ public class HandleUpdateService : IHandleUpdateService
     {
         const string usage = "Что я умею:\n" +
                              "Мне нужно отправлять суммы расходов в рублях, а затем выбирать к какой категории расходов они относятся. " +
-                             "Если надо сохранить приход, то перед суммой должен ыть занк \"+\"";
+                             "Если надо сохранить приход, то перед суммой должен быть занк \"+\"";
         await _botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: usage);
     }
 
@@ -169,7 +167,7 @@ public class HandleUpdateService : IHandleUpdateService
         var inlineKeyboard = new InlineKeyboardMarkup(categoriesArrays.Select(arr =>
             arr.Select(x =>
             {
-                var callback = new CallbackInfoDto { Id = savedDataId, Ctg = x.Name };
+                var callback = new CallbackInfo { Id = savedDataId, Ctg = x.Name };
                 return InlineKeyboardButton.WithCallbackData(x.Icon, callback.ToString());
             }).ToArray()
         ).ToArray());
@@ -179,7 +177,7 @@ public class HandleUpdateService : IHandleUpdateService
     private async Task HandleCallbackQuery(CallbackQuery callbackQuery)
     {
         await _botClient.SendChatActionAsync(callbackQuery.Message.Chat.Id, ChatAction.Typing);
-        var callbackData = JsonConvert.DeserializeObject<CallbackInfoDto>(callbackQuery.Data);
+        var callbackData = JsonConvert.DeserializeObject<CallbackInfo>(callbackQuery.Data);
         var categoryCollection = _categoryService.Get();
         var category = categoryCollection.First(x => x.Name == callbackData.Ctg);
         var msg = $"{callbackQuery.Message.Text}, в категории \"{category.HumanName}\" {category.Icon}";

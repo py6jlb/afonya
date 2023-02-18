@@ -7,14 +7,14 @@ using Shared.Contracts;
 
 namespace Afonya.MoneyBot.Logic.Services;
 
-public class DataSeedService : IHostedService
+public class Starter : IHostedService
 {
-    private readonly ILogger<DataSeedService> _logger;
+    private readonly ILogger<Starter> _logger;
     private readonly IServiceProvider _services;
     private readonly IConfiguration _configuration;
     
-    public DataSeedService(
-        ILogger<DataSeedService> logger, 
+    public Starter(
+        ILogger<Starter> logger, 
         IServiceProvider serviceProvider,
         IConfiguration configuration)
     {
@@ -42,7 +42,8 @@ public class DataSeedService : IHostedService
         if (notNull) return;
         
         var categories = _configuration.GetSection("Categories")
-            .Get<CategoryDto[]>().Select(x => { x.IsActive = true; return x; });
+            .Get<CategoryDto[]>()?.Select(x => { x.IsActive = true; return x; }) ?? Array.Empty<CategoryDto>();
+
         foreach (var categoryDto in categories)
         {
             srv.Create(categoryDto);

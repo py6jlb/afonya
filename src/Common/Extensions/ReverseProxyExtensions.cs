@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Common.Options;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Common.Extensions;
 
@@ -11,13 +13,12 @@ public static class ReverseProxyExtensions
     /// Добавить реверсивный прокси
     /// </summary>
     /// <param name="app">приложение</param>
-    /// <param name="config">конфигурация</param>
-    public static WebApplication UseReverseProxy(this WebApplication app, IConfiguration config)
+    public static WebApplication UseReverseProxy(this WebApplication app)
     {
-        _ = bool.TryParse(config["USE_REVERSE_PROXY"], out var behindReverseProxy);
-        if (!behindReverseProxy) return app;
+        var opt = app.Services.GetRequiredService<IOptions<ReverseProxyConfig>>().Value;
+        if (opt?.UseReverseProxy ?? false) return app;
         
-        var subDirPath = config["SUBDIR"];
+        var subDirPath = opt?.SubDir ?? "";
         if (!string.IsNullOrWhiteSpace(subDirPath)) app.UsePathBase(new PathString(subDirPath));
         
         var forwardedHeaderOptions = new ForwardedHeadersOptions

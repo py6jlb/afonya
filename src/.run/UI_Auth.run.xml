@@ -1,7 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="UI_Auth" type="CompoundRunConfigurationType">
-    <toRun name="Afonya.Identity.Web: Identity.Web" type="LaunchSettings" />
-    <toRun name="Afonya.WebUi" type="LaunchSettings" />
-    <method v="2" />
-  </configuration>
-</component>

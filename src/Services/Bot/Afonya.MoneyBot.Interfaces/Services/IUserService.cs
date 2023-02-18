@@ -4,7 +4,8 @@ namespace Afonya.MoneyBot.Interfaces.Services;
 
 public interface IUserService
 {
-    bool UsersExists();
+    bool IsAdminUser(string userName, string password);
+    bool TelegramUsersExists();
     IReadOnlyCollection<UserDto> Get();
     UserDto? Get(string id);
     UserDto? Create(UserDto user);

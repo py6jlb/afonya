@@ -2,7 +2,7 @@
 
 namespace Afonya.MoneyBot.Interfaces.Dto;
 
-public class CallbackInfoDto
+public class CallbackInfo
 {
     public string Id { get; set; }
     public string Ctg { get; set; }

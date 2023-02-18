@@ -4,9 +4,10 @@ using Afonya.MoneyBot.Interfaces.Dto;
 using Afonya.MoneyBot.Interfaces.Services;
 using Afonya.MoneyBot.Logic.Services;
 using Common.Exceptions;
-using Common.Extensions;
+using Common.Options;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Telegram.Bot;
 
 namespace Afonya.MoneyBot.WebWorker.Extensions;
@@ -40,30 +41,39 @@ public static class StartupExtensions
 
     public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration config)
     {
-        services.AddHostedService<DataSeedService>();
-        services.AddJwtAuthentication(config);
-        services.AddSingleton<ILiteDbContext>(p => new DbContext(config.GetConnectionString("Default")));
+        services.Configure<BotConfiguration>(config.GetSection("BotConfiguration"));
+        services.Configure<AdminUser>(config.GetSection("AdminUser"));
+        services.Configure<ReverseProxyConfig>(config.GetSection("ProxyConfig"));
+        
+        var connectionString = config.GetConnectionString("Default") ?? throw new NullReferenceException("Отсутствует строка подключения к БД");
+        services.AddHostedService<Starter>();
+
+        services.AddSingleton<ILiteDbContext>(p => new DbContext(connectionString));
         services.AddScoped<IUserService, UserService>();
         services.AddTransient<IMoneyTransactionService, MoneyTransactionService>();
         services.AddTransient<ICategoryService, CategoryService>();
         return services;
     }
     
-    public static IServiceCollection AddBotServices(this IServiceCollection services, BotConfiguration config)
+    public static IServiceCollection AddBotServices(this IServiceCollection services)
     {
         services.AddHttpClient("tgwebhook")
-            .AddTypedClient<ITelegramBotClient>(httpClient => new TelegramBotClient(config.BotToken, httpClient));
+            .AddTypedClient<ITelegramBotClient>((httpClient, sp) =>
+            {
+                var opt = sp.GetRequiredService<IOptions<BotConfiguration>>().Value;
+                return new TelegramBotClient(opt.BotToken, httpClient);
+            });
         services.AddScoped<IHandleUpdateService, HandleUpdateService>();
         return services;
     }
 
-    public static ControllerActionEndpointConventionBuilder MapBotController(this IEndpointRouteBuilder endpoints,
-        BotConfiguration config)
+    public static WebApplication MapBotController(this WebApplication app)
     {
-        var result = endpoints.MapControllerRoute(
+        var opt = app.Services.GetRequiredService<IOptions<BotConfiguration>>().Value;
+        app.MapControllerRoute(
             name: "tgwebhook",
-            pattern: $"bot/{config.BotToken}", 
+            pattern: $"bot/{opt.BotToken}", 
             new { controller = "WebHook", action = "Post" });
-        return result;
+        return app;
     }
 }

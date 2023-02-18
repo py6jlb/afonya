@@ -1,5 +1,5 @@
 ﻿using Afonya.MoneyBot.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
+using Afonya.MoneyBot.WebWorker.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts;
 using Swashbuckle.AspNetCore.Annotations;
@@ -8,7 +8,6 @@ namespace Afonya.MoneyBot.WebWorker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class DataController : ControllerBase
     {
         private readonly ILogger<DataController> _logger;
@@ -22,6 +21,7 @@ namespace Afonya.MoneyBot.WebWorker.Controllers
         }
 
         [HttpGet]
+        [BasicAuth]
         public ActionResult<IEnumerable<MoneyTransactionDto>> Get(
             [FromQuery, SwaggerParameter("Начало периода")]DateTime? startDate, 
             [FromQuery, SwaggerParameter("Конец периода")]DateTime? endDate, 
@@ -54,6 +54,7 @@ namespace Afonya.MoneyBot.WebWorker.Controllers
         }
 
         [HttpPut]
+        [BasicAuth]
         public ActionResult<bool> Put(MoneyTransactionDto data)
         {
             if (string.IsNullOrWhiteSpace(data.Id))
