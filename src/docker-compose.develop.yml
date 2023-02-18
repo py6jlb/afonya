@@ -31,6 +31,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     build:
       context: .
-      dockerfile: Services/Bot/Dockerfile
+      dockerfile: Services/Bot/Afonya.MoneyBot.WebWorker/Dockerfile
     networks:
       app:
