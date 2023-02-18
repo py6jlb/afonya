@@ -2,6 +2,7 @@
 using Afonya.Bot.Interfaces;
 using Afonya.Bot.Interfaces.Dto;
 using Afonya.Bot.Interfaces.Services;
+using LiteDB;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Shared.Contracts;
@@ -25,7 +26,7 @@ public class UserService : IUserService
     {
         _logger.LogInformation("Validating admin user [{UserName}]", userName);
         if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password)) return false;
-        var inputUser = new AdminUser(userName, password);
+        var inputUser = new AdminUser{ Username = userName, Password = password };
         return _admin == inputUser;
     }
     
@@ -44,7 +45,15 @@ public class UserService : IUserService
 
     public UserDto? Get(string id)
     {
-        var user = _db.Database.GetCollection<TelegramUser>().FindById(id);
+        var user = _db.Database.GetCollection<TelegramUser>().FindById(new ObjectId(id));
+        if (user == null) return null;
+        var res = new UserDto(user.Id.ToString(), user.Login);
+        return res;
+    }
+
+    public UserDto? GetByName(string userName)
+    {
+        var user = _db.Database.GetCollection<TelegramUser>().FindOne(x=>x.Login == userName);
         if (user == null) return null;
         var res = new UserDto(user.Id.ToString(), user.Login);
         return res;
@@ -58,7 +67,7 @@ public class UserService : IUserService
         };
 
         var id = _db.Database.GetCollection<TelegramUser>().Insert(entity);
-        var result = Get(id);
+        var result = Get(id.AsObjectId.ToString());
         return result;
     }
 

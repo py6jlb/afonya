@@ -3,9 +3,9 @@
 namespace Afonya.Bot.WebWorker.Auth;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public class BasicAuthAttribute : TypeFilterAttribute
+public class BasicAuthAdminAttribute : TypeFilterAttribute
 {
-    public BasicAuthAttribute(string realm = "Afonya") : base(typeof(BasicAuthFilter))
+    public BasicAuthAdminAttribute(string realm = "Afonya") : base(typeof(BasicAuthAdminFilter))
     {
         Arguments = new object[] { realm };
     }

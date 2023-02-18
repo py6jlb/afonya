@@ -1,4 +1,5 @@
 ﻿using Afonya.Bot.Interfaces.Services;
+using Afonya.Bot.WebWorker.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Telegram.Bot.Types;
@@ -18,14 +19,29 @@ public class WebHookController : ControllerBase
     }
 
     [HttpPost]
+    //[ValidateTelegramBot]
     public async Task<IActionResult> Post([FromBody] Update update)
     {
-        var from = update.Message?.From?.Username;
-        if (string.IsNullOrWhiteSpace(from) || _userService.Get(from) == null)
+        var from = GetUserLogin(update);
+        if (string.IsNullOrWhiteSpace(from) || _userService.GetByName(from) == null)
         {
             return Ok();
         }
         await _handleUpdateService.HandleUpdate(update);
         return Ok();
+    }
+
+    private static string? GetUserLogin(Update? update)
+    {
+        if(update == null) return null;
+        return update switch
+        {
+            { Message: { } message }                       => update?.Message?.From?.Username,
+            { EditedMessage: { } message }                 => update?.EditedMessage?.From?.Username,
+            { CallbackQuery: { } callbackQuery }           => update?.CallbackQuery?.From?.Username,
+            { InlineQuery: { } inlineQuery }               => update?.InlineQuery?.From?.Username,
+            { ChosenInlineResult: { } chosenInlineResult } => update?.ChosenInlineResult?.From?.Username,
+            _                                              => null
+        };
     }
 }

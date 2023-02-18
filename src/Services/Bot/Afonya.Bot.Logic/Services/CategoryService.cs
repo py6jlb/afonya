@@ -33,11 +33,13 @@ public class CategoryService : ICategoryService
             IsActive = x.IsActive
         }).ToArray();
     }
-    public CategoryDto Get(string id)
-    {
-        var cat = _db.GetCollection<Category>().FindById(id);
 
-        return  new CategoryDto
+    public CategoryDto? Get(string id)
+    {
+        var cat = _db.GetCollection<Category>().FindById(new ObjectId(id));
+        if (cat == null) return null;
+
+        return new CategoryDto
         {
             Id = cat.Id.ToString(),
             Name = cat.Name,
@@ -62,10 +64,9 @@ public class CategoryService : ICategoryService
             Icon = category.Icon,
             IsActive = category.IsActive
         };
-
         var res = _db.GetCollection<Category>().Insert(entity);
-        var newCat = Get(res.ToString());
-        return newCat;
+        var newCategory = Get(res.AsObjectId.ToString());
+        return newCategory;
     }
 
     public CategoryDto Update(CategoryDto category)
@@ -73,7 +74,7 @@ public class CategoryService : ICategoryService
         if (string.IsNullOrWhiteSpace(category.Icon))
             throw new AfonyaErrorException("Отсутсвует id категории для обновления.");
         
-        var cat = _db.GetCollection<Category>().FindById(category.Id);
+        var cat = _db.GetCollection<Category>().FindById(new ObjectId(category.Id));
         cat.Icon = category.Icon;
         cat.Name = category.Name;
         cat.HumanName = category.HumanName;
@@ -86,7 +87,7 @@ public class CategoryService : ICategoryService
 
     public bool Delete(string id)
     {
-        var cat = _db.GetCollection<Category>().FindById(id);
+        var cat = _db.GetCollection<Category>().FindById(new ObjectId(id));
         cat.IsActive = false;
         var result = _db.GetCollection<Category>().Update(cat);
         return result;

@@ -8,7 +8,7 @@ builder.Services.AddSwaggerGeneration();
 builder.Services.AddErrorHandling(builder.Environment);
 builder.Services.AddServices(builder.Configuration);
 builder.Services.AddBotServices();
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Host.UseSerilog();
 
 var app = builder.Build();

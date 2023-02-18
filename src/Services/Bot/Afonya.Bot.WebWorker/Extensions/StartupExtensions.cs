@@ -46,9 +46,9 @@ public static class StartupExtensions
         services.Configure<ReverseProxyConfig>(config.GetSection("ProxyConfig"));
         
         var connectionString = config.GetConnectionString("Default") ?? throw new NullReferenceException("Отсутствует строка подключения к БД");
+        services.AddSingleton<ILiteDbContext>(_ => new DbContext(connectionString));
+        
         services.AddHostedService<Starter>();
-
-        services.AddSingleton<ILiteDbContext>(p => new DbContext(connectionString));
         services.AddScoped<IUserService, UserService>();
         services.AddTransient<IMoneyTransactionService, MoneyTransactionService>();
         services.AddTransient<ICategoryService, CategoryService>();
@@ -72,7 +72,7 @@ public static class StartupExtensions
         var opt = app.Services.GetRequiredService<IOptions<BotConfiguration>>().Value;
         app.MapControllerRoute(
             name: "tgwebhook",
-            pattern: $"bot/{opt.BotToken}", 
+            pattern: $"bot/{opt.BotToken}/webhook", 
             new { controller = "WebHook", action = "Post" });
         return app;
     }

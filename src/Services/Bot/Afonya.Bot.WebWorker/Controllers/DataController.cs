@@ -21,7 +21,7 @@ namespace Afonya.Bot.WebWorker.Controllers
         }
 
         [HttpGet]
-        [BasicAuth]
+        [BasicAuthAdmin]
         public ActionResult<IEnumerable<MoneyTransactionDto>> Get(
             [FromQuery, SwaggerParameter("Начало периода")]DateTime? startDate, 
             [FromQuery, SwaggerParameter("Конец периода")]DateTime? endDate, 
@@ -54,7 +54,7 @@ namespace Afonya.Bot.WebWorker.Controllers
         }
 
         [HttpPut]
-        [BasicAuth]
+        [BasicAuthAdmin]
         public ActionResult<bool> Put(MoneyTransactionDto data)
         {
             if (string.IsNullOrWhiteSpace(data.Id))

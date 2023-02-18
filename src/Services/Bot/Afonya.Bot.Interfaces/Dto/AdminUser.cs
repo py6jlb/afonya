@@ -1,3 +1,7 @@
 ﻿namespace Afonya.Bot.Interfaces.Dto;
 
-public record AdminUser(string Username, string Password);
+public record AdminUser
+{
+    public string Username { get; init; }
+    public string Password { get; init; }
+};

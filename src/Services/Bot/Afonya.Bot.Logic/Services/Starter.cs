@@ -40,12 +40,14 @@ public class Starter : IHostedService
     {
         var notNull = srv.CategoriesExists();
         if (notNull) return;
-        
-        var categories = _configuration.GetSection("Categories")
-            .Get<CategoryDto[]>()?.Select(x => { x.IsActive = true; return x; }) ?? Array.Empty<CategoryDto>();
 
-        foreach (var categoryDto in categories)
+        var categories = _configuration.GetSection("Categories").GetChildren();
+
+        foreach (var category in categories)
         {
+            var categoryDto = category.Get<CategoryDto>();
+            if (categoryDto == null) continue;
+            categoryDto.IsActive = true;
             srv.Create(categoryDto);
         }
     }

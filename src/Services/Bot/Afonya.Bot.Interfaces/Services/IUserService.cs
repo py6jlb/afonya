@@ -8,6 +8,7 @@ public interface IUserService
     bool TelegramUsersExists();
     IReadOnlyCollection<UserDto> Get();
     UserDto? Get(string id);
+    UserDto? GetByName(string userName);
     UserDto? Create(UserDto user);
     bool Delete(string id);
 }

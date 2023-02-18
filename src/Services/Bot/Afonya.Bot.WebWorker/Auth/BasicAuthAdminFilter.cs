@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Afonya.Bot.WebWorker.Auth;
 
-public class BasicAuthFilter
+public class BasicAuthAdminFilter : IAuthorizationFilter
 {
     private readonly string _realm;
 
-    public BasicAuthFilter(string realm)
+    public BasicAuthAdminFilter(string realm)
     {
         _realm = realm;
         if (string.IsNullOrWhiteSpace(_realm))

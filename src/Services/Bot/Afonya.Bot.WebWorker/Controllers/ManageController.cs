@@ -37,7 +37,7 @@ public class ManageController : ControllerBase
     }
     
     [HttpGet("api/category")]
-    [BasicAuth]
+    [BasicAuthAdmin]
     public IReadOnlyCollection<CategoryDto> GetCategories([FromQuery, SwaggerParameter("Включая неактивные")]bool all = false)
     {
         var data = _categoryService.Get(all);
@@ -45,7 +45,7 @@ public class ManageController : ControllerBase
     }
     
     [HttpPost("api/category")]
-    [BasicAuth]
+    [BasicAuthAdmin]
     public CategoryDto PostCategory(CategoryDto category)
     {
         var data = _categoryService.Create(category);
@@ -53,7 +53,7 @@ public class ManageController : ControllerBase
     }
     
     [HttpPut("api/category")]
-    [BasicAuth]
+    [BasicAuthAdmin]
     public CategoryDto PutCategory(CategoryDto category)
     {
         var data = _categoryService.Update(category);
@@ -61,7 +61,7 @@ public class ManageController : ControllerBase
     }
     
     [HttpDelete("api/category")]
-    [BasicAuth]
+    [BasicAuthAdmin]
     public bool DeleteCategory(string id)
     {
         var data = _categoryService.Delete(id);
@@ -69,7 +69,7 @@ public class ManageController : ControllerBase
     }
     
     [HttpPost("bot/status")]
-    [BasicAuth]
+    [BasicAuthAdmin]
     public async Task<WebhookInfo> StatusBot()
     {
         var result = await _telegramBotClient.GetWebhookInfoAsync();
@@ -77,20 +77,20 @@ public class ManageController : ControllerBase
     }
     
     [HttpPost("bot/start")]
-    [BasicAuth]
+    [BasicAuthAdmin]
     public async Task<bool> StartBot()
     {
         var webHookAddress = _proxyConfig?.UseReverseProxy ?? false ? 
             $"{_botConfig.HostAddress}{_proxyConfig?.SubDir ?? ""}/bot/{_botConfig.BotToken}" : 
             $"{_botConfig.HostAddress}/bot/{_botConfig.BotToken}";
-        _logger.LogInformation("Set webHook: {WebHookAddress}", webHookAddress);
-        await _telegramBotClient.SetWebhookAsync(url: webHookAddress, 
+        _logger.LogInformation("Set webHook: {WebHookAddress}", $"{webHookAddress}/webhook");
+        await _telegramBotClient.SetWebhookAsync(url: $"{webHookAddress}/webhook", 
             allowedUpdates: Array.Empty<UpdateType>());
         return true;
     }
     
     [HttpPost("bot/stop")]
-    [BasicAuth]
+    [BasicAuthAdmin]
     public async Task<bool> StopBot()
     {
         _logger.LogInformation("Delete webHook");
@@ -99,7 +99,7 @@ public class ManageController : ControllerBase
     }
     
     [HttpGet("api/user")]
-    [BasicAuth]
+    [BasicAuthAdmin]
     public IReadOnlyCollection<UserDto> GetUsers()
     {
         var data = _userService.Get();
@@ -107,7 +107,7 @@ public class ManageController : ControllerBase
     }
     
     [HttpPost("api/user")]
-    [BasicAuth]
+    [BasicAuthAdmin]
     public UserDto PostUser(UserDto user)
     {
         var data = _userService.Create(user);
@@ -115,7 +115,7 @@ public class ManageController : ControllerBase
     }
     
     [HttpDelete("api/user")]
-    [BasicAuth]
+    [BasicAuthAdmin]
     public bool DeleteUser(string id)
     {
         var data = _categoryService.Delete(id);

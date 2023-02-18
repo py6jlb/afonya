@@ -69,7 +69,7 @@ public class MoneyTransactionService : IMoneyTransactionService
         try
         {
             var objectId = new ObjectId(id);
-            var res =  _db.GetCollection<MoneyTransaction>().FindById(objectId);
+            var res =  _db.GetCollection<MoneyTransaction>().FindById(new ObjectId(objectId));
             return new MoneyTransactionDto
             {
                 Id = res.Id.ToString(), 
@@ -108,7 +108,7 @@ public class MoneyTransactionService : IMoneyTransactionService
                 ChatId = moneyTransaction.ChatId
             };
             var id = _db.GetCollection<MoneyTransaction>().Insert(entity);
-            return id.ToString();
+            return id.AsObjectId.ToString();
         }
         catch (Exception e)
         {

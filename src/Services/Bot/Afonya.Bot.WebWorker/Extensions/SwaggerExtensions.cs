@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Common.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -10,25 +12,25 @@ public static class SwaggerExtensions
     {
         services.AddSwaggerGen(c =>
         {
-            var securityScheme = new OpenApiSecurityScheme
-            {
-                Name = "JWT Аутентификация",
-                Description = "Вводите **_только_** JWT Bearer токен.",
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.Http,
-                Scheme = "bearer", // must be lower case
-                BearerFormat = "JWT",
-                Reference = new OpenApiReference
-                {
-                    Id = JwtBearerDefaults.AuthenticationScheme,
-                    Type = ReferenceType.SecurityScheme
-                }
-            };
-            c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-                {securityScheme, Array.Empty<string>()}
-            });
+            //var securityScheme = new OpenApiSecurityScheme
+            //{
+            //    Name = "JWT Аутентификация",
+            //    Description = "Вводите **_только_** JWT Bearer токен.",
+            //    In = ParameterLocation.Header,
+            //    Type = SecuritySchemeType.Http,
+            //    Scheme = "bearer", // must be lower case
+            //    BearerFormat = "JWT",
+            //    Reference = new OpenApiReference
+            //    {
+            //        Id = JwtBearerDefaults.AuthenticationScheme,
+            //        Type = ReferenceType.SecurityScheme
+            //    }
+            //};
+            //c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+            //c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            //{
+            //    {securityScheme, Array.Empty<string>()}
+            //});
 
             c.SupportNonNullableReferenceTypes();
             c.UseDateOnlyTimeOnlyStringConverters();
@@ -40,20 +42,21 @@ public static class SwaggerExtensions
 
     public static IApplicationBuilder UseSwaggerUi(this IApplicationBuilder app, WebApplicationBuilder builder)
     {
+        var opt = app.ApplicationServices.GetRequiredService<IOptions<ReverseProxyConfig>>().Value;
         app.UseSwagger(c => 
         {
             c.PreSerializeFilters.Add((swaggerDoc, httpRequest) =>
             {
                 var schema = httpRequest.Scheme;
                 var host = httpRequest.Headers["Host"];
-                var subDir = builder.Configuration["SUBDIR"] ?? "";
+                var subDir = opt.SubDir ?? "";
                 var serverUrl = $"{schema}://{host}{subDir}";
-                swaggerDoc.Servers = new List<OpenApiServer> { new OpenApiServer { Url = serverUrl } };
+                swaggerDoc.Servers = new List<OpenApiServer> { new() { Url = serverUrl } };
             });
         });
         app.UseSwaggerUI(c =>
         {
-            c.SwaggerEndpoint("v1/swagger.json", "Бот store V1");
+            c.SwaggerEndpoint("v1/swagger.json", "Бот V1");
         });
         return app;
     }
