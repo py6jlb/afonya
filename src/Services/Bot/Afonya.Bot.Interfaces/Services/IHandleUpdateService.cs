@@ -4,5 +4,5 @@ namespace Afonya.Bot.Interfaces.Services;
 
 public interface IHandleUpdateService
 {
-    Task HandleUpdate(Update update);
+    Task HandleUpdateAsync(Update update, CancellationToken ct = default);
 }

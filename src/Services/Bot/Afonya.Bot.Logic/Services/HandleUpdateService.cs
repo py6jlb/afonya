@@ -30,22 +30,16 @@ public class HandleUpdateService : IHandleUpdateService
         _categoryService = categoryService;
     }
 
-    public async Task HandleUpdate(Update update)
+    public async Task HandleUpdateAsync(Update update, CancellationToken ct = default)
     {
-        var handler = update.Type switch
+        var handler = update switch
         {
-            UpdateType.Message => HandleMessageAsync(update.Message!),
-            UpdateType.EditedMessage => HandleMessageAsync(update.EditedMessage!),
-            UpdateType.CallbackQuery => HandleCallbackQuery(update.CallbackQuery!),
-            // UpdateType.Unknown:
-            // UpdateType.ChannelPost:
-            // UpdateType.EditedChannelPost:
-            // UpdateType.ShippingQuery:
-            // UpdateType.PreCheckoutQuery:
-            // UpdateType.Poll:
-            //UpdateType.InlineQuery        => BotOnInlineQueryReceived(update.InlineQuery!),
-            //UpdateType.ChosenInlineResult => BotOnChosenInlineResultReceived(update.ChosenInlineResult!),
-            _ => UnknownUpdateHandlerAsync(update)
+            { Message: { } message }                       => BotOnMessageAsync(message, ct),
+            { EditedMessage: { } message }                 => BotOnMessageAsync(message, ct),
+            { CallbackQuery: { } callbackQuery }           => BotOnCallbackQueryAsync(callbackQuery, ct),
+            //{ InlineQuery: { } inlineQuery }               => BotOnInlineQueryReceived(inlineQuery, ct),
+            //{ ChosenInlineResult: { } chosenInlineResult } => BotOnChosenInlineResultReceived(chosenInlineResult, ct),
+            _                                              => UnknownUpdateHandlerAsync(update, ct)
         };
 
         try
@@ -54,51 +48,99 @@ public class HandleUpdateService : IHandleUpdateService
         }
         catch (Exception exception)
         {
-            await HandleErrorAsync(exception);
+            await HandleErrorAsync(exception, ct);
         }
     }
 
-    //-----------------------------Handlers----------------------------------
-    private async Task HandleMessageAsync(Message message)
+    private Task HandleErrorAsync(Exception exception, CancellationToken ct = default)
     {
-        _logger.LogInformation($"Receive message type: {message.Type}");
-        if (message.Type != MessageType.Text)
-            return;
-
-        var action = (message.Text?.Split(' ').First()?.ToLower()) switch
+        var errorMessage = exception switch
         {
-            "/начать" => HandleStartAsync(message),
-            "/start" => HandleStartAsync(message),
-            "/закрыть" => HandleCancelAsync(message),
-            "/cancel" => HandleCancelAsync(message),
-            "/помощь" => HandleHelpAsync(message),
-            "/help" => HandleHelpAsync(message),
-            _ => HandleNonCommandMessageAsync(message)
+            ApiRequestException apiRequestException =>
+                $"Ошибка Telegram API :\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
+            _ => exception.ToString()
+        };
+
+        _logger.LogInformation("Обработка ошибки: {ErrorMessage}", errorMessage);
+        return Task.CompletedTask;
+    }
+
+    //-----------------------------Bot events handlers----------------------------------
+    private async Task BotOnMessageAsync(Message message, CancellationToken ct = default)
+    {
+        _logger.LogInformation($"Получено сообщения типа: {message.Type}");
+        if (message.Type != MessageType.Text) return;
+
+        var action = (message.Text?.Split(' ').FirstOrDefault()?.ToLower()) switch
+        {
+            "/начать" => StartAsync(message, ct),
+            "/start" => StartAsync(message, ct),
+            "/закрыть" => CancelAsync(message, ct),
+            "/cancel" => CancelAsync(message, ct),
+            "/помощь" => HelpAsync(message, ct),
+            "/help" => HelpAsync(message, ct),
+            _ => NonCommandMessageAsync(message, ct)
         };
         await action;
     }
 
-    private async Task HandleStartAsync(Message message)
+    private async Task BotOnCallbackQueryAsync(CallbackQuery callbackQuery, CancellationToken ct = default)
     {
-        await _botClient.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
-        await SendBaseKeyboardAsync(message);
-        await HandleHelpAsync(message);
+        await _botClient.SendChatActionAsync(callbackQuery.Message.Chat.Id, ChatAction.Typing, cancellationToken: ct);
+        var callbackData = JsonConvert.DeserializeObject<CallbackInfo>(callbackQuery.Data);
+        var categoryCollection = _categoryService.Get();
+        var category = categoryCollection.First(x => x.Name == callbackData.Ctg);
+        var msg = $"{callbackQuery.Message.Text}, в категории \"{category.HumanName}\" {category.Icon}";
+
+        var data = _moneyTransaction.Get(callbackData.Id);
+        if (data == null)
+        {
+            _logger.LogError("Отсуствуют данные для обновдления. {msq}", category);
+            return;
+        }
+
+        data.CategoryHumanName = category.HumanName;
+        data.CategoryName = category.Name;
+        data.CategoryIcon = category.Icon;
+        _moneyTransaction.Update(data);
+
+        await _botClient.AnswerCallbackQueryAsync(callbackQuery.Id, $"Категория выбрана", cancellationToken: ct);
+        await _botClient.EditMessageTextAsync(callbackQuery.Message.Chat.Id,
+            callbackQuery.Message.MessageId,
+            msg,
+            replyMarkup: new InlineKeyboardMarkup(Array.Empty<InlineKeyboardButton>()), cancellationToken: ct);
     }
 
-    private async Task HandleCancelAsync(Message message)
+    private Task UnknownUpdateHandlerAsync(Update update, CancellationToken ct = default)
     {
-        await DeleteBaseKeyboardAsync(message);
+        _logger.LogInformation("Unknown update type: {UpdateType}", update.Type);
+        return Task.CompletedTask;
+    }
+    
+
+    //-----------------------------Message handlers----------------------------------
+
+    private async Task StartAsync(Message message, CancellationToken ct = default)
+    {
+        await _botClient.SendChatActionAsync(message.Chat.Id, ChatAction.Typing, cancellationToken: ct);
+        await SendKeyboardAsync(message, ct);
+        await HelpAsync(message, ct);
     }
 
-    private async Task HandleHelpAsync(Message message)
+    private async Task CancelAsync(Message message, CancellationToken ct = default)
+    {
+        await DeleteKeyboardAsync(message, ct);
+    }
+
+    private async Task HelpAsync(Message message, CancellationToken ct = default)
     {
         const string usage = "Что я умею:\n" +
                              "Мне нужно отправлять суммы расходов в рублях, а затем выбирать к какой категории расходов они относятся. " +
                              "Если надо сохранить приход, то перед суммой должен быть занк \"+\"";
-        await _botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: usage);
+        await _botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: usage, cancellationToken: ct);
     }
 
-    private async Task SendBaseKeyboardAsync(Message message)
+    private async Task SendKeyboardAsync(Message message, CancellationToken ct = default)
     {
         var replyKeyboardMarkup = new ReplyKeyboardMarkup(new[] { new KeyboardButton("/Помощь") })
         {
@@ -108,20 +150,18 @@ public class HandleUpdateService : IHandleUpdateService
         await _botClient.SendTextMessageAsync(
             chatId: message.Chat.Id,
             text: "Привет!",
-            replyMarkup: replyKeyboardMarkup
-        );
+            replyMarkup: replyKeyboardMarkup, cancellationToken: ct);
     }
 
-    private async Task DeleteBaseKeyboardAsync(Message message)
+    private async Task DeleteKeyboardAsync(Message message, CancellationToken ct = default)
     {
         await _botClient.SendTextMessageAsync(
             chatId: message.Chat.Id,
             text: "Клавиатура удалена.",
-            replyMarkup: new ReplyKeyboardRemove()
-        );
+            replyMarkup: new ReplyKeyboardRemove(), cancellationToken: ct);
     }
 
-    private async Task HandleNonCommandMessageAsync(Message message)
+    private async Task NonCommandMessageAsync(Message message, CancellationToken ct = default)
     {
         if(string.IsNullOrWhiteSpace(message.Text) || message.From == null || string.IsNullOrWhiteSpace(message.From.Username))
             return;
@@ -143,23 +183,21 @@ public class HandleUpdateService : IHandleUpdateService
             };
 
             var dataId = _moneyTransaction.Insert(savedData);
-            var keyboard = GetInlineKeyboard(isIncome, dataId.ToString());
+            var keyboard = BuildInlineKeyboard(isIncome, dataId.ToString());
             await _botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: $"{savedData.Sign}{num} руб",
-                replyMarkup: keyboard
-            );
+                replyMarkup: keyboard, cancellationToken: ct);
         }
         else
         {
             await _botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
-                text: "Я не понимаю, что вы от меня хотите."
-            );
+                text: "Я не понимаю, что вы от меня хотите.", cancellationToken: ct);
         }
     }
 
-    private InlineKeyboardMarkup GetInlineKeyboard(bool isIncome, string savedDataId)
+    private InlineKeyboardMarkup BuildInlineKeyboard(bool isIncome, string savedDataId)
     {
         var categoryCollection = _categoryService.Get();
         var categoriesArrays = categoryCollection.ToArray().SplitArray(8);
@@ -172,51 +210,5 @@ public class HandleUpdateService : IHandleUpdateService
             }).ToArray()
         ).ToArray());
         return inlineKeyboard;
-    }
-
-    private async Task HandleCallbackQuery(CallbackQuery callbackQuery)
-    {
-        await _botClient.SendChatActionAsync(callbackQuery.Message.Chat.Id, ChatAction.Typing);
-        var callbackData = JsonConvert.DeserializeObject<CallbackInfo>(callbackQuery.Data);
-        var categoryCollection = _categoryService.Get();
-        var category = categoryCollection.First(x => x.Name == callbackData.Ctg);
-        var msg = $"{callbackQuery.Message.Text}, в категории \"{category.HumanName}\" {category.Icon}";
-
-        var data = _moneyTransaction.Get(callbackData.Id);
-        if (data == null)
-        {
-            _logger.LogError("Отсуствуют данные для обновдления. {msq}", category);
-            return;
-        }
-
-        data.CategoryHumanName = category.HumanName;
-        data.CategoryName = category.Name;
-        data.CategoryIcon = category.Icon;
-        _moneyTransaction.Update(data);
-
-        await _botClient.AnswerCallbackQueryAsync(callbackQuery.Id, $"Категория выбрана");
-        await _botClient.EditMessageTextAsync(callbackQuery.Message.Chat.Id,
-            callbackQuery.Message.MessageId,
-            msg,
-            replyMarkup: new InlineKeyboardMarkup(Array.Empty<InlineKeyboardButton>()));
-    }
-
-    private Task UnknownUpdateHandlerAsync(Update update)
-    {
-        _logger.LogInformation("Unknown update type: {UpdateType}", update.Type);
-        return Task.CompletedTask;
-    }
-
-    private Task HandleErrorAsync(Exception exception)
-    {
-        var errorMessage = exception switch
-        {
-            ApiRequestException apiRequestException =>
-                $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
-            _ => exception.ToString()
-        };
-
-        _logger.LogInformation("HandleError: {ErrorMessage}", errorMessage);
-        return Task.CompletedTask;
     }
 }
