@@ -1,11 +1,14 @@
-﻿using Afonya.Bot.Infrastructure.Contexts;
+﻿using System.Reflection;
+using Afonya.Bot.Infrastructure.Contexts;
 using Afonya.Bot.Interfaces;
 using Afonya.Bot.Interfaces.Dto;
 using Afonya.Bot.Interfaces.Services;
+using Afonya.Bot.Logic.Commands.Bot.HandleUpdate;
 using Afonya.Bot.Logic.Services;
 using Common.Exceptions;
 using Common.Options;
 using Hellang.Middleware.ProblemDetails;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
@@ -49,9 +52,13 @@ public static class StartupExtensions
         services.AddSingleton<ILiteDbContext>(_ => new DbContext(connectionString));
         
         services.AddHostedService<Starter>();
+
         services.AddScoped<IUserService, UserService>();
         services.AddTransient<IMoneyTransactionService, MoneyTransactionService>();
         services.AddTransient<ICategoryService, CategoryService>();
+        services.AddTransient<IBotManagementService, BotManagementService>();
+
+        services.AddMediatR(typeof(HandleUpdateCommand).GetTypeInfo().Assembly);
         return services;
     }
     
@@ -63,7 +70,7 @@ public static class StartupExtensions
                 var opt = sp.GetRequiredService<IOptions<BotConfiguration>>().Value;
                 return new TelegramBotClient(opt.BotToken, httpClient);
             });
-        services.AddScoped<IHandleUpdateService, HandleUpdateService>();
+        services.AddScoped<ITelegramUpdateService, TelegramUpdateService>();
         return services;
     }
 

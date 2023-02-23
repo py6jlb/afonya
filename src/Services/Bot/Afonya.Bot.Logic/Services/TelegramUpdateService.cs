@@ -13,15 +13,15 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Afonya.Bot.Logic.Services;
 
-public class HandleUpdateService : IHandleUpdateService
+public class TelegramUpdateService : ITelegramUpdateService
 {
     private readonly ITelegramBotClient _botClient;
-    private readonly ILogger<HandleUpdateService> _logger;
+    private readonly ILogger<TelegramUpdateService> _logger;
     private readonly IMoneyTransactionService _moneyTransaction;
     private readonly ICategoryService _categoryService;
 
-    public HandleUpdateService(ITelegramBotClient botClient,
-        ILogger<HandleUpdateService> logger,
+    public TelegramUpdateService(ITelegramBotClient botClient,
+        ILogger<TelegramUpdateService> logger,
         IMoneyTransactionService moneyTransaction, ICategoryService categoryService)
     {
         _botClient = botClient;
@@ -119,7 +119,6 @@ public class HandleUpdateService : IHandleUpdateService
     
 
     //-----------------------------Message handlers----------------------------------
-
     private async Task StartAsync(Message message, CancellationToken ct = default)
     {
         await _botClient.SendChatActionAsync(message.Chat.Id, ChatAction.Typing, cancellationToken: ct);

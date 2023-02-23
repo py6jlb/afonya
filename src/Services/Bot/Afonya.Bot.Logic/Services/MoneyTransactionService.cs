@@ -31,14 +31,14 @@ public class MoneyTransactionService : IMoneyTransactionService
         }
     }
 
-    public IEnumerable<MoneyTransactionDto> Get(MoneyTransactionFilter filter)
+    public IReadOnlyCollection<MoneyTransactionDto> Get(MoneyTransactionFilter filter)
     {
         var query = _db.GetCollection<MoneyTransaction>().Query();
 
         filter.StartDate ??= DateTime.MinValue;
         filter.EndDate ??= DateTime.MaxValue;
 
-        if (filter.IncludeDate)
+        if (filter.IncludeDate ?? true)
             query.Where(x => x.RegisterDate >= filter.StartDate && x.RegisterDate <= filter.EndDate);
         else
             query.Where(x => x.RegisterDate > filter.StartDate && x.RegisterDate < filter.EndDate);
@@ -61,7 +61,7 @@ public class MoneyTransactionService : IMoneyTransactionService
             RegisterDate = x.RegisterDate, 
             TransactionDate = x.TransactionDate, 
             FromUserName = x.FromUserName
-        });
+        }).ToArray();
     }
 
     public MoneyTransactionDto Get(string id)

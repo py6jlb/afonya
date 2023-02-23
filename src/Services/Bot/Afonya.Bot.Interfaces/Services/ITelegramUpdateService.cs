@@ -2,7 +2,7 @@
 
 namespace Afonya.Bot.Interfaces.Services;
 
-public interface IHandleUpdateService
+public interface ITelegramUpdateService
 {
     Task HandleUpdateAsync(Update update, CancellationToken ct = default);
 }

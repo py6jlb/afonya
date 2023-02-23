@@ -1,124 +1,44 @@
-﻿using Afonya.Bot.Interfaces.Dto;
-using Afonya.Bot.Interfaces.Services;
+﻿using Afonya.Bot.Logic.Commands.Bot.BotStart;
+using Afonya.Bot.Logic.Commands.Bot.BotStop;
+using Afonya.Bot.Logic.Queries.BotWebhookStatus;
 using Afonya.Bot.WebWorker.Auth;
-using Common.Options;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Shared.Contracts;
 using Swashbuckle.AspNetCore.Annotations;
-using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 
 namespace Afonya.Bot.WebWorker.Controllers;
 
 [ApiController]
 //[Authorize]
+[BasicAuthAdmin]
 public class ManageController : ControllerBase
 {
-    private readonly ILogger<ManageController> _logger;
-    private readonly ICategoryService _categoryService;
-    private readonly ITelegramBotClient _telegramBotClient;
-    private readonly IUserService _userService;
-    private readonly BotConfiguration _botConfig;
-    private readonly ReverseProxyConfig _proxyConfig;
-    
-    public ManageController(ILogger<ManageController> logger, 
-        ICategoryService categoryService, IOptions<BotConfiguration> botConfig,
-        IOptions<ReverseProxyConfig> proxyConfig,
-        ITelegramBotClient telegramBotClient, IUserService userService)
+    private readonly IMediator _mediator;
+
+
+    public ManageController(IMediator mediator)
     {
-        _logger = logger;
-        _categoryService = categoryService;
-        _telegramBotClient = telegramBotClient;
-        _userService = userService;
-        _botConfig = botConfig.Value;
-        _proxyConfig = proxyConfig.Value;
+        _mediator = mediator;
     }
-    
-    [HttpGet("api/category")]
-    [BasicAuthAdmin]
-    public IReadOnlyCollection<CategoryDto> GetCategories([FromQuery, SwaggerParameter("Включая неактивные")]bool all = false)
-    {
-        var data = _categoryService.Get(all);
-        return data;
-    }
-    
-    [HttpPost("api/category")]
-    [BasicAuthAdmin]
-    public CategoryDto PostCategory(CategoryDto category)
-    {
-        var data = _categoryService.Create(category);
-        return data;
-    }
-    
-    [HttpPut("api/category")]
-    [BasicAuthAdmin]
-    public CategoryDto PutCategory(CategoryDto category)
-    {
-        var data = _categoryService.Update(category);
-        return data;
-    }
-    
-    [HttpDelete("api/category")]
-    [BasicAuthAdmin]
-    public bool DeleteCategory(string id)
-    {
-        var data = _categoryService.Delete(id);
-        return data;
-    }
-    
+
     [HttpPost("bot/status")]
-    [BasicAuthAdmin]
-    public async Task<WebhookInfo> StatusBot()
+    public async Task<WebhookInfo> StatusBot(CancellationToken cancellationToken)
     {
-        var result = await _telegramBotClient.GetWebhookInfoAsync();
+        var result = await _mediator.Send(new BotWebhookStatusQuery(), cancellationToken);
         return result;
     }
     
     [HttpPost("bot/start")]
-    [BasicAuthAdmin]
-    public async Task<bool> StartBot()
+    public async Task StartBot(CancellationToken cancellationToken)
     {
-        var webHookAddress = _proxyConfig?.UseReverseProxy ?? false ? 
-            $"{_botConfig.HostAddress}{_proxyConfig?.SubDir ?? ""}/bot/{_botConfig.BotToken}" : 
-            $"{_botConfig.HostAddress}/bot/{_botConfig.BotToken}";
-        _logger.LogInformation("Set webHook: {WebHookAddress}", $"{webHookAddress}/webhook");
-        await _telegramBotClient.SetWebhookAsync(url: $"{webHookAddress}/webhook", 
-            allowedUpdates: Array.Empty<UpdateType>());
-        return true;
+        await _mediator.Send(new BotStartCommand(), cancellationToken);
     }
     
     [HttpPost("bot/stop")]
-    [BasicAuthAdmin]
-    public async Task<bool> StopBot()
+    public async Task StopBot(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Delete webHook");
-        await _telegramBotClient.DeleteWebhookAsync();
-        return true;
-    }
-    
-    [HttpGet("api/user")]
-    [BasicAuthAdmin]
-    public IReadOnlyCollection<UserDto> GetUsers()
-    {
-        var data = _userService.Get();
-        return data;
-    }
-    
-    [HttpPost("api/user")]
-    [BasicAuthAdmin]
-    public UserDto PostUser(UserDto user)
-    {
-        var data = _userService.Create(user);
-        return data;
-    }
-    
-    [HttpDelete("api/user")]
-    [BasicAuthAdmin]
-    public bool DeleteUser(string id)
-    {
-        var data = _categoryService.Delete(id);
-        return data;
+        await _mediator.Send(new BotStopCommand(), cancellationToken);
     }
 }
