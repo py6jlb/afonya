@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Afonya.Bot.Logic</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\Common.csproj" />
+      <ProjectReference Include="..\Afonya.Bot.Interfaces\Afonya.Bot.Interfaces.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.3" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+      <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Commands\Bot\HandleUpdate\" />
+      <Folder Include="Commands\Bot\BotStart\" />
+      <Folder Include="Commands\Bot\BotStop\" />
+      <Folder Include="Commands\Categories\AddCategory\" />
+      <Folder Include="Commands\Categories\DeleteCategory\" />
+      <Folder Include="Commands\Categories\UpdateCategory\" />
+      <Folder Include="Commands\MoneyTransactions\UpdateMoneyTransaction\" />
+      <Folder Include="Commands\User\CreateUser\" />
+      <Folder Include="Commands\User\DeleteUser\" />
+      <Folder Include="Queries\BotWebhookStatus\" />
+      <Folder Include="Queries\GetUser\" />
+      <Folder Include="Queries\GetCategories\" />
+      <Folder Include="Queries\GetMoneyTransactions\" />
+    </ItemGroup>
+
+</Project>

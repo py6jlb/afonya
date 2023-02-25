@@ -1,0 +1,24 @@
+version: '3.4'
+
+networks:
+  app:
+    driver: "bridge"
+
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    hostname: "nginx"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ../deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../deploy/nginx/proxy.conf:/etc/nginx/proxy.conf:ro
+      - ../deploy/ssl/local.crt:/etc/ssl/certs/local.crt:ro
+      - ../deploy/ssl/local.key:/etc/ssl/certs/local.key:ro
+      - ../deploy/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "80:80"
+      - "8081:443"
+    networks:
+      app:
