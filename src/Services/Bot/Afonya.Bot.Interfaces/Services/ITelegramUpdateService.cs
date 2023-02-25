@@ -4,5 +4,7 @@ namespace Afonya.Bot.Interfaces.Services;
 
 public interface ITelegramUpdateService
 {
-    Task HandleUpdateAsync(Update update, CancellationToken ct = default);
+    Task BotOnMessageAsync(Message message, CancellationToken ct = default);
+    Task BotOnCallbackQueryAsync(CallbackQuery callbackQuery, CancellationToken ct = default);
+    Task UnknownUpdateHandler(Update update);
 }

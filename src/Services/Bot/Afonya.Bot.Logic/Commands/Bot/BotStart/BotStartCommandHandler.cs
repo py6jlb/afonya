@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Afonya.Bot.Logic.Commands.Bot.BotStart;
 
-public class BotStartCommandHandler : IRequestHandler<BotStopCommand, bool>
+public class BotStartCommandHandler : IRequestHandler<BotStartCommand, bool>
 {
     private readonly IBotManagementService _botManagementService;
 
@@ -13,7 +13,7 @@ public class BotStartCommandHandler : IRequestHandler<BotStopCommand, bool>
         _botManagementService = botManagementService;
     }
 
-    public async Task<bool> Handle(BotStopCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(BotStartCommand request, CancellationToken cancellationToken)
     {
         await _botManagementService.StartAsync(cancellationToken);
         return true;

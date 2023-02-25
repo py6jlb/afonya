@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Shared.Contracts;
 using Telegram.Bot;
-using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -30,43 +29,8 @@ public class TelegramUpdateService : ITelegramUpdateService
         _categoryService = categoryService;
     }
 
-    public async Task HandleUpdateAsync(Update update, CancellationToken ct = default)
-    {
-        var handler = update switch
-        {
-            { Message: { } message }                       => BotOnMessageAsync(message, ct),
-            { EditedMessage: { } message }                 => BotOnMessageAsync(message, ct),
-            { CallbackQuery: { } callbackQuery }           => BotOnCallbackQueryAsync(callbackQuery, ct),
-            //{ InlineQuery: { } inlineQuery }               => BotOnInlineQueryReceived(inlineQuery, ct),
-            //{ ChosenInlineResult: { } chosenInlineResult } => BotOnChosenInlineResultReceived(chosenInlineResult, ct),
-            _                                              => UnknownUpdateHandlerAsync(update, ct)
-        };
-
-        try
-        {
-            await handler;
-        }
-        catch (Exception exception)
-        {
-            await HandleErrorAsync(exception, ct);
-        }
-    }
-
-    private Task HandleErrorAsync(Exception exception, CancellationToken ct = default)
-    {
-        var errorMessage = exception switch
-        {
-            ApiRequestException apiRequestException =>
-                $"Ошибка Telegram API :\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
-            _ => exception.ToString()
-        };
-
-        _logger.LogInformation("Обработка ошибки: {ErrorMessage}", errorMessage);
-        return Task.CompletedTask;
-    }
-
     //-----------------------------Bot events handlers----------------------------------
-    private async Task BotOnMessageAsync(Message message, CancellationToken ct = default)
+    public async Task BotOnMessageAsync(Message message, CancellationToken ct = default)
     {
         _logger.LogInformation($"Получено сообщения типа: {message.Type}");
         if (message.Type != MessageType.Text) return;
@@ -79,12 +43,13 @@ public class TelegramUpdateService : ITelegramUpdateService
             "/cancel" => CancelAsync(message, ct),
             "/помощь" => HelpAsync(message, ct),
             "/help" => HelpAsync(message, ct),
+            "/kbrm" => DeleteKeyboardAsync(message, ct),
             _ => NonCommandMessageAsync(message, ct)
         };
         await action;
     }
 
-    private async Task BotOnCallbackQueryAsync(CallbackQuery callbackQuery, CancellationToken ct = default)
+    public async Task BotOnCallbackQueryAsync(CallbackQuery callbackQuery, CancellationToken ct = default)
     {
         await _botClient.SendChatActionAsync(callbackQuery.Message.Chat.Id, ChatAction.Typing, cancellationToken: ct);
         var callbackData = JsonConvert.DeserializeObject<CallbackInfo>(callbackQuery.Data);
@@ -95,7 +60,7 @@ public class TelegramUpdateService : ITelegramUpdateService
         var data = _moneyTransaction.Get(callbackData.Id);
         if (data == null)
         {
-            _logger.LogError("Отсуствуют данные для обновдления. {msq}", category);
+            _logger.LogError("Отсуствуют данные для обновления. {msq}", category);
             return;
         }
 
@@ -111,7 +76,7 @@ public class TelegramUpdateService : ITelegramUpdateService
             replyMarkup: new InlineKeyboardMarkup(Array.Empty<InlineKeyboardButton>()), cancellationToken: ct);
     }
 
-    private Task UnknownUpdateHandlerAsync(Update update, CancellationToken ct = default)
+    public Task UnknownUpdateHandler(Update update)
     {
         _logger.LogInformation("Unknown update type: {UpdateType}", update.Type);
         return Task.CompletedTask;
@@ -168,7 +133,7 @@ public class TelegramUpdateService : ITelegramUpdateService
         var isIncome = message.Text.StartsWith("+");
         var msgText = isIncome ? message.Text[1..] : message.Text;
         var isFloat = float.TryParse(msgText, NumberStyles.Any, CultureInfo.InvariantCulture, out var num);
-        if (isFloat)
+        if (isFloat && num > 0)
         {
             var savedData = new MoneyTransactionDto()
             {
@@ -182,7 +147,7 @@ public class TelegramUpdateService : ITelegramUpdateService
             };
 
             var dataId = _moneyTransaction.Insert(savedData);
-            var keyboard = BuildInlineKeyboard(isIncome, dataId.ToString());
+            var keyboard = BuildInlineKeyboard(isIncome, dataId);
             await _botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: $"{savedData.Sign}{num} руб",

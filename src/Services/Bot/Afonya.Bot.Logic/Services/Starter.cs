@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Shared.Contracts;
+using Telegram.Bot;
 
 namespace Afonya.Bot.Logic.Services;
 
@@ -12,15 +13,17 @@ public class Starter : IHostedService
     private readonly ILogger<Starter> _logger;
     private readonly IServiceProvider _services;
     private readonly IConfiguration _configuration;
+    private readonly ITelegramBotClient _botClient;
     
     public Starter(
         ILogger<Starter> logger, 
         IServiceProvider serviceProvider,
-        IConfiguration configuration)
+        IConfiguration configuration, ITelegramBotClient botClient)
     {
         _logger = logger;
         _services = serviceProvider;
         _configuration = configuration;
+        _botClient = botClient;
     }
     
     public Task StartAsync(CancellationToken cancellationToken)
@@ -31,9 +34,9 @@ public class Starter : IHostedService
         return Task.CompletedTask;
     }
 
-    public Task StopAsync(CancellationToken cancellationToken)
+    public async Task StopAsync(CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        await _botClient.DeleteWebhookAsync(cancellationToken: cancellationToken);
     }
 
     private void InitCategories(ICategoryService srv)
