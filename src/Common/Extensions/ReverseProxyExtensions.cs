@@ -16,7 +16,7 @@ public static class ReverseProxyExtensions
     public static WebApplication UseReverseProxy(this WebApplication app)
     {
         var opt = app.Services.GetRequiredService<IOptions<ReverseProxyConfig>>().Value;
-        if (opt?.UseReverseProxy ?? false) return app;
+        if (!opt?.UseReverseProxy ?? false) return app;
         
         var subDirPath = opt?.SubDir ?? "";
         if (!string.IsNullOrWhiteSpace(subDirPath)) app.UsePathBase(new PathString(subDirPath));
