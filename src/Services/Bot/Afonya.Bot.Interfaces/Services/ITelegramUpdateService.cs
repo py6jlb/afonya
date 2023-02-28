@@ -7,4 +7,5 @@ public interface ITelegramUpdateService
     Task BotOnMessageAsync(Message message, CancellationToken ct = default);
     Task BotOnCallbackQueryAsync(CallbackQuery callbackQuery, CancellationToken ct = default);
     Task UnknownUpdateHandler(Update update);
+    Task NotAllowed(Update update, CancellationToken ct = default);
 }

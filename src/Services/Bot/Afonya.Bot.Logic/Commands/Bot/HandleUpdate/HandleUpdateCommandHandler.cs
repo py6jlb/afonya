@@ -22,7 +22,11 @@ public class HandleUpdateCommandHandler : IRequestHandler<HandleUpdateCommand, b
     public async Task<bool> Handle(HandleUpdateCommand request, CancellationToken cancellationToken)
     {
         var allowed = AllowedUser(request.Update);
-        if (!allowed) return false;
+        if (!allowed)
+        {
+            await _updateService.NotAllowed(request.Update, cancellationToken);
+            return false;
+        }
         
         var handler = request.Update switch
         {

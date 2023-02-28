@@ -81,7 +81,22 @@ public class TelegramUpdateService : ITelegramUpdateService
         _logger.LogInformation("Unknown update type: {UpdateType}", update.Type);
         return Task.CompletedTask;
     }
-    
+
+    public async Task NotAllowed(Update update, CancellationToken ct = default)
+    {
+        var chatId = update switch
+        {
+            { Message: { } message }                       => message?.Chat.Id,
+            { EditedMessage: { } message }                 => message?.Chat.Id,
+            _                                              => null
+        };
+
+        if (chatId.HasValue)
+        {
+            await SendNotAllowedMessageAsync(chatId.Value, ct);
+        }
+    }
+
 
     //-----------------------------Message handlers----------------------------------
     private async Task StartAsync(Message message, CancellationToken ct = default)
@@ -102,6 +117,12 @@ public class TelegramUpdateService : ITelegramUpdateService
                              "Мне нужно отправлять суммы расходов в рублях, а затем выбирать к какой категории расходов они относятся. " +
                              "Если надо сохранить приход, то перед суммой должен быть занк \"+\"";
         await _botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: usage, cancellationToken: ct);
+    }
+
+    private async Task SendNotAllowedMessageAsync(long chatId, CancellationToken ct = default)
+    {
+        const string msg = "Тебе не разрешали пользоваться этим ботом!";
+        await _botClient.SendTextMessageAsync(chatId: chatId, text: msg, cancellationToken: ct);
     }
 
     private async Task SendKeyboardAsync(Message message, CancellationToken ct = default)

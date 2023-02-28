@@ -4,15 +4,12 @@ using Afonya.Bot.Logic.Queries.BotWebhookStatus;
 using Afonya.Bot.WebWorker.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Contracts;
-using Swashbuckle.AspNetCore.Annotations;
 using Telegram.Bot.Types;
 
 namespace Afonya.Bot.WebWorker.Controllers;
 
 [ApiController]
-//[Authorize]
-[BasicAuthAdmin]
+[Route("api/[controller]")]
 public class ManageController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -23,20 +20,23 @@ public class ManageController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost("bot/status")]
+    [BasicAuthAdmin]
+    [HttpPost("status")]
     public async Task<WebhookInfo> StatusBot(CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new BotWebhookStatusQuery(), cancellationToken);
         return result;
     }
     
-    [HttpPost("bot/start")]
+    [BasicAuthAdmin]
+    [HttpPost("start")]
     public async Task StartBot(CancellationToken cancellationToken)
     {
         await _mediator.Send(new BotStartCommand(), cancellationToken);
     }
     
-    [HttpPost("bot/stop")]
+    [BasicAuthAdmin]
+    [HttpPost("stop")]
     public async Task StopBot(CancellationToken cancellationToken)
     {
         await _mediator.Send(new BotStopCommand(), cancellationToken);

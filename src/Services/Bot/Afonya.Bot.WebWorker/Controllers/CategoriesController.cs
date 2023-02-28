@@ -2,6 +2,7 @@
 using Afonya.Bot.Logic.Commands.Categories.DeleteCategory;
 using Afonya.Bot.Logic.Commands.Categories.UpdateCategory;
 using Afonya.Bot.Logic.Queries.GetCategories;
+using Afonya.Bot.WebWorker.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts;
@@ -27,13 +28,15 @@ namespace Afonya.Bot.WebWorker.Controllers
             return data;
         }
     
+        [BasicAuthAdmin]
         [HttpPost]
         public async Task<CategoryDto> Post(CategoryDto category)
         {
             var data = await _mediator.Send(new AddCategoryCommand{NewCategory = category});
             return data;
         }
-    
+        
+        [BasicAuthAdmin]
         [HttpPut]
         public async Task<CategoryDto> Put(CategoryDto category)
         {
@@ -41,6 +44,7 @@ namespace Afonya.Bot.WebWorker.Controllers
             return data;
         }
     
+        [BasicAuthAdmin]
         [HttpDelete]
         public async Task<bool> Delete(string id)
         {

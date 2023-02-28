@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Common.Extensions;
@@ -16,14 +17,26 @@ public static class ReverseProxyExtensions
     public static WebApplication UseReverseProxy(this WebApplication app)
     {
         var opt = app.Services.GetRequiredService<IOptions<ReverseProxyConfig>>().Value;
-        if (!opt?.UseReverseProxy ?? false) return app;
+        var logger = app.Services.GetRequiredService<ILogger<WebApplication>>();
+        
+        var useProxy = opt?.UseReverseProxy ?? false;
+
+        if (!useProxy)
+        {
+            logger.LogInformation($"Reverse-прокси не используется");
+            return app;
+        }
         
         var subDirPath = opt?.SubDir ?? "";
-        if (!string.IsNullOrWhiteSpace(subDirPath)) app.UsePathBase(new PathString(subDirPath));
-        
+        if (!string.IsNullOrWhiteSpace(subDirPath))
+        {
+            logger.LogInformation("Базовый путь: {path}", subDirPath);
+            app.UsePathBase(new PathString(subDirPath));
+        }
+
         var forwardedHeaderOptions = new ForwardedHeadersOptions
         {
-            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            ForwardedHeaders = ForwardedHeaders.All
         };
         forwardedHeaderOptions.KnownNetworks.Clear();
         forwardedHeaderOptions.KnownProxies.Clear();
