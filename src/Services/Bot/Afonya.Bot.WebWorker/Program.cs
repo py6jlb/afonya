@@ -4,11 +4,10 @@ using Hellang.Middleware.ProblemDetails;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSwaggerGeneration();
-builder.Services.AddErrorHandling(builder.Environment);
-builder.Services.AddServices(builder.Configuration);
-builder.Services.AddBotServices();
-builder.Services.AddControllers().AddNewtonsoftJson();
+builder.AddSwaggerGeneration();
+builder.AddErrorHandling(builder.Environment);
+builder.AddServices(builder.Configuration);
+builder.AddBotServices(builder.Configuration);
 builder.Host.UseSerilog();
 
 var app = builder.Build();
