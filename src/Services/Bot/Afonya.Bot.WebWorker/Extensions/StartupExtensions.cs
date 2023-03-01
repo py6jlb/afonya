@@ -3,8 +3,10 @@ using Afonya.Bot.Infrastructure.Contexts;
 using Afonya.Bot.Interfaces;
 using Afonya.Bot.Interfaces.Dto;
 using Afonya.Bot.Interfaces.Services;
+using Afonya.Bot.Interfaces.Services.UpdateHandler;
 using Afonya.Bot.Logic.Commands.Bot.HandleUpdate;
 using Afonya.Bot.Logic.Services;
+using Afonya.Bot.Logic.UpdateHandlers;
 using Common.Exceptions;
 using Common.Options;
 using Hellang.Middleware.ProblemDetails;
@@ -70,7 +72,7 @@ public static class StartupExtensions
                 var opt = sp.GetRequiredService<IOptions<BotConfiguration>>().Value;
                 return new TelegramBotClient(opt.BotToken, httpClient);
             });
-        services.AddScoped<ITelegramUpdateService, TelegramUpdateService>();
+        services.AddScoped<IUpdateHandlerFactory, UpdateHandlerFactory>();
         return services;
     }
 

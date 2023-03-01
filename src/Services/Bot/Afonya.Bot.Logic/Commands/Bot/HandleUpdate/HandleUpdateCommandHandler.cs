@@ -1,4 +1,5 @@
 ﻿using Afonya.Bot.Interfaces.Services;
+using Afonya.Bot.Interfaces.Services.UpdateHandler;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Exceptions;
@@ -10,37 +11,36 @@ public class HandleUpdateCommandHandler : IRequestHandler<HandleUpdateCommand, b
 {
     private readonly ILogger<HandleUpdateCommandHandler> _logger;
     private readonly IUserService _userService;
-    private readonly ITelegramUpdateService _updateService;
+    private readonly IUpdateHandlerFactory _handlerFactory;
 
-    public HandleUpdateCommandHandler(IUserService userService, ITelegramUpdateService updateService, ILogger<HandleUpdateCommandHandler> logger)
+    public HandleUpdateCommandHandler(IUserService userService, ILogger<HandleUpdateCommandHandler> logger, IUpdateHandlerFactory handlerFactory)
     {
         _userService = userService;
-        _updateService = updateService;
         _logger = logger;
+        _handlerFactory = handlerFactory;
     }
 
     public async Task<bool> Handle(HandleUpdateCommand request, CancellationToken cancellationToken)
     {
-        var allowed = AllowedUser(request.Update);
-        if (!allowed)
+        var (allowed, chatId) = AllowedUser(request.Update);
+        var handler = _handlerFactory.CreateHandler(request.Update);
+        
+        if (!chatId.HasValue)
         {
-            await _updateService.NotAllowed(request.Update, cancellationToken);
+            _logger.LogWarning("Ошибка обработки обновления. отсутствует ChatId");
             return false;
         }
-        
-        var handler = request.Update switch
+
+        if (!allowed)
         {
-            { Message: { } message }                       => _updateService.BotOnMessageAsync(message, cancellationToken),
-            { EditedMessage: { } message }                 => _updateService.BotOnMessageAsync(message, cancellationToken),
-            { CallbackQuery: { } callbackQuery }           => _updateService.BotOnCallbackQueryAsync(callbackQuery, cancellationToken),
-            //{ InlineQuery: { } inlineQuery }               => _updateService.BotOnInlineQueryReceived(inlineQuery, cancellationToken),
-            //{ ChosenInlineResult: { } chosenInlineResult } => _updateService.BotOnChosenInlineResultReceived(chosenInlineResult, cancellationToken),
-            _                                              => _updateService.UnknownUpdateHandler(request.Update)
-        };
+            await handler.NotAllowed(chatId.Value, cancellationToken);
+            return false;
+        }
+
 
         try
         {
-            await handler;
+            await handler.HandleAsync(request.Update, chatId.Value, cancellationToken );
         }
         catch (Exception exception)
         {
@@ -56,19 +56,18 @@ public class HandleUpdateCommandHandler : IRequestHandler<HandleUpdateCommand, b
         return true;
     }
 
-    private bool AllowedUser(Update? update)
+    private (bool allowed, long? chatId) AllowedUser(Update? update)
     {
-        if(update == null) return false;
-        var from = update switch
+        if(update == null) return (false, null);
+
+        var (from, chatId) = update switch
         {
-            { Message: { } message }                       => message?.From?.Username,
-            { EditedMessage: { } message }                 => message?.From?.Username,
-            { CallbackQuery: { } callbackQuery }           => callbackQuery?.From?.Username,
-            { InlineQuery: { } inlineQuery }               => inlineQuery?.From?.Username,
-            { ChosenInlineResult: { } chosenInlineResult } => chosenInlineResult?.From?.Username,
-            _                                              => null
+            { Message: { } message }                       => (message?.From?.Username, message?.Chat.Id),
+            { EditedMessage: { } message }                 => (message?.From?.Username, message?.Chat.Id),
+            { CallbackQuery: { } callbackQuery }           => (callbackQuery?.From?.Username, callbackQuery?.Message?.Chat.Id),
+            _                                              => (null, null)
         };
 
-        return !string.IsNullOrWhiteSpace(from) && _userService.GetByName(from) != null;
+        return (!string.IsNullOrWhiteSpace(from) && _userService.GetByName(from) != null, chatId);
     }
 }
