@@ -51,7 +51,6 @@ public class TelegramUpdateService : ITelegramUpdateService
 
     public async Task BotOnCallbackQueryAsync(CallbackQuery callbackQuery, CancellationToken ct = default)
     {
-        await _botClient.SendChatActionAsync(callbackQuery.Message.Chat.Id, ChatAction.Typing, cancellationToken: ct);
         var callbackData = JsonConvert.DeserializeObject<CallbackInfo>(callbackQuery.Data);
         var categoryCollection = _categoryService.Get();
         var category = categoryCollection.First(x => x.Name == callbackData.Ctg);
@@ -101,7 +100,6 @@ public class TelegramUpdateService : ITelegramUpdateService
     //-----------------------------Message handlers----------------------------------
     private async Task StartAsync(Message message, CancellationToken ct = default)
     {
-        await _botClient.SendChatActionAsync(message.Chat.Id, ChatAction.Typing, cancellationToken: ct);
         await SendKeyboardAsync(message, ct);
         await HelpAsync(message, ct);
     }
