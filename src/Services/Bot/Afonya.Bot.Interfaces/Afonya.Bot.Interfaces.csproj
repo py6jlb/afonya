@@ -20,4 +20,8 @@
       <ProjectReference Include="..\Afonya.Bot.Domain\Afonya.Bot.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Pooling\" />
+    </ItemGroup>
+
 </Project>

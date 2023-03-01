@@ -1,5 +1,4 @@
 ﻿using Common.Options;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -8,9 +7,9 @@ namespace Afonya.Bot.WebWorker.Extensions;
 
 public static class SwaggerExtensions
 {
-    public static IServiceCollection AddSwaggerGeneration(this IServiceCollection services)
+    public static WebApplicationBuilder AddSwaggerGeneration(this WebApplicationBuilder builder)
     {
-        services.AddSwaggerGen(c =>
+        builder.Services.AddSwaggerGen(c =>
         {
             //var securityScheme = new OpenApiSecurityScheme
             //{
@@ -37,7 +36,7 @@ public static class SwaggerExtensions
 
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Хранение данных бота", Version = "v1" });
         });
-        return services;
+        return builder;
     }
 
     public static IApplicationBuilder UseSwaggerUi(this IApplicationBuilder app, WebApplicationBuilder builder)

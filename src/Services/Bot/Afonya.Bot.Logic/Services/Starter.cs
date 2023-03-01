@@ -14,6 +14,7 @@ public class Starter : IHostedService
     private readonly IServiceProvider _services;
     private readonly IConfiguration _configuration;
     private readonly ITelegramBotClient _botClient;
+    private readonly bool _usePooling;
     
     public Starter(
         ILogger<Starter> logger, 
@@ -24,6 +25,7 @@ public class Starter : IHostedService
         _services = serviceProvider;
         _configuration = configuration;
         _botClient = botClient;
+        _usePooling = configuration.GetSection("BotConfiguration:UsePooling").Get<bool>();
     }
     
     public Task StartAsync(CancellationToken cancellationToken)
@@ -36,7 +38,7 @@ public class Starter : IHostedService
 
     public async Task StopAsync(CancellationToken cancellationToken)
     {
-        await _botClient.DeleteWebhookAsync(cancellationToken: cancellationToken);
+        if(!_usePooling) await _botClient.DeleteWebhookAsync(cancellationToken: cancellationToken);
     }
 
     private void InitCategories(ICategoryService srv)
