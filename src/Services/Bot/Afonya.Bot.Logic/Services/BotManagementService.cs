@@ -28,18 +28,24 @@ public class BotManagementService : IBotManagementService
 
     public async Task StartAsync(CancellationToken ct = default)
     {
-        var webHookAddress = _proxyConfig?.UseReverseProxy ?? false ? 
-            $"{_botConfig.HostAddress}{_proxyConfig?.SubDir ?? ""}/bot/{_botConfig.BotToken}" : 
-            $"{_botConfig.HostAddress}/bot/{_botConfig.BotToken}";
-        _logger.LogInformation("Set webHook: {WebHookAddress}", $"{webHookAddress}/webhook");
-        await _telegramBotClient.SetWebhookAsync(url: $"{webHookAddress}/webhook", 
-            allowedUpdates: Array.Empty<UpdateType>(), cancellationToken: ct);
+        if (!_botConfig.UsePooling)
+        {
+            var webHookAddress = _proxyConfig?.UseReverseProxy ?? false ? 
+                $"{_botConfig.HostAddress}{_proxyConfig?.SubDir ?? ""}/bot/{_botConfig.BotToken}" : 
+                $"{_botConfig.HostAddress}/bot/{_botConfig.BotToken}";
+            _logger.LogInformation("Set webHook: {WebHookAddress}", $"{webHookAddress}/webhook");
+            await _telegramBotClient.SetWebhookAsync(url: $"{webHookAddress}/webhook", 
+                allowedUpdates: Array.Empty<UpdateType>(), cancellationToken: ct);
+        }
     }
 
     public async Task StopAsync(CancellationToken ct = default)
     {
-        _logger.LogInformation("Delete webHook");
-        await _telegramBotClient.DeleteWebhookAsync(cancellationToken: ct);
+        if (!_botConfig.UsePooling)
+        {
+            _logger.LogInformation("Delete webHook");
+            await _telegramBotClient.DeleteWebhookAsync(cancellationToken: ct);
+        }
     }
 
     public async Task<WebhookInfo> StatusAsync(CancellationToken ct = default)
