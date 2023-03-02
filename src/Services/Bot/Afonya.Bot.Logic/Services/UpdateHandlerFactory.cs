@@ -1,11 +1,13 @@
 ﻿using Afonya.Bot.Interfaces.Services;
 using Afonya.Bot.Interfaces.Services.UpdateHandler;
+using Afonya.Bot.Logic.TelegramUpdateHandlers;
+using Afonya.Bot.Logic.UpdateHandlers;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using IUpdateHandler = Afonya.Bot.Interfaces.Services.UpdateHandler.IUpdateHandler;
 
-namespace Afonya.Bot.Logic.UpdateHandlers;
+namespace Afonya.Bot.Logic.Services;
 
 public class UpdateHandlerFactory : IUpdateHandlerFactory
 {
@@ -26,10 +28,10 @@ public class UpdateHandlerFactory : IUpdateHandlerFactory
     {
         return update switch
         {
-            { Message: { } }            => new MessageHandler(_loggerFactory.CreateLogger<MessageHandler>(), _botClient, _moneyTransaction, _categoryService),
-            { EditedMessage: { } }      => new EditedMessageHandler(_loggerFactory.CreateLogger<EditedMessageHandler>(), _botClient),
-            { CallbackQuery: { } }      => new CallbackQueryHandler(_loggerFactory.CreateLogger<CallbackQueryHandler>(), _botClient, _moneyTransaction, _categoryService),
-            _                           => new UnknownUpdateHandler(_loggerFactory.CreateLogger<UnknownUpdateHandler>(), _botClient)
+            { Message: { } } => new MessageHandler(_loggerFactory.CreateLogger<MessageHandler>(), _botClient, _moneyTransaction, _categoryService),
+            { EditedMessage: { } } => new EditedMessageHandler(_loggerFactory.CreateLogger<EditedMessageHandler>(), _botClient),
+            { CallbackQuery: { } } => new CallbackQueryHandler(_loggerFactory.CreateLogger<CallbackQueryHandler>(), _botClient, _moneyTransaction, _categoryService),
+            _ => new UnknownUpdateHandler(_loggerFactory.CreateLogger<UnknownUpdateHandler>(), _botClient)
         };
     }
 }

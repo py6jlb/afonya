@@ -21,7 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Commands\Bot\HandleUpdate\" />
       <Folder Include="Commands\Bot\BotStart\" />
       <Folder Include="Commands\Bot\BotStop\" />
       <Folder Include="Commands\Categories\AddCategory\" />

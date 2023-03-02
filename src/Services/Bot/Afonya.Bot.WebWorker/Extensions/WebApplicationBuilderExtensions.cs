@@ -3,7 +3,8 @@ using Afonya.Bot.Infrastructure.Contexts;
 using Afonya.Bot.Interfaces;
 using Afonya.Bot.Interfaces.Dto;
 using Afonya.Bot.Interfaces.Services;
-using Afonya.Bot.Logic.Commands.Bot.HandleUpdate;
+using Afonya.Bot.Interfaces.Services.UpdateHandler;
+using Afonya.Bot.Logic.Commands.Bot.NewTelegramEvent;
 using Afonya.Bot.Logic.Services;
 using Afonya.Bot.Logic.Services.Pooling;
 using Common.Exceptions;
@@ -13,7 +14,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
-using Telegram.Bot.Polling;
+using IUpdateHandler = Telegram.Bot.Polling.IUpdateHandler;
 
 namespace Afonya.Bot.WebWorker.Extensions;
 
@@ -62,7 +63,7 @@ public static class WebApplicationBuilderExtensions
         builder.Services.AddTransient<ICategoryService, CategoryService>();
         builder.Services.AddTransient<IBotManagementService, BotManagementService>();
 
-        builder.Services.AddMediatR(typeof(HandleUpdateCommand).GetTypeInfo().Assembly);
+        builder.Services.AddMediatR(typeof(NewTelegramEventCommand).GetTypeInfo().Assembly);
 
         builder.Services.AddControllers().AddNewtonsoftJson();
         return builder;
@@ -82,7 +83,7 @@ public static class WebApplicationBuilderExtensions
                 return new TelegramBotClient(opt.BotToken, httpClient);
             });
 
-        builder.Services.AddScoped<ITelegramUpdateService, TelegramUpdateService>();
+        builder.Services.AddScoped<IUpdateHandlerFactory, UpdateHandlerFactory>();
         if (!botConfig.UsePooling) return builder;
 
         builder.Services.AddScoped<IUpdateHandler, UpdateHandler>();

@@ -12,6 +12,7 @@ public class UnknownUpdateHandler : BaseHandler
 
     public override Task HandleAsync(Update update, long chatId, CancellationToken ct = default)
     {
+        Logger.LogInformation("Получено обновления типа: UnknownUpdate");
         return base.HandleAsync(update, chatId, ct);
     }
 }

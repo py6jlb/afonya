@@ -24,6 +24,7 @@ public class CallbackQueryHandler : BaseHandler
 
     public override async Task HandleAsync(Update update, long chatId, CancellationToken ct = default)
     {
+        Logger.LogInformation("Получено обновления типа: CallbackQuery");
         var callbackQuery = update.CallbackQuery!;
 
         var callbackData = JsonConvert.DeserializeObject<CallbackInfo>(callbackQuery.Data);

@@ -1,4 +1,4 @@
-﻿using Afonya.Bot.Logic.Commands.Bot.HandleUpdate;
+﻿using Afonya.Bot.Logic.Commands.Bot.NewTelegramEvent;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +20,7 @@ public class WebHookController : ControllerBase
     //[ValidateTelegramBot]
     public async Task<IActionResult> Post([FromBody] Update update, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new HandleUpdateCommand{ Update = update }, cancellationToken);
+        await _mediator.Send(new NewTelegramEventCommand{ Update = update }, cancellationToken);
         return Ok();
     }
 }

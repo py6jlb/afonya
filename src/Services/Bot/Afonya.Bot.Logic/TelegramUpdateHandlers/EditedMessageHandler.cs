@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Afonya.Bot.Logic.UpdateHandlers;
+using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace Afonya.Bot.Logic.UpdateHandlers;
+namespace Afonya.Bot.Logic.TelegramUpdateHandlers;
 
 public class EditedMessageHandler : BaseHandler
 {
@@ -12,6 +13,7 @@ public class EditedMessageHandler : BaseHandler
 
     public override Task HandleAsync(Update update, long chatId, CancellationToken ct = default)
     {
+        Logger.LogInformation("Получено обновления типа: EditedMessage");
         return base.HandleAsync(update, chatId, ct);
     }
 }

@@ -1,15 +1,16 @@
-﻿using Afonya.Bot.Interfaces.Dto;
+﻿using System.Globalization;
+using Afonya.Bot.Interfaces.Dto;
 using Afonya.Bot.Interfaces.Services;
+using Afonya.Bot.Logic.UpdateHandlers;
+using Common.Extensions;
 using Microsoft.Extensions.Logging;
 using Shared.Contracts;
-using System.Globalization;
-using Common.Extensions;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Afonya.Bot.Logic.UpdateHandlers;
+namespace Afonya.Bot.Logic.TelegramUpdateHandlers;
 
 public class MessageHandler : BaseHandler
 {
@@ -25,6 +26,8 @@ public class MessageHandler : BaseHandler
 
     public override async Task HandleAsync(Update update, long chatId, CancellationToken ct = default)
     {
+        Logger.LogInformation("Получено обновления типа: Message");
+
         var message = update.Message!;
         if (message.Type != MessageType.Text) return;
 
@@ -112,7 +115,8 @@ public class MessageHandler : BaseHandler
             arr.Select(x =>
             {
                 var callback = new CallbackInfo { Id = savedDataId, Ctg = x.Name };
-                return InlineKeyboardButton.WithCallbackData(x.Icon, callback.ToString());
+                var button = InlineKeyboardButton.WithCallbackData(x.Icon, callback.ToString());
+                return button;
             }).ToArray()
         ).ToArray());
         return inlineKeyboard;

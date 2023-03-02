@@ -5,22 +5,22 @@ using Microsoft.Extensions.Logging;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
 
-namespace Afonya.Bot.Logic.Commands.Bot.HandleUpdate;
+namespace Afonya.Bot.Logic.Commands.Bot.NewTelegramEvent;
 
-public class HandleUpdateCommandHandler : IRequestHandler<HandleUpdateCommand, bool>
+public class NewTelegramEventCommandHandler : IRequestHandler<NewTelegramEventCommand, bool>
 {
-    private readonly ILogger<HandleUpdateCommandHandler> _logger;
+    private readonly ILogger<NewTelegramEventCommandHandler> _logger;
     private readonly IUserService _userService;
     private readonly IUpdateHandlerFactory _handlerFactory;
 
-    public HandleUpdateCommandHandler(IUserService userService, ILogger<HandleUpdateCommandHandler> logger, IUpdateHandlerFactory handlerFactory)
+    public NewTelegramEventCommandHandler(IUserService userService, ILogger<NewTelegramEventCommandHandler> logger, IUpdateHandlerFactory handlerFactory)
     {
         _userService = userService;
         _logger = logger;
         _handlerFactory = handlerFactory;
     }
 
-    public async Task<bool> Handle(HandleUpdateCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(NewTelegramEventCommand request, CancellationToken cancellationToken)
     {
         var (allowed, chatId) = AllowedUser(request.Update);
         var handler = _handlerFactory.CreateHandler(request.Update);

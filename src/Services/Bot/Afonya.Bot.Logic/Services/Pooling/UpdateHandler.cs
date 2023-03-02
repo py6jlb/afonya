@@ -1,4 +1,4 @@
-﻿using Afonya.Bot.Logic.Commands.Bot.HandleUpdate;
+﻿using Afonya.Bot.Logic.Commands.Bot.NewTelegramEvent;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
@@ -21,7 +21,7 @@ public class UpdateHandler : IUpdateHandler
 
     public async Task HandleUpdateAsync(ITelegramBotClient _, Update update, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new HandleUpdateCommand {Update = update}, cancellationToken);
+        await _mediator.Send(new NewTelegramEventCommand {Update = update}, cancellationToken);
     }
 
     public async Task HandlePollingErrorAsync(ITelegramBotClient _, Exception exception, CancellationToken cancellationToken)
