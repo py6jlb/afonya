@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
-using Afonya.Bot.Interfaces.Dto;
 using Afonya.Bot.Interfaces.Repositories;
-using Common.Extensions;
+using Afonya.Bot.Interfaces.Services;
 using Microsoft.Extensions.Logging;
 using Shared.Contracts;
 using Telegram.Bot;
@@ -14,13 +13,13 @@ namespace Afonya.Bot.Logic.TelegramUpdateHandlers;
 public class MessageHandler : BaseHandler
 {
     private readonly IMoneyTransactionRepository _moneyTransaction;
-    private readonly ICategoryRepository _categoryRepository;
+    private readonly IBotKeyboardService _botKeyboard;
 
     public MessageHandler(ILogger<MessageHandler> logger, ITelegramBotClient botClient, 
-        IMoneyTransactionRepository moneyTransaction, ICategoryRepository categoryRepository) : base(logger, botClient)
+        IMoneyTransactionRepository moneyTransaction, IBotKeyboardService botKeyboard) : base(logger, botClient)
     {
         _moneyTransaction = moneyTransaction;
-        _categoryRepository = categoryRepository;
+        _botKeyboard = botKeyboard;
     }
 
     public override async Task HandleAsync(Update update, long chatId, CancellationToken ct = default)
@@ -33,35 +32,12 @@ public class MessageHandler : BaseHandler
         var action = (message.Text?.Split(' ').FirstOrDefault()?.ToLower()) switch
         {
             "/начать" or "/start"  => StartAsync(message, ct),
-            "/закрыть" or "/cancel" => DeleteKeyboardAsync(message, ct),
+            "/закрыть" or "/cancel" => RemoveKeyboardAsync(message, ct),
             "/помощь" or "/help" => HelpAsync(message, ct),
-            "/kbrm" => DeleteKeyboardAsync(message, ct),
+            "/kbrm" => RemoveKeyboardAsync(message, ct),
             _ => NonCommandMessageAsync(message, ct)
         };
         await action;
-    }
-
-    private async Task StartAsync(Message message, CancellationToken ct = default)
-    {
-        var replyKeyboardMarkup = new ReplyKeyboardMarkup(new[] { new KeyboardButton("/Помощь") }) { ResizeKeyboard = true};
-        await BotClient.SendTextMessageAsync(chatId: message.Chat.Id, text: "Привет!", replyMarkup: replyKeyboardMarkup, cancellationToken: ct);
-        await HelpAsync(message, ct);
-    }
-    
-    private async Task HelpAsync(Message message, CancellationToken ct = default)
-    {
-        const string usage = "Что я умею:\n" +
-                             "Мне нужно отправлять суммы расходов в рублях, а затем выбирать к какой категории расходов они относятся. " +
-                             "Если надо сохранить приход, то перед суммой должен быть занк \"+\"";
-        await BotClient.SendTextMessageAsync(chatId: message.Chat.Id, text: usage, cancellationToken: ct);
-    }
-    
-    private async Task DeleteKeyboardAsync(Message message, CancellationToken ct = default)
-    {
-        await BotClient.SendTextMessageAsync(
-            chatId: message.Chat.Id,
-            text: "Клавиатура удалена.",
-            replyMarkup: new ReplyKeyboardRemove(), cancellationToken: ct);
     }
 
     private async Task NonCommandMessageAsync(Message message, CancellationToken ct = default)
@@ -90,7 +66,7 @@ public class MessageHandler : BaseHandler
         };
 
         var dataId = _moneyTransaction.Insert(savedData);
-        var keyboard = BuildCallbackCategoryKeyboard(isIncome, dataId);
+        var keyboard = _botKeyboard.GetCategoryKeyboard(isIncome, dataId);
         await BotClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"{savedData.Sign}{num} руб", replyMarkup: keyboard, cancellationToken: ct);
     }
 
@@ -105,19 +81,26 @@ public class MessageHandler : BaseHandler
         return isFloat ? (isIncome, num) : (isIncome, null);
     }
 
-    private InlineKeyboardMarkup BuildCallbackCategoryKeyboard(bool isIncome, string savedDataId)
+    private async Task StartAsync(Message message, CancellationToken ct = default)
     {
-        var categoryCollection = _categoryRepository.Get();
-        var categoriesArrays = categoryCollection.ToArray().SplitArray(7);
-
-        var inlineKeyboard = new InlineKeyboardMarkup(categoriesArrays.Select(arr =>
-            arr.Select(x =>
-            {
-                var callback = new CallbackInfo { Id = savedDataId, Ctg = x.Name };
-                var button = InlineKeyboardButton.WithCallbackData(x.Icon, callback.ToString());
-                return button;
-            }).ToArray()
-        ).ToArray());
-        return inlineKeyboard;
+        var replyKeyboardMarkup = new ReplyKeyboardMarkup(new[] { new KeyboardButton("/Помощь") }) { ResizeKeyboard = true};
+        await BotClient.SendTextMessageAsync(chatId: message.Chat.Id, text: "Привет!", replyMarkup: replyKeyboardMarkup, cancellationToken: ct);
+        await HelpAsync(message, ct);
+    }
+    
+    private async Task HelpAsync(Message message, CancellationToken ct = default)
+    {
+        const string usage = "Что я умею:\n" +
+                             "Мне нужно отправлять суммы расходов в рублях, а затем выбирать к какой категории расходов они относятся. " +
+                             "Если надо сохранить приход, то перед суммой должен быть занк \"+\"";
+        await BotClient.SendTextMessageAsync(chatId: message.Chat.Id, text: usage, cancellationToken: ct);
+    }
+    
+    private async Task RemoveKeyboardAsync(Message message, CancellationToken ct = default)
+    {
+        await BotClient.SendTextMessageAsync(
+            chatId: message.Chat.Id,
+            text: "Клавиатура удалена.",
+            replyMarkup: new ReplyKeyboardRemove(), cancellationToken: ct);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Afonya.Bot.Interfaces.Repositories;
+using Afonya.Bot.Interfaces.Services;
 using Afonya.Bot.Interfaces.Services.UpdateHandler;
 using Afonya.Bot.Logic.TelegramUpdateHandlers;
 using Microsoft.Extensions.Logging;
@@ -14,22 +15,24 @@ public class UpdateHandlerFactory : IUpdateHandlerFactory
     private readonly ITelegramBotClient _botClient;
     private readonly IMoneyTransactionRepository _moneyTransaction;
     private readonly ICategoryRepository _categoryRepository;
+    private readonly IBotKeyboardService _botKeyboard;
 
-    public UpdateHandlerFactory(ILoggerFactory loggerFactory, ITelegramBotClient botClient, IMoneyTransactionRepository moneyTransaction, ICategoryRepository categoryRepository)
+    public UpdateHandlerFactory(ILoggerFactory loggerFactory, ITelegramBotClient botClient, IMoneyTransactionRepository moneyTransaction, ICategoryRepository categoryRepository, IBotKeyboardService botKeyboard)
     {
         _loggerFactory = loggerFactory;
         _botClient = botClient;
         _moneyTransaction = moneyTransaction;
         _categoryRepository = categoryRepository;
+        _botKeyboard = botKeyboard;
     }
 
     public IUpdateHandler CreateHandler(Update update)
     {
         return update switch
         {
-            { Message: { } } => new MessageHandler(_loggerFactory.CreateLogger<MessageHandler>(), _botClient, _moneyTransaction, _categoryRepository),
+            { Message: { } } => new MessageHandler(_loggerFactory.CreateLogger<MessageHandler>(), _botClient, _moneyTransaction, _botKeyboard),
             { EditedMessage: { } } => new EditedMessageHandler(_loggerFactory.CreateLogger<EditedMessageHandler>(), _botClient),
-            { CallbackQuery: { } } => new CallbackQueryHandler(_loggerFactory.CreateLogger<CallbackQueryHandler>(), _botClient, _moneyTransaction, _categoryRepository),
+            { CallbackQuery: { } } => new CallbackQueryHandler(_loggerFactory.CreateLogger<CallbackQueryHandler>(), _botClient, _moneyTransaction, _categoryRepository, _botKeyboard),
             _ => new UnknownUpdateHandler(_loggerFactory.CreateLogger<UnknownUpdateHandler>(), _botClient)
         };
     }
