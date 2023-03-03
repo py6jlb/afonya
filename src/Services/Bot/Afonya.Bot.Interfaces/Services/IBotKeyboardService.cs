@@ -8,5 +8,5 @@ public interface IBotKeyboardService
 {
     InlineKeyboardMarkup GetCategoryKeyboard(bool isIncome, string savedDataId);
     InlineKeyboardMarkup GetDeleteKeyboard(string savedDataId, string originalText);
-    InlineKeyboardMarkup GetDeleteConfirmKeyboard(DeleteRequest data);
+    InlineKeyboardMarkup GetDeleteConfirmKeyboard(DeleteRequestCallbackData data);
 }

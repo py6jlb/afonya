@@ -61,6 +61,7 @@ public static class WebApplicationBuilderExtensions
         builder.Services.AddTransient<IUserRepository, UserRepository>();
         builder.Services.AddTransient<IMoneyTransactionRepository, MoneyTransactionRepository>(); 
         builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
+        builder.Services.AddTransient<ICallbackRepository, CallbackRepository>();
 
         //app
         builder.Services.AddTransient<IBotKeyboardService, BotKeyboardService>();

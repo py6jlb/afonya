@@ -1,4 +1,5 @@
-﻿using Afonya.Bot.Domain.Enums;
+﻿using Afonya.Bot.Domain.Entities;
+using Afonya.Bot.Domain.Enums;
 using Afonya.Bot.Interfaces.Dto.CallbackData;
 using Afonya.Bot.Interfaces.Repositories;
 using Afonya.Bot.Interfaces.Services;
@@ -12,69 +13,76 @@ namespace Afonya.Bot.Logic.TelegramUpdateHandlers;
 public class CallbackQueryHandler : BaseHandler
 {
     private readonly IMoneyTransactionRepository _moneyTransaction;
-    private readonly ICategoryRepository _categoryRepository;
     private readonly IBotKeyboardService _botKeyboard;
+    private readonly ICallbackRepository _callbackRepository;
 
     public CallbackQueryHandler(ILogger<CallbackQueryHandler> logger, ITelegramBotClient botClient, 
-        IMoneyTransactionRepository moneyTransaction, ICategoryRepository categoryRepository, IBotKeyboardService botKeyboard) : base(logger, botClient)
+        IMoneyTransactionRepository moneyTransaction, IBotKeyboardService botKeyboard, ICallbackRepository callbackRepository) : base(logger, botClient)
     {
         _moneyTransaction = moneyTransaction;
-        _categoryRepository = categoryRepository;
         _botKeyboard = botKeyboard;
+        _callbackRepository = callbackRepository;
     }
 
     public override async Task HandleAsync(Update update, long chatId, CancellationToken ct = default)
     {
         Logger.LogInformation("Получено обновления типа: CallbackQuery");
         var callbackQuery = update.CallbackQuery!;
-        var callbackData = JsonConvert.DeserializeObject<CallbackData>(callbackQuery.Data);
+        if (string.IsNullOrWhiteSpace(callbackQuery.Data)) return;
 
-        switch (callbackData.Command)
+        var callback = _callbackRepository.Get(callbackQuery.Data);
+        if (callback == null) return;
+
+        switch (callback.Command)
         {
             case CallbackCommand.SetCategory:
-                await SetCategory(callbackQuery, ct);
+                await SetCategory(callbackQuery, callback, ct);
                 break;
             case CallbackCommand.DeleteRequest:
-                await DeleteEntryConfirm(callbackQuery, ct);
+                await DeleteEntryConfirm(callbackQuery, callback, ct);
                 break;
             case CallbackCommand.Delete:
-                await DeleteEntry(callbackQuery, ct);
+                await DeleteEntry(callbackQuery, callback, ct);
                 break;
-            default:
-                break;
+        }
+
+        var res = _callbackRepository.Delete(callbackQuery.Data);
+        if (callback.GroupId.HasValue)
+        {
+            var group = _callbackRepository.GetGroup(callback.GroupId.Value);
+            foreach (var groupCallback in group ?? Array.Empty<Callback>())
+            {
+                _callbackRepository.Delete(groupCallback.Id.ToString());
+            }
         }
     }
 
-
-    private async Task SetCategory(CallbackQuery? callbackQuery, CancellationToken ct)
+    private async Task SetCategory(CallbackQuery? callbackQuery, Callback callback, CancellationToken ct)
     {
-        var callbackData = JsonConvert.DeserializeObject<SetCategory>(callbackQuery.Data);
-        var categoryCollection = _categoryRepository.Get();
-        var category = categoryCollection.First(x => x.Name == callbackData.Ctg);
-        var msg = $"{callbackQuery.Message.Text}, в категории \"{category.HumanName}\" {category.Icon}";
+        var callbackData = JsonConvert.DeserializeObject<SetCategoryCallbackData>(callback.JsonData);
+        var msg = $"{callbackQuery.Message.Text}, в категории \"{callbackData.Category.HumanName}\" {callbackData.Category.Icon}";
 
         var data = _moneyTransaction.Get(callbackData.DataId);
         if (data == null)
         {
-            Logger.LogError("Отсутствуют данные для обновления. {msq}", category);
+            Logger.LogError("Отсутствуют данные для обновления. {msq}", callbackData.Category);
             return;
         }
 
-        data.CategoryHumanName = category.HumanName;
-        data.CategoryName = category.Name;
-        data.CategoryIcon = category.Icon;
+        data.CategoryHumanName = callbackData.Category.HumanName;
+        data.CategoryName = callbackData.Category.Name;
+        data.CategoryIcon = callbackData.Category.Icon;
         _moneyTransaction.Update(data);
 
         await BotClient.AnswerCallbackQueryAsync(callbackQuery.Id, $"Категория выбрана", cancellationToken: ct);
-        var deleteKeyboard = _botKeyboard.GetDeleteKeyboard(callbackData.DataId, callbackQuery.Message.Text);
+        var deleteKeyboard = _botKeyboard.GetDeleteKeyboard(callbackData.DataId, msg);
         await BotClient.EditMessageTextAsync(callbackQuery.Message.Chat.Id,
             callbackQuery.Message.MessageId, msg, replyMarkup: deleteKeyboard, cancellationToken: ct);
-
     }
 
-    private async Task DeleteEntry(CallbackQuery? callbackQuery, CancellationToken ct)
+    private async Task DeleteEntry(CallbackQuery? callbackQuery, Callback callback, CancellationToken ct)
     {
-        var callbackData = JsonConvert.DeserializeObject<DeleteRequest>(callbackQuery.Data);
+        var callbackData = JsonConvert.DeserializeObject<DeleteRequestCallbackData>(callback.JsonData);
         if (callbackData.Confirm)
         {
             var res = _moneyTransaction.Delete(callbackData.DataId);
@@ -88,9 +96,9 @@ public class CallbackQueryHandler : BaseHandler
             callbackQuery.Message.MessageId, callbackData.OriginalMessageText, replyMarkup: deleteKeyboard, cancellationToken: ct);
     }
 
-    private async Task DeleteEntryConfirm(CallbackQuery? callbackQuery, CancellationToken ct)
+    private async Task DeleteEntryConfirm(CallbackQuery? callbackQuery, Callback callback, CancellationToken ct)
     {
-        var callbackData = JsonConvert.DeserializeObject<DeleteRequest>(callbackQuery.Data);
+        var callbackData = JsonConvert.DeserializeObject<DeleteRequestCallbackData>(callback.JsonData);
         var confirmKeyboard = _botKeyboard.GetDeleteConfirmKeyboard(callbackData);
         var msg = $"Вы действительно хотите удалить запись: {callbackQuery.Message.Text}";
         await BotClient.EditMessageTextAsync(callbackQuery.Message.Chat.Id,
