@@ -1,14 +1,16 @@
 ﻿using Afonya.Bot.Domain.Enums;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Afonya.Bot.Interfaces.Dto.CallbackData;
 
 public record CallbackData
 {
     public CallbackCommand Command { get; set; }
-    public override string ToString()
+    public string Serialize()
     {
-        var str = JsonConvert.SerializeObject(this, new JsonSerializerSettings());
-        return str;
+        var converter = new StringEnumConverter();
+        var str = JsonConvert.SerializeObject(this, converter);
+        return str; 
     }
 }

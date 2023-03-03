@@ -1,5 +1,4 @@
 ﻿using Afonya.Bot.Domain.Enums;
-using Afonya.Bot.Interfaces.Dto;
 using Afonya.Bot.Interfaces.Dto.CallbackData;
 using Afonya.Bot.Interfaces.Repositories;
 using Afonya.Bot.Interfaces.Services;
@@ -26,7 +25,7 @@ public class BotKeyboardService : IBotKeyboardService
             arr.Select(x =>
             {
                 var callback = new SetCategory { DataId = savedDataId, Ctg = x.Name, Command = CallbackCommand.SetCategory};
-                var button = InlineKeyboardButton.WithCallbackData(x.Icon, callback.ToString());
+                var button = InlineKeyboardButton.WithCallbackData(x.Icon, callback.Serialize());
                 return button;
             }).ToArray()
         ).ToArray());
@@ -36,7 +35,7 @@ public class BotKeyboardService : IBotKeyboardService
     public InlineKeyboardMarkup GetDeleteKeyboard(string savedDataId, string originalText)
     {
         var callback = new DeleteRequest() { DataId = savedDataId,  Command = CallbackCommand.DeleteRequest, OriginalMessageText = originalText};
-        var button = InlineKeyboardButton.WithCallbackData("Удалить", callback.ToString());
+        var button = InlineKeyboardButton.WithCallbackData("Удалить", callback.Serialize());
         
         var buttons = new[] {button};
         var inlineKeyboard = new InlineKeyboardMarkup(buttons);
@@ -50,8 +49,8 @@ public class BotKeyboardService : IBotKeyboardService
         
         var buttons = new[]
         {
-            InlineKeyboardButton.WithCallbackData("Да", yesData.ToString()),
-            InlineKeyboardButton.WithCallbackData("Нет", noData.ToString())
+            InlineKeyboardButton.WithCallbackData("Да", yesData.Serialize()),
+            InlineKeyboardButton.WithCallbackData("Нет", noData.Serialize())
         };
 
         var inlineKeyboard = new InlineKeyboardMarkup(buttons);

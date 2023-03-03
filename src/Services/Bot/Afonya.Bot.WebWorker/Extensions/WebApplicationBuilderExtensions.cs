@@ -63,6 +63,7 @@ public static class WebApplicationBuilderExtensions
         builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 
         //app
+        builder.Services.AddTransient<IBotKeyboardService, BotKeyboardService>();
         builder.Services.AddTransient<IBotManagementService, BotManagementService>();
         builder.Services.AddHostedService<Starter>();
         builder.Services.AddMediatR(typeof(NewTelegramEventCommand).GetTypeInfo().Assembly);
