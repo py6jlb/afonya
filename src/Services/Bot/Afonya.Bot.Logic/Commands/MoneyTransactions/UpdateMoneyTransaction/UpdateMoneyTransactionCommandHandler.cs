@@ -1,17 +1,16 @@
-﻿using Afonya.Bot.Interfaces.Services;
+﻿using Afonya.Bot.Interfaces.Repositories;
 using Common.Exceptions;
 using MediatR;
-using Shared.Contracts;
 
 namespace Afonya.Bot.Logic.Commands.MoneyTransactions.UpdateMoneyTransaction;
 
 public class UpdateMoneyTransactionCommandHandler : IRequestHandler<UpdateMoneyTransactionCommand, bool>
 {
-    private readonly IMoneyTransactionService _moneyTransactionService;
+    private readonly IMoneyTransactionRepository _moneyTransactionRepository;
 
-    public UpdateMoneyTransactionCommandHandler(IMoneyTransactionService moneyTransactionService)
+    public UpdateMoneyTransactionCommandHandler(IMoneyTransactionRepository moneyTransactionRepository)
     {
-        _moneyTransactionService = moneyTransactionService;
+        _moneyTransactionRepository = moneyTransactionRepository;
     }
 
     public Task<bool> Handle(UpdateMoneyTransactionCommand request, CancellationToken cancellationToken)
@@ -19,7 +18,7 @@ public class UpdateMoneyTransactionCommandHandler : IRequestHandler<UpdateMoneyT
         if (string.IsNullOrWhiteSpace(request.MoneyTransaction.Id))
             throw new AfonyaErrorException("Отсуствует id записи для обновления.");
 
-        var entity = _moneyTransactionService.Get(request.MoneyTransaction.Id);
+        var entity = _moneyTransactionRepository.Get(request.MoneyTransaction.Id);
         if (entity == null)
             throw new AfonyaErrorException("Транзакция для обновления не найдена");
 
@@ -32,7 +31,7 @@ public class UpdateMoneyTransactionCommandHandler : IRequestHandler<UpdateMoneyT
         entity.TransactionDate = request.MoneyTransaction.TransactionDate;
         entity.FromUserName = request.MoneyTransaction.FromUserName;
 
-        var res = _moneyTransactionService.Update(entity);
+        var res = _moneyTransactionRepository.Update(entity);
         return Task.FromResult(res);
     }
 }

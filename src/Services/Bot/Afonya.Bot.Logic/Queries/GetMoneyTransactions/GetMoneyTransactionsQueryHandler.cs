@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using Afonya.Bot.Interfaces.Services;
+﻿using Afonya.Bot.Interfaces.Repositories;
 using MediatR;
 using Shared.Contracts;
 
@@ -7,16 +6,16 @@ namespace Afonya.Bot.Logic.Queries.GetMoneyTransactions;
 
 public class GetMoneyTransactionsQueryHandler : IRequestHandler<GetMoneyTransactionsQuery, IReadOnlyCollection<MoneyTransactionDto>>
 {
-    private readonly IMoneyTransactionService _moneyTransactionService;
+    private readonly IMoneyTransactionRepository _moneyTransactionRepository;
 
-    public GetMoneyTransactionsQueryHandler(IMoneyTransactionService moneyTransactionService)
+    public GetMoneyTransactionsQueryHandler(IMoneyTransactionRepository moneyTransactionRepository)
     {
-        _moneyTransactionService = moneyTransactionService;
+        _moneyTransactionRepository = moneyTransactionRepository;
     }
 
     public Task<IReadOnlyCollection<MoneyTransactionDto>> Handle(GetMoneyTransactionsQuery request, CancellationToken cancellationToken)
     {
-        var result = _moneyTransactionService.Get(request.Filter).Select(x => new MoneyTransactionDto
+        var result = _moneyTransactionRepository.Get(request.Filter).Select(x => new MoneyTransactionDto
         {
             Id = x.Id?.ToString(),
             CategoryName = x.CategoryName,

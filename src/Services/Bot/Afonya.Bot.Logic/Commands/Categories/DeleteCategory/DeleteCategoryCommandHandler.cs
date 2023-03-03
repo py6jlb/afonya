@@ -1,20 +1,20 @@
-﻿using Afonya.Bot.Interfaces.Services;
+﻿using Afonya.Bot.Interfaces.Repositories;
 using MediatR;
 
 namespace Afonya.Bot.Logic.Commands.Categories.DeleteCategory;
 
 public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, bool>
 {
-    private readonly ICategoryService _categoryService;
+    private readonly ICategoryRepository _categoryRepository;
 
-    public DeleteCategoryCommandHandler(ICategoryService categoryService)
+    public DeleteCategoryCommandHandler(ICategoryRepository categoryRepository)
     {
-        _categoryService = categoryService;
+        _categoryRepository = categoryRepository;
     }
 
     public Task<bool> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
-        var result = _categoryService.Delete(request.Id);
+        var result = _categoryRepository.Delete(request.Id);
         return Task.FromResult(result);
     }
 }

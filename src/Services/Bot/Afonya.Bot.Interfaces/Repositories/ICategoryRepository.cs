@@ -1,12 +1,12 @@
 ﻿using Shared.Contracts;
 
-namespace Afonya.Bot.Interfaces.Services;
+namespace Afonya.Bot.Interfaces.Repositories;
 
-public interface ICategoryService
+public interface ICategoryRepository
 {
     IReadOnlyCollection<CategoryDto> Get(bool onlyActive = true);
     public CategoryDto? Get(string id);
-    bool CategoriesExists();
+    int Count();
     CategoryDto Create(CategoryDto category);
     CategoryDto Update(CategoryDto category);
     bool Delete(string id);

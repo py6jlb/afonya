@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using Afonya.Bot.Interfaces.Dto;
-using Afonya.Bot.Interfaces.Services;
-using Afonya.Bot.Logic.UpdateHandlers;
+using Afonya.Bot.Interfaces.Repositories;
 using Common.Extensions;
 using Microsoft.Extensions.Logging;
 using Shared.Contracts;
@@ -14,14 +13,14 @@ namespace Afonya.Bot.Logic.TelegramUpdateHandlers;
 
 public class MessageHandler : BaseHandler
 {
-    private readonly IMoneyTransactionService _moneyTransaction;
-    private readonly ICategoryService _categoryService;
+    private readonly IMoneyTransactionRepository _moneyTransaction;
+    private readonly ICategoryRepository _categoryRepository;
 
     public MessageHandler(ILogger<MessageHandler> logger, ITelegramBotClient botClient, 
-        IMoneyTransactionService moneyTransaction, ICategoryService categoryService) : base(logger, botClient)
+        IMoneyTransactionRepository moneyTransaction, ICategoryRepository categoryRepository) : base(logger, botClient)
     {
         _moneyTransaction = moneyTransaction;
-        _categoryService = categoryService;
+        _categoryRepository = categoryRepository;
     }
 
     public override async Task HandleAsync(Update update, long chatId, CancellationToken ct = default)
@@ -108,7 +107,7 @@ public class MessageHandler : BaseHandler
 
     private InlineKeyboardMarkup BuildCallbackCategoryKeyboard(bool isIncome, string savedDataId)
     {
-        var categoryCollection = _categoryService.Get();
+        var categoryCollection = _categoryRepository.Get();
         var categoriesArrays = categoryCollection.ToArray().SplitArray(7);
 
         var inlineKeyboard = new InlineKeyboardMarkup(categoriesArrays.Select(arr =>

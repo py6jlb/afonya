@@ -1,4 +1,4 @@
-﻿namespace Afonya.Bot.Interfaces.Pooling;
+﻿namespace Afonya.Bot.Interfaces.Services;
 
 public interface IReceiverService
 {

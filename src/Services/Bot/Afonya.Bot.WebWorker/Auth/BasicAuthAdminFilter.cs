@@ -1,9 +1,10 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
-using Afonya.Bot.Interfaces.Services;
+using Afonya.Bot.Interfaces.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Options;
 
 namespace Afonya.Bot.WebWorker.Auth;
 
@@ -43,8 +44,9 @@ public class BasicAuthAdminFilter : IAuthorizationFilter
 
     private bool IsAuthorized(AuthorizationFilterContext context, string username, string password)
     {
-        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
-        return userService.IsAdminUser(username, password);
+        var adminUser = context.HttpContext.RequestServices.GetRequiredService<IOptions<AdminUser>>().Value;
+        return adminUser.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase) 
+               && adminUser.Password.Equals(password, StringComparison.InvariantCultureIgnoreCase);
     }
 
     private void ReturnUnauthorizedResult(AuthorizationFilterContext context)

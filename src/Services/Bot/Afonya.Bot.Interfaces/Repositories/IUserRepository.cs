@@ -1,11 +1,10 @@
 ﻿using Shared.Contracts;
 
-namespace Afonya.Bot.Interfaces.Services;
+namespace Afonya.Bot.Interfaces.Repositories;
 
-public interface IUserService
+public interface IUserRepository
 {
-    bool IsAdminUser(string userName, string password);
-    bool TelegramUsersExists();
+    int Count();
     IReadOnlyCollection<UserDto> Get();
     UserDto? Get(string id);
     UserDto? GetByName(string userName);

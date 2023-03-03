@@ -1,4 +1,4 @@
-﻿using Afonya.Bot.Interfaces.Services;
+﻿using Afonya.Bot.Interfaces.Repositories;
 using MediatR;
 using Shared.Contracts;
 
@@ -6,16 +6,16 @@ namespace Afonya.Bot.Logic.Queries.GetCategories;
 
 public class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesQuery, IReadOnlyCollection<CategoryDto>>
 {
-    private readonly ICategoryService _categoryService;
+    private readonly ICategoryRepository _categoryRepository;
 
-    public GetCategoriesQueryHandler(ICategoryService categoryService)
+    public GetCategoriesQueryHandler(ICategoryRepository categoryRepository)
     {
-        _categoryService = categoryService;
+        _categoryRepository = categoryRepository;
     }
 
     public Task<IReadOnlyCollection<CategoryDto>> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
     {
-        var result = _categoryService.Get(request.All);
+        var result = _categoryRepository.Get(request.All);
         return Task.FromResult(result);
     }
 }

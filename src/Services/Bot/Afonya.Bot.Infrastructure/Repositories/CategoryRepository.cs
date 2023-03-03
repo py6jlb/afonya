@@ -1,19 +1,19 @@
 ﻿using Afonya.Bot.Domain.Entities;
 using Afonya.Bot.Interfaces;
-using Afonya.Bot.Interfaces.Services;
+using Afonya.Bot.Interfaces.Repositories;
 using Common.Exceptions;
 using LiteDB;
 using Microsoft.Extensions.Logging;
 using Shared.Contracts;
 
-namespace Afonya.Bot.Logic.Services;
+namespace Afonya.Bot.Infrastructure.Repositories;
 
-public class CategoryService : ICategoryService
+public class CategoryRepository : ICategoryRepository
 {
-    private readonly ILogger<CategoryService> _logger;
+    private readonly ILogger<CategoryRepository> _logger;
     private readonly LiteDatabase _db;
 
-    public CategoryService(ILogger<CategoryService> logger, ILiteDbContext context)
+    public CategoryRepository(ILogger<CategoryRepository> logger, ILiteDbContext context)
     {
         _logger = logger;
         _db = context.Database;
@@ -49,9 +49,9 @@ public class CategoryService : ICategoryService
         };
     }
 
-    public bool CategoriesExists()
+    public int Count()
     {
-        var res = _db.GetCollection<Category>().Count() > 0;
+        var res = _db.GetCollection<Category>().Count();
         return res;
     }
 

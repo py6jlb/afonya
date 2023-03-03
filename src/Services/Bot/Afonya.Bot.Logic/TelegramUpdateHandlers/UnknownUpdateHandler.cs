@@ -2,7 +2,7 @@
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace Afonya.Bot.Logic.UpdateHandlers;
+namespace Afonya.Bot.Logic.TelegramUpdateHandlers;
 
 public class UnknownUpdateHandler : BaseHandler
 {

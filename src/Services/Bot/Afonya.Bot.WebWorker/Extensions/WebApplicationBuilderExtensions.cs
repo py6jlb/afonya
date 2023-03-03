@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 using Afonya.Bot.Infrastructure.Contexts;
+using Afonya.Bot.Infrastructure.Repositories;
 using Afonya.Bot.Interfaces;
 using Afonya.Bot.Interfaces.Dto;
+using Afonya.Bot.Interfaces.Repositories;
 using Afonya.Bot.Interfaces.Services;
 using Afonya.Bot.Interfaces.Services.UpdateHandler;
 using Afonya.Bot.Logic.Commands.Bot.NewTelegramEvent;
@@ -49,22 +51,21 @@ public static class WebApplicationBuilderExtensions
 
     public static WebApplicationBuilder AddServices(this WebApplicationBuilder builder, IConfiguration config)
     {
-        
+        //config
         builder.Services.Configure<AdminUser>(config.GetSection("AdminUser"));
         builder.Services.Configure<ReverseProxyConfig>(config.GetSection("ProxyConfig"));
         
+        //store
         var connectionString = config.GetConnectionString("Default") ?? throw new NullReferenceException("Отсутствует строка подключения к БД");
         builder.Services.AddSingleton<ILiteDbContext>(_ => new DbContext(connectionString));
-        
-        builder.Services.AddHostedService<Starter>();
+        builder.Services.AddTransient<IUserRepository, UserRepository>();
+        builder.Services.AddTransient<IMoneyTransactionRepository, MoneyTransactionRepository>(); 
+        builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 
-        builder.Services.AddScoped<IUserService, UserService>();
-        builder.Services.AddTransient<IMoneyTransactionService, MoneyTransactionService>();
-        builder.Services.AddTransient<ICategoryService, CategoryService>();
+        //app
         builder.Services.AddTransient<IBotManagementService, BotManagementService>();
-
+        builder.Services.AddHostedService<Starter>();
         builder.Services.AddMediatR(typeof(NewTelegramEventCommand).GetTypeInfo().Assembly);
-
         builder.Services.AddControllers().AddNewtonsoftJson();
         return builder;
     }

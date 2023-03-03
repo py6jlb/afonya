@@ -1,38 +1,26 @@
 ﻿using Afonya.Bot.Domain.Entities;
 using Afonya.Bot.Interfaces;
-using Afonya.Bot.Interfaces.Dto;
-using Afonya.Bot.Interfaces.Services;
+using Afonya.Bot.Interfaces.Repositories;
 using LiteDB;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Shared.Contracts;
 
-namespace Afonya.Bot.Logic.Services;
+namespace Afonya.Bot.Infrastructure.Repositories;
 
-public class UserService : IUserService
+public class UserRepository : IUserRepository
 {
-    private readonly ILogger<UserService> _logger;
+    private readonly ILogger<UserRepository> _logger;
     private readonly ILiteDbContext _db;
-    private readonly AdminUser _admin;
     
-    public UserService(ILogger<UserService> logger, ILiteDbContext db, IOptions<AdminUser> admin)
+    public UserRepository(ILogger<UserRepository> logger, ILiteDbContext db)
     {
         _logger = logger;
         _db = db;
-        _admin = admin.Value;
     }
 
-    public bool IsAdminUser(string userName, string password)
+    public int Count()
     {
-        _logger.LogInformation("Validating admin user [{UserName}]", userName);
-        if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password)) return false;
-        var inputUser = new AdminUser{ Username = userName, Password = password };
-        return _admin == inputUser;
-    }
-    
-    public bool TelegramUsersExists()
-    {
-        var res = _db.Database.GetCollection<TelegramUser>().Count() > 0;
+        var res = _db.Database.GetCollection<TelegramUser>().Count();
         return res;
     }
 
