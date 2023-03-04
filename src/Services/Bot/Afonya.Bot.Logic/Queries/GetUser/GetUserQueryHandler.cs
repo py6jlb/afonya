@@ -1,4 +1,4 @@
-﻿using Afonya.Bot.Interfaces.Services;
+﻿using Afonya.Bot.Interfaces.Repositories;
 using MediatR;
 using Shared.Contracts;
 
@@ -6,18 +6,18 @@ namespace Afonya.Bot.Logic.Queries.GetUser;
 
 public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDto?>
 {
-    private readonly IUserService _userService;
+    private readonly IUserRepository _userRepository;
 
-    public GetUserQueryHandler(IUserService userService)
+    public GetUserQueryHandler(IUserRepository userRepository)
     {
-        _userService = userService;
+        _userRepository = userRepository;
     }
 
     public Task<UserDto?> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
 
         if (string.IsNullOrWhiteSpace(request.UserName)) return null;
-        var result = _userService.GetByName(request.UserName);
+        var result = _userRepository.GetByName(request.UserName);
         return Task.FromResult(result);
     }
 }

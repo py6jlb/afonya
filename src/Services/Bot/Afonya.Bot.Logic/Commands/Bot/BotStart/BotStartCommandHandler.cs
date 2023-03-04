@@ -1,5 +1,4 @@
 ﻿using Afonya.Bot.Interfaces.Services;
-using Afonya.Bot.Logic.Commands.Bot.BotStop;
 using MediatR;
 
 namespace Afonya.Bot.Logic.Commands.Bot.BotStart;

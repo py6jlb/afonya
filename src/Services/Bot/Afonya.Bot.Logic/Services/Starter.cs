@@ -1,4 +1,4 @@
-﻿using Afonya.Bot.Interfaces.Services;
+﻿using Afonya.Bot.Interfaces.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -31,8 +31,8 @@ public class Starter : IHostedService
     public Task StartAsync(CancellationToken cancellationToken)
     {
         using var scope = _services.CreateScope();
-        var categoryService = _services.GetRequiredService<ICategoryService>();
-        InitCategories(categoryService);
+        var categories = _services.GetRequiredService<ICategoryRepository>();
+        InitCategories(categories);
         return Task.CompletedTask;
     }
 
@@ -41,10 +41,10 @@ public class Starter : IHostedService
         if(!_usePooling) await _botClient.DeleteWebhookAsync(cancellationToken: cancellationToken);
     }
 
-    private void InitCategories(ICategoryService srv)
+    private void InitCategories(ICategoryRepository repo)
     {
-        var notNull = srv.CategoriesExists();
-        if (notNull) return;
+        var count = repo.Count();
+        if (count > 0) return;
 
         var categories = _configuration.GetSection("Categories").GetChildren();
 
@@ -53,7 +53,7 @@ public class Starter : IHostedService
             var categoryDto = category.Get<CategoryDto>();
             if (categoryDto == null) continue;
             categoryDto.IsActive = true;
-            srv.Create(categoryDto);
+            repo.Create(categoryDto);
         }
     }
 }

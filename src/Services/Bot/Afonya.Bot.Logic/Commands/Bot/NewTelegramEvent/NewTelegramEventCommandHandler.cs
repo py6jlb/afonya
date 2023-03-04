@@ -1,4 +1,4 @@
-﻿using Afonya.Bot.Interfaces.Services;
+﻿using Afonya.Bot.Interfaces.Repositories;
 using Afonya.Bot.Interfaces.Services.UpdateHandler;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -10,12 +10,12 @@ namespace Afonya.Bot.Logic.Commands.Bot.NewTelegramEvent;
 public class NewTelegramEventCommandHandler : IRequestHandler<NewTelegramEventCommand, bool>
 {
     private readonly ILogger<NewTelegramEventCommandHandler> _logger;
-    private readonly IUserService _userService;
+    private readonly IUserRepository _userRepository;
     private readonly IUpdateHandlerFactory _handlerFactory;
 
-    public NewTelegramEventCommandHandler(IUserService userService, ILogger<NewTelegramEventCommandHandler> logger, IUpdateHandlerFactory handlerFactory)
+    public NewTelegramEventCommandHandler(IUserRepository userRepository, ILogger<NewTelegramEventCommandHandler> logger, IUpdateHandlerFactory handlerFactory)
     {
-        _userService = userService;
+        _userRepository = userRepository;
         _logger = logger;
         _handlerFactory = handlerFactory;
     }
@@ -68,6 +68,6 @@ public class NewTelegramEventCommandHandler : IRequestHandler<NewTelegramEventCo
             _                                              => (null, null)
         };
 
-        return (!string.IsNullOrWhiteSpace(from) && _userService.GetByName(from) != null, chatId);
+        return (!string.IsNullOrWhiteSpace(from) && _userRepository.GetByName(from) != null, chatId);
     }
 }

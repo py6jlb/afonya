@@ -1,5 +1,4 @@
-﻿using Afonya.Bot.Interfaces.Services;
-using Afonya.Bot.Logic.Commands.MoneyTransactions.UpdateMoneyTransaction;
+﻿using Afonya.Bot.Logic.Commands.MoneyTransactions.UpdateMoneyTransaction;
 using Afonya.Bot.Logic.Queries.GetMoneyTransactions;
 using Afonya.Bot.WebWorker.Auth;
 using MediatR;
