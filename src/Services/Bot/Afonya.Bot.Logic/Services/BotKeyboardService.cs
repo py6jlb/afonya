@@ -27,13 +27,13 @@ public class BotKeyboardService : IBotKeyboardService
         var buttons = new List<InlineKeyboardButton>();
         foreach (var category in categoryCollection)
         {
-            var callbackId = _callbackRepository.Create(new Callback
+            var data = new SetCategoryCallbackData
             {
-                Command = CallbackCommand.SetCategory,
-                GroupId = groupId,
-                JsonData = JsonConvert.SerializeObject(new SetCategoryCallbackData
-                    { DataId = savedDataId, Category = category })
-            });
+                DataId = savedDataId,
+                Category = category
+            };
+            var callback = new Callback(CallbackCommand.SetCategory, groupId, JsonConvert.SerializeObject(data));
+            var callbackId = _callbackRepository.Create(callback);
 
             var button = InlineKeyboardButton.WithCallbackData(category.Icon, callbackId.Id.ToString());
             buttons.Add(button);
@@ -46,11 +46,9 @@ public class BotKeyboardService : IBotKeyboardService
 
     public InlineKeyboardMarkup GetDeleteKeyboard(string savedDataId, string originalText)
     {
-        var callbackId = _callbackRepository.Create(new Callback
-        {
-            Command = CallbackCommand.DeleteRequest,
-            JsonData = JsonConvert.SerializeObject(new DeleteRequestCallbackData { DataId = savedDataId, OriginalMessageText = originalText})
-        });
+        var data = new DeleteRequestCallbackData { DataId = savedDataId, OriginalMessageText = originalText };
+        var callback = new Callback( CallbackCommand.DeleteRequest, null, JsonConvert.SerializeObject(data));
+        var callbackId = _callbackRepository.Create(callback);
         
         var inlineKeyboard = new InlineKeyboardMarkup(new[] {InlineKeyboardButton.WithCallbackData("Удалить", callbackId.Id.ToString())});
         return inlineKeyboard;
@@ -59,20 +57,14 @@ public class BotKeyboardService : IBotKeyboardService
     public InlineKeyboardMarkup GetDeleteConfirmKeyboard(DeleteRequestCallbackData data)
     {
         var groupId = Guid.NewGuid();
+        
+        var yesData = data with { Confirm = true };
+        var yesCallback = new Callback(CallbackCommand.Delete, groupId, JsonConvert.SerializeObject(yesData));
+        var yesCallbackId =  _callbackRepository.Create(yesCallback);
 
-        var yesCallbackId =  _callbackRepository.Create(new Callback
-        {
-            Command = CallbackCommand.Delete,
-            GroupId = groupId,
-            JsonData = JsonConvert.SerializeObject(data with { Confirm = true })
-        });
-
-        var noCallbackId = _callbackRepository.Create(new Callback
-        {
-            Command = CallbackCommand.Delete,
-            GroupId = groupId,
-            JsonData = JsonConvert.SerializeObject(data with { Confirm = false })
-        });
+        var noData = data with { Confirm = false };
+        var noCallback = new Callback(CallbackCommand.Delete, groupId, JsonConvert.SerializeObject(noData));
+        var noCallbackId = _callbackRepository.Create(noCallback);
         
         var buttons = new[]
         {

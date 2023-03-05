@@ -3,7 +3,6 @@ using Afonya.Bot.Interfaces;
 using Afonya.Bot.Interfaces.Repositories;
 using LiteDB;
 using Microsoft.Extensions.Logging;
-using Shared.Contracts;
 
 namespace Afonya.Bot.Infrastructure.Repositories;
 
@@ -24,37 +23,29 @@ public class UserRepository : IUserRepository
         return res;
     }
 
-    public IReadOnlyCollection<UserDto> Get()
+    public IEnumerable<TelegramUser> Get()
     {
-        var users = _db.Database.GetCollection<TelegramUser>().FindAll()
-            .Select(x => new UserDto(x.Id.ToString(), x.Login)).ToArray();
+        var users = _db.Database.GetCollection<TelegramUser>().FindAll();
         return users;
     }
 
-    public UserDto? Get(string id)
+    public TelegramUser? Get(string id)
     {
         var user = _db.Database.GetCollection<TelegramUser>().FindById(new ObjectId(id));
         if (user == null) return null;
-        var res = new UserDto(user.Id.ToString(), user.Login);
-        return res;
+        return user;
     }
 
-    public UserDto? GetByName(string userName)
+    public TelegramUser? GetByName(string userName)
     {
         var user = _db.Database.GetCollection<TelegramUser>().FindOne(x=>x.Login == userName);
         if (user == null) return null;
-        var res = new UserDto(user.Id.ToString(), user.Login);
-        return res;
+        return user;
     }
 
-    public UserDto? Create(UserDto user)
+    public TelegramUser? Create(TelegramUser user)
     {
-        var entity = new TelegramUser
-        {
-            Login = user.Login
-        };
-
-        var id = _db.Database.GetCollection<TelegramUser>().Insert(entity);
+        var id = _db.Database.GetCollection<TelegramUser>().Insert(user);
         var result = Get(id.AsObjectId.ToString());
         return result;
     }

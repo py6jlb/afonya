@@ -1,4 +1,5 @@
-﻿using Afonya.Bot.Interfaces.Repositories;
+﻿using Afonya.Bot.Domain.Entities;
+using Afonya.Bot.Interfaces.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -50,9 +51,9 @@ public class Starter : IHostedService
 
         foreach (var category in categories)
         {
-            var categoryDto = category.Get<CategoryDto>();
+            var categoryDto = category.Get<Category>();
             if (categoryDto == null) continue;
-            categoryDto.IsActive = true;
+            categoryDto.SetIsActive(true);
             repo.Create(categoryDto);
         }
     }

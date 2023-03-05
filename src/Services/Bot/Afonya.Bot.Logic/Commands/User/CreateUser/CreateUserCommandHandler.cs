@@ -1,4 +1,5 @@
-﻿using Afonya.Bot.Interfaces.Repositories;
+﻿using Afonya.Bot.Domain.Entities;
+using Afonya.Bot.Interfaces.Repositories;
 using Common.Exceptions;
 using MediatR;
 using Shared.Contracts;
@@ -16,11 +17,11 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserD
 
     public Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        
-        var result = _userRepository.Create(request.NewUser);
+        var user = new TelegramUser(request.NewUser.Login);
+        var result = _userRepository.Create(user);
         if (result == null)
             throw new AfonyaErrorException("При создании пользователя, что-то пошло не так.");
 
-        return Task.FromResult(result);
+        return Task.FromResult(new UserDto( result.Id.ToString(), result.Login));
     }
 }

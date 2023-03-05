@@ -1,4 +1,5 @@
-﻿using Afonya.Bot.Interfaces.Repositories;
+﻿using Afonya.Bot.Domain.Entities;
+using Afonya.Bot.Interfaces.Repositories;
 using Common.Exceptions;
 using MediatR;
 using Shared.Contracts;
@@ -16,10 +17,23 @@ public class AddCategoryCommandHandler : IRequestHandler<AddCategoryCommand, Cat
 
     public Task<CategoryDto> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
     {
-        var result = _categoryRepository.Create(request.NewCategory);
+        var category = new Category(
+            request.NewCategory.Icon,
+            request.NewCategory.Name,
+            request.NewCategory.HumanName,
+            request.NewCategory.IsActive
+        );
+        var result = _categoryRepository.Create(category);
         if (result == null)
             throw new AfonyaErrorException("При создании категории, что-то пошло не так.");
 
-        return Task.FromResult(result);
+        return Task.FromResult(new CategoryDto
+        {
+            Id = result.Id.ToString(),
+            Icon = result.Icon,
+            HumanName = result.HumanName,
+            IsActive = result.IsActive,
+            Name = result.Name
+        });
     }
 }

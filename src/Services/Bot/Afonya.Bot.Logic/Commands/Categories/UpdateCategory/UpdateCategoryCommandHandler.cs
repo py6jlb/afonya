@@ -1,4 +1,5 @@
 ﻿using Afonya.Bot.Interfaces.Repositories;
+using LiteDB;
 using MediatR;
 using Shared.Contracts;
 
@@ -15,7 +16,13 @@ public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryComman
 
     public Task<CategoryDto> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
     {
-        var result = _categoryRepository.Update(request.Category);
-        return Task.FromResult(result);
+        var category = _categoryRepository.Get(request.Category.Id);
+        category.SetIsActive(request.Category.IsActive);
+        category.SetIcon(request.Category.Icon);
+        category.SetName(request.Category.Name);
+        category.SetHumanName(request.Category.HumanName);
+        var result = _categoryRepository.Update(category);
+
+        return Task.FromResult(request.Category);
     }
 }

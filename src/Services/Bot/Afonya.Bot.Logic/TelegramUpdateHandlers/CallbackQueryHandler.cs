@@ -69,9 +69,7 @@ public class CallbackQueryHandler : BaseHandler
             return;
         }
 
-        data.CategoryHumanName = callbackData.Category.HumanName;
-        data.CategoryName = callbackData.Category.Name;
-        data.CategoryIcon = callbackData.Category.Icon;
+        data.SetCategory(callbackData.Category.Name, callbackData.Category.Icon, callbackData.Category.HumanName);
         _moneyTransaction.Update(data);
 
         await BotClient.AnswerCallbackQueryAsync(callbackQuery.Id, $"Категория выбрана", cancellationToken: ct);

@@ -31,7 +31,7 @@ public class MoneyTransactionRepository : IMoneyTransactionRepository
         }
     }
 
-    public IReadOnlyCollection<MoneyTransactionDto> Get(MoneyTransactionFilter filter)
+    public IEnumerable<MoneyTransaction> Get(MoneyTransactionFilter filter)
     {
         var query = _db.GetCollection<MoneyTransaction>().Query();
 
@@ -50,38 +50,16 @@ public class MoneyTransactionRepository : IMoneyTransactionRepository
             query.Where(x => x.FromUserName.Equals(filter.User, StringComparison.InvariantCultureIgnoreCase));
 
         var result = query.OrderBy(x => x.RegisterDate).ToEnumerable();
-        return result.Select(x=> new MoneyTransactionDto
-        {
-            Id = x.Id.ToString(), 
-            CategoryName = x.CategoryName, 
-            CategoryHumanName = x.CategoryHumanName, 
-            CategoryIcon = x.CategoryIcon, 
-            Value = x.Value, 
-            Sign = x.Sign, 
-            RegisterDate = x.RegisterDate, 
-            TransactionDate = x.TransactionDate, 
-            FromUserName = x.FromUserName
-        }).ToArray();
+        return result;
     }
 
-    public MoneyTransactionDto Get(string id)
+    public MoneyTransaction Get(string id)
     {
         try
         {
             var objectId = new ObjectId(id);
-            var res =  _db.GetCollection<MoneyTransaction>().FindById(new ObjectId(objectId));
-            return new MoneyTransactionDto
-            {
-                Id = res.Id.ToString(), 
-                CategoryName = res.CategoryName, 
-                CategoryHumanName = res.CategoryHumanName, 
-                CategoryIcon = res.CategoryIcon, 
-                Value = res.Value, 
-                Sign = res.Sign, 
-                RegisterDate = res.RegisterDate, 
-                TransactionDate = res.TransactionDate, 
-                FromUserName = res.FromUserName
-            };
+            var result =  _db.GetCollection<MoneyTransaction>().FindById(new ObjectId(objectId));
+            return result;
         }
         catch (Exception e)
         {
@@ -90,24 +68,11 @@ public class MoneyTransactionRepository : IMoneyTransactionRepository
         }
     }
 
-    public string Insert(MoneyTransactionDto moneyTransaction)
+    public string Insert(MoneyTransaction moneyTransaction)
     {
         try
         {
-            var entity = new MoneyTransaction
-            {
-                CategoryName = moneyTransaction.CategoryName, 
-                CategoryHumanName = moneyTransaction.CategoryHumanName, 
-                CategoryIcon = moneyTransaction.CategoryIcon, 
-                Value = moneyTransaction.Value, 
-                Sign = moneyTransaction.Sign, 
-                RegisterDate = moneyTransaction.RegisterDate, 
-                TransactionDate = moneyTransaction.TransactionDate, 
-                FromUserName = moneyTransaction.FromUserName,
-                MessageId = moneyTransaction.MessageId,
-                ChatId = moneyTransaction.ChatId
-            };
-            var id = _db.GetCollection<MoneyTransaction>().Insert(entity);
+            var id = _db.GetCollection<MoneyTransaction>().Insert(moneyTransaction);
             return id.AsObjectId.ToString();
         }
         catch (Exception e)
@@ -117,25 +82,11 @@ public class MoneyTransactionRepository : IMoneyTransactionRepository
         }
     }
 
-    public bool Update(MoneyTransactionDto moneyTransaction)
+    public bool Update(MoneyTransaction update)
     {
         try
         {
-            var entity = new MoneyTransaction
-            {
-                Id = new ObjectId(moneyTransaction.Id),
-                CategoryName = moneyTransaction.CategoryName, 
-                CategoryHumanName = moneyTransaction.CategoryHumanName, 
-                CategoryIcon = moneyTransaction.CategoryIcon, 
-                Value = moneyTransaction.Value, 
-                Sign = moneyTransaction.Sign, 
-                RegisterDate = moneyTransaction.RegisterDate, 
-                TransactionDate = moneyTransaction.TransactionDate, 
-                FromUserName = moneyTransaction.FromUserName,
-                MessageId = moneyTransaction.MessageId,
-                ChatId = moneyTransaction.ChatId
-            };
-            return _db.GetCollection<MoneyTransaction>().Update(entity);
+            return _db.GetCollection<MoneyTransaction>().Update(update);
         }
         catch (Exception e)
         {
