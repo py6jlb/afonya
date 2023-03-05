@@ -47,10 +47,10 @@ public class BotKeyboardService : IBotKeyboardService
     public InlineKeyboardMarkup GetDeleteKeyboard(string savedDataId, string originalText)
     {
         var data = new DeleteRequestCallbackData { DataId = savedDataId, OriginalMessageText = originalText };
-        var callback = new Callback( CallbackCommand.DeleteRequest, null, JsonConvert.SerializeObject(data));
-        var callbackId = _callbackRepository.Create(callback);
+        var newCallback = new Callback( CallbackCommand.DeleteRequest, null, JsonConvert.SerializeObject(data));
+        var callback = _callbackRepository.Create(newCallback);
         
-        var inlineKeyboard = new InlineKeyboardMarkup(new[] {InlineKeyboardButton.WithCallbackData("Удалить", callbackId.Id.ToString())});
+        var inlineKeyboard = new InlineKeyboardMarkup(new[] {InlineKeyboardButton.WithCallbackData("Удалить", callback.Id.ToString())});
         return inlineKeyboard;
     }
 
@@ -59,17 +59,17 @@ public class BotKeyboardService : IBotKeyboardService
         var groupId = Guid.NewGuid();
         
         var yesData = data with { Confirm = true };
-        var yesCallback = new Callback(CallbackCommand.Delete, groupId, JsonConvert.SerializeObject(yesData));
-        var yesCallbackId =  _callbackRepository.Create(yesCallback);
+        var newYesCallback = new Callback(CallbackCommand.Delete, groupId, JsonConvert.SerializeObject(yesData));
+        var yesCallback =  _callbackRepository.Create(newYesCallback);
 
         var noData = data with { Confirm = false };
-        var noCallback = new Callback(CallbackCommand.Delete, groupId, JsonConvert.SerializeObject(noData));
-        var noCallbackId = _callbackRepository.Create(noCallback);
+        var newNoCallback = new Callback(CallbackCommand.Delete, groupId, JsonConvert.SerializeObject(noData));
+        var noCallback = _callbackRepository.Create(newNoCallback);
         
         var buttons = new[]
         {
-            InlineKeyboardButton.WithCallbackData("Да", yesCallbackId.Id.ToString()),
-            InlineKeyboardButton.WithCallbackData("Нет", noCallbackId.Id.ToString())
+            InlineKeyboardButton.WithCallbackData("Да", yesCallback.Id.ToString()),
+            InlineKeyboardButton.WithCallbackData("Нет", noCallback.Id.ToString())
         };
 
         var inlineKeyboard = new InlineKeyboardMarkup(buttons);

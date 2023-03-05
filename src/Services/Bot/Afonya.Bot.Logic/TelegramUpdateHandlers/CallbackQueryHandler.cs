@@ -33,26 +33,31 @@ public class CallbackQueryHandler : BaseHandler
         var callback = _callbackRepository.Get(callbackQuery.Data);
         if (callback == null) return;
 
-        switch (callback.Command)
+        try
         {
-            case CallbackCommand.SetCategory:
-                await SetCategory(callbackQuery, callback, ct);
-                break;
-            case CallbackCommand.DeleteRequest:
-                await DeleteEntryConfirm(callbackQuery, callback, ct);
-                break;
-            case CallbackCommand.Delete:
-                await DeleteEntry(callbackQuery, callback, ct);
-                break;
-        }
-
-        var res = _callbackRepository.Delete(callbackQuery.Data);
-        if (callback.GroupId.HasValue)
-        {
-            var group = _callbackRepository.GetGroup(callback.GroupId.Value);
-            foreach (var groupCallback in group ?? Array.Empty<Callback>())
+            switch (callback.Command)
             {
-                _callbackRepository.Delete(groupCallback.Id.ToString());
+                case CallbackCommand.SetCategory:
+                    await SetCategory(callbackQuery, callback, ct);
+                    break;
+                case CallbackCommand.DeleteRequest:
+                    await DeleteEntryConfirm(callbackQuery, callback, ct);
+                    break;
+                case CallbackCommand.Delete:
+                    await DeleteEntry(callbackQuery, callback, ct);
+                    break;
+            }
+        }
+        finally
+        {
+            var res = _callbackRepository.Delete(callbackQuery.Data);
+            if (callback.GroupId.HasValue)
+            {
+                var group = _callbackRepository.GetGroup(callback.GroupId.Value);
+                foreach (var groupCallback in group ?? Array.Empty<Callback>())
+                {
+                    _callbackRepository.Delete(groupCallback.Id.ToString());
+                }
             }
         }
     }
@@ -81,17 +86,25 @@ public class CallbackQueryHandler : BaseHandler
     private async Task DeleteEntry(CallbackQuery? callbackQuery, Callback callback, CancellationToken ct)
     {
         var callbackData = JsonConvert.DeserializeObject<DeleteRequestCallbackData>(callback.JsonData);
+        var deleted = false;
         if (callbackData.Confirm)
         {
             var res = _moneyTransaction.Delete(callbackData.DataId);
-            if (!res) return;
+            deleted = res;
+        }
+
+        if (deleted)
+        {
             await BotClient.AnswerCallbackQueryAsync(callbackQuery.Id, $"Запись удалена", cancellationToken: ct);
             await BotClient.DeleteMessageAsync(callbackQuery.Message.Chat.Id, callbackQuery.Message.MessageId, cancellationToken: ct);
         }
+        else
+        {
+            var deleteKeyboard = _botKeyboard.GetDeleteKeyboard(callbackData.DataId, callbackData.OriginalMessageText);
+            await BotClient.EditMessageTextAsync(callbackQuery.Message.Chat.Id,
+                callbackQuery.Message.MessageId, callbackData.OriginalMessageText, replyMarkup: deleteKeyboard, cancellationToken: ct);
 
-        var deleteKeyboard = _botKeyboard.GetDeleteKeyboard(callbackData.DataId, callbackData.OriginalMessageText);
-        await BotClient.EditMessageTextAsync(callbackQuery.Message.Chat.Id,
-            callbackQuery.Message.MessageId, callbackData.OriginalMessageText, replyMarkup: deleteKeyboard, cancellationToken: ct);
+        }
     }
 
     private async Task DeleteEntryConfirm(CallbackQuery? callbackQuery, Callback callback, CancellationToken ct)

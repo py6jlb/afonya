@@ -51,10 +51,10 @@ public class Starter : IHostedService
 
         foreach (var category in categories)
         {
-            var categoryDto = category.Get<Category>();
+            var categoryDto = category.Get<CategoryDto>();
             if (categoryDto == null) continue;
-            categoryDto.SetIsActive(true);
-            repo.Create(categoryDto);
+            var newCategory = new Category(categoryDto.Icon, categoryDto.Name, categoryDto.HumanName, true);
+            repo.Create(newCategory);
         }
     }
 }
