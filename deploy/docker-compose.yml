@@ -1,0 +1,48 @@
+version: '3.4'
+
+networks:
+  app:
+    driver: "bridge"
+
+services:
+  proxy:
+    image: nginx:stable-alpine
+    hostname: "proxy"
+    restart: unless-stopped
+    networks:
+      app:
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/proxy.conf:/etc/nginx/proxy.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+    ports:
+      - "80:80"
+      - "443:443"
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email py6jlb125@gmail.com -d vrublevskiy.ru --agree-tos
+
+  bot:
+    image: py6jlb/bot:latest
+    hostname: "bot"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ConnectionStrings__Default: "Filename=./db/LiteDb.db;"
+      ProxyConfig__UseReverseProxy: "true"
+      ProxyConfig__SubDir: "/tg"
+      AdminUser__UserName: "Admin"
+      AdminUser__Password: "123qwezxc"
+      BotConfiguration__BotToken: "430705700:AAGnfYR41ToKjo_XeSEBqPGG5pgDfEcGaYo"
+      BotConfiguration__HostAddress: "https://vrublevskiy.ru"
+    volumes:
+     - ./db:/app/db
+    networks:
+      app:
+    restart: always
