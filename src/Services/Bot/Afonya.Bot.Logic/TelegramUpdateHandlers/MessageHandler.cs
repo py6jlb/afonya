@@ -60,7 +60,8 @@ public class MessageHandler : BaseHandler
 
         var dataId = _moneyTransaction.Insert(savedData);
         var keyboard = _botKeyboard.GetCategoryKeyboard(isIncome, dataId);
-        await BotClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"{savedData.Sign}{num} руб", replyMarkup: keyboard, cancellationToken: ct);
+        await BotClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Выберете категорию для: {savedData.Sign}{num} руб", replyMarkup: keyboard, cancellationToken: ct);
+        await BotClient.DeleteMessageAsync(message.Chat.Id, message.MessageId, cancellationToken: ct);
     }
 
     private static (bool, float?) GetNumber(string numText)
