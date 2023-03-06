@@ -18,6 +18,8 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDto?>
 
         if (string.IsNullOrWhiteSpace(request.UserName)) return null;
         var result = _userRepository.GetByName(request.UserName);
-        return Task.FromResult(result);
+        return result == null ? 
+            Task.FromResult<UserDto?>(null) : 
+            Task.FromResult<UserDto?>(new UserDto(result.Id.ToString(), result.Login));
     }
 }

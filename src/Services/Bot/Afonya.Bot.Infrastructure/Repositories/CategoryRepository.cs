@@ -4,7 +4,6 @@ using Afonya.Bot.Interfaces.Repositories;
 using Common.Exceptions;
 using LiteDB;
 using Microsoft.Extensions.Logging;
-using Shared.Contracts;
 
 namespace Afonya.Bot.Infrastructure.Repositories;
 
@@ -19,34 +18,18 @@ public class CategoryRepository : ICategoryRepository
         _db = context.Database;
     }
     
-    public IReadOnlyCollection<CategoryDto> Get(bool onlyActive = true)
+    public IEnumerable<Category> Get(bool onlyActive = true)
     {
-        var t =  onlyActive ? _db.GetCollection<Category>().Find(x => x.IsActive == true) 
+        var result =  onlyActive ? _db.GetCollection<Category>().Find(x => x.IsActive == true) 
             : _db.GetCollection<Category>().FindAll();
 
-        return t.Select(x => new CategoryDto
-        {
-            Id = x.Id.ToString(),
-            Name = x.Name,
-            HumanName = x.HumanName,
-            Icon = x.Icon,
-            IsActive = x.IsActive
-        }).ToArray();
+        return result;
     }
 
-    public CategoryDto? Get(string id)
+    public Category? Get(string id)
     {
-        var cat = _db.GetCollection<Category>().FindById(new ObjectId(id));
-        if (cat == null) return null;
-
-        return new CategoryDto
-        {
-            Id = cat.Id.ToString(),
-            Name = cat.Name,
-            HumanName = cat.HumanName,
-            Icon = cat.Icon,
-            IsActive = cat.IsActive
-        };
+        var category = _db.GetCollection<Category>().FindById(new ObjectId(id));
+        return category;
     }
 
     public int Count()
@@ -55,41 +38,28 @@ public class CategoryRepository : ICategoryRepository
         return res;
     }
 
-    public CategoryDto Create(CategoryDto category)
+    public Category Create(Category category)
     {
-        var entity = new Category
-        {
-            Name = category.Name,
-            HumanName = category.HumanName,
-            Icon = category.Icon,
-            IsActive = category.IsActive
-        };
-        var res = _db.GetCollection<Category>().Insert(entity);
-        var newCategory = Get(res.AsObjectId.ToString());
-        return newCategory;
+        var id = _db.GetCollection<Category>().Insert(category);
+        var result = Get(id.AsObjectId.ToString());
+        return result;
     }
 
-    public CategoryDto Update(CategoryDto category)
+    public Category Update(Category update)
     {
-        if (string.IsNullOrWhiteSpace(category.Icon))
+        if (string.IsNullOrWhiteSpace(update.Icon))
             throw new AfonyaErrorException("Отсутсвует id категории для обновления.");
         
-        var cat = _db.GetCollection<Category>().FindById(new ObjectId(category.Id));
-        cat.Icon = category.Icon;
-        cat.Name = category.Name;
-        cat.HumanName = category.HumanName;
-        cat.IsActive = category.IsActive;
-
-        var result = _db.GetCollection<Category>().Update(cat);
-        if (result) return category;
+        var result = _db.GetCollection<Category>().Update(update);
+        if (result) return update;
         throw new AfonyaErrorException("Ошибка обновления категории.");
     }
 
     public bool Delete(string id)
     {
-        var cat = _db.GetCollection<Category>().FindById(new ObjectId(id));
-        cat.IsActive = false;
-        var result = _db.GetCollection<Category>().Update(cat);
+        var category = _db.GetCollection<Category>().FindById(new ObjectId(id));
+        category.SetIsActive(false);
+        var result = _db.GetCollection<Category>().Update(category);
         return result;
     }
 }

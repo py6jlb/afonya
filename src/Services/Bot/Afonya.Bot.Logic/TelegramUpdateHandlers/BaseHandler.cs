@@ -5,7 +5,7 @@ using Telegram.Bot.Types;
 
 namespace Afonya.Bot.Logic.TelegramUpdateHandlers;
 
-public abstract class BaseHandler : IUpdateHandler
+public abstract class BaseHandler : ITelegramUpdateHandler
 {
     protected readonly ILogger Logger;
     protected readonly ITelegramBotClient BotClient;

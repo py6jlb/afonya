@@ -11,9 +11,9 @@ public class NewTelegramEventCommandHandler : IRequestHandler<NewTelegramEventCo
 {
     private readonly ILogger<NewTelegramEventCommandHandler> _logger;
     private readonly IUserRepository _userRepository;
-    private readonly IUpdateHandlerFactory _handlerFactory;
+    private readonly ITelegramUpdateHandlerFactory _handlerFactory;
 
-    public NewTelegramEventCommandHandler(IUserRepository userRepository, ILogger<NewTelegramEventCommandHandler> logger, IUpdateHandlerFactory handlerFactory)
+    public NewTelegramEventCommandHandler(IUserRepository userRepository, ILogger<NewTelegramEventCommandHandler> logger, ITelegramUpdateHandlerFactory handlerFactory)
     {
         _userRepository = userRepository;
         _logger = logger;

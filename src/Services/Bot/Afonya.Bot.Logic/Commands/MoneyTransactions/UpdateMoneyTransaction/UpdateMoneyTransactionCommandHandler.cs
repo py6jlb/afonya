@@ -22,14 +22,14 @@ public class UpdateMoneyTransactionCommandHandler : IRequestHandler<UpdateMoneyT
         if (entity == null)
             throw new AfonyaErrorException("Транзакция для обновления не найдена");
 
-        entity.Value = request.MoneyTransaction.Value;
-        entity.Sign = request.MoneyTransaction.Sign;
-        entity.CategoryName = request.MoneyTransaction.CategoryName;
-        entity.CategoryHumanName = request.MoneyTransaction.CategoryHumanName;
-        entity.CategoryIcon = request.MoneyTransaction.CategoryIcon;
-        entity.RegisterDate = request.MoneyTransaction.RegisterDate;
-        entity.TransactionDate = request.MoneyTransaction.TransactionDate;
-        entity.FromUserName = request.MoneyTransaction.FromUserName;
+        entity.SetValue(request.MoneyTransaction.Value);
+        entity.SetSign(request.MoneyTransaction.Sign);
+        entity.SetCategory(request.MoneyTransaction.CategoryName, 
+            request.MoneyTransaction.CategoryIcon,
+            request.MoneyTransaction.CategoryHumanName);
+        entity.SetRegisterDate(request.MoneyTransaction.RegisterDate);
+        entity.SetTransactionDate(request.MoneyTransaction.TransactionDate);
+        entity.SetUser(request.MoneyTransaction.FromUserName);
 
         var res = _moneyTransactionRepository.Update(entity);
         return Task.FromResult(res);

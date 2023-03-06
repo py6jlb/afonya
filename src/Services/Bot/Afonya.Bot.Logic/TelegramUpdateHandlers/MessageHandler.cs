@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
+using Afonya.Bot.Domain.Entities;
 using Afonya.Bot.Interfaces.Repositories;
 using Afonya.Bot.Interfaces.Services;
 using Microsoft.Extensions.Logging;
-using Shared.Contracts;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -54,20 +54,14 @@ public class MessageHandler : BaseHandler
             return;
         }
 
-        var savedData = new MoneyTransactionDto()
-        {
-            FromUserName = message.From.Username,
-            Value = num.Value,
-            RegisterDate = message.Date,
-            Sign = isIncome ? "+" : "-",
-            TransactionDate = DateTime.Now,
-            MessageId = message.MessageId,
-            ChatId = message.Chat.Id
-        };
+        var savedData = new MoneyTransaction(
+            num.Value, message.MessageId, message.Chat.Id, isIncome ? "+" : "-",
+            null, null, null, message.Date, DateTime.Now, message.From.Username);
 
         var dataId = _moneyTransaction.Insert(savedData);
         var keyboard = _botKeyboard.GetCategoryKeyboard(isIncome, dataId);
-        await BotClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"{savedData.Sign}{num} руб", replyMarkup: keyboard, cancellationToken: ct);
+        await BotClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Выберете категорию для: {savedData.Sign}{num} руб", replyMarkup: keyboard, cancellationToken: ct);
+        await BotClient.DeleteMessageAsync(message.Chat.Id, message.MessageId, cancellationToken: ct);
     }
 
     private static (bool, float?) GetNumber(string numText)

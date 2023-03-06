@@ -1,13 +1,13 @@
-﻿using Shared.Contracts;
+﻿using Afonya.Bot.Domain.Entities;
 
 namespace Afonya.Bot.Interfaces.Repositories;
 
 public interface IUserRepository
 {
     int Count();
-    IReadOnlyCollection<UserDto> Get();
-    UserDto? Get(string id);
-    UserDto? GetByName(string userName);
-    UserDto? Create(UserDto user);
+    IEnumerable<TelegramUser> Get();
+    TelegramUser? Get(string id);
+    TelegramUser? GetByName(string userName);
+    TelegramUser? Create(TelegramUser user);
     bool Delete(string id);
 }
