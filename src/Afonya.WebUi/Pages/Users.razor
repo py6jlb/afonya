@@ -1,0 +1,17 @@
+﻿@page "/users"
+@inject HttpClient Http
+
+<PageTitle>Пользователи бота</PageTitle>
+
+<h1>Пользователи бота</h1>
+
+<p>Этот компонент позволяет настраивать список пользователей которым разрешено отправлять боту сообщения.</p>
+
+@code {
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.CompletedTask;
+    }
+}
