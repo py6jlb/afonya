@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types;
 
-namespace Afonya.Bot.Interfaces.Services.UpdateHandler;
+namespace Afonya.Bot.Interfaces.Services;
 
 public interface ITelegramUpdateHandler
 {

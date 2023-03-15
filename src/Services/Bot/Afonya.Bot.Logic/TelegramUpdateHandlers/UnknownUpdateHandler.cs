@@ -6,7 +6,7 @@ namespace Afonya.Bot.Logic.TelegramUpdateHandlers;
 
 public class UnknownUpdateHandler : BaseHandler
 {
-    public UnknownUpdateHandler(ILogger logger, ITelegramBotClient botClient) : base(logger, botClient)
+    public UnknownUpdateHandler(ILogger<UnknownUpdateHandler> logger, ITelegramBotClient botClient) : base(logger, botClient)
     {
     }
 

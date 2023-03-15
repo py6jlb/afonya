@@ -1,4 +1,4 @@
-﻿using Afonya.Bot.Interfaces.Services.UpdateHandler;
+﻿using Afonya.Bot.Interfaces.Services;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Types;

@@ -5,10 +5,11 @@ using Afonya.Bot.Interfaces;
 using Afonya.Bot.Interfaces.Dto;
 using Afonya.Bot.Interfaces.Repositories;
 using Afonya.Bot.Interfaces.Services;
-using Afonya.Bot.Interfaces.Services.UpdateHandler;
 using Afonya.Bot.Logic.Commands.Bot.NewTelegramEvent;
+using Afonya.Bot.Logic.Delegates;
 using Afonya.Bot.Logic.Services;
 using Afonya.Bot.Logic.Services.Pooling;
+using Afonya.Bot.Logic.TelegramUpdateHandlers;
 using Afonya.Bot.WebWorker.BackgroundTasks;
 using Common.Exceptions;
 using Common.Options;
@@ -18,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
+using Telegram.Bot.Types.Enums;
 
 namespace Afonya.Bot.WebWorker.Extensions;
 
@@ -36,7 +38,7 @@ public static class WebApplicationBuilderExtensions
                     Detail = exception.Message,
                     Status = StatusCodes.Status500InternalServerError,
                 });
-                
+
                 options.Map<Exception>(exception => new ProblemDetails
                 {
                     Type = "AfonyaException",
@@ -55,12 +57,12 @@ public static class WebApplicationBuilderExtensions
         //config
         builder.Services.Configure<AdminUser>(config.GetSection("AdminUser"));
         builder.Services.Configure<ReverseProxyConfig>(config.GetSection("ProxyConfig"));
-        
+
         //store
         var connectionString = config.GetConnectionString("Default") ?? throw new NullReferenceException("Отсутствует строка подключения к БД");
         builder.Services.AddSingleton<ILiteDbContext>(_ => new DbContext(connectionString));
         builder.Services.AddTransient<IUserRepository, UserRepository>();
-        builder.Services.AddTransient<IMoneyTransactionRepository, MoneyTransactionRepository>(); 
+        builder.Services.AddTransient<IMoneyTransactionRepository, MoneyTransactionRepository>();
         builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
         builder.Services.AddTransient<ICallbackRepository, CallbackRepository>();
 
@@ -72,7 +74,7 @@ public static class WebApplicationBuilderExtensions
         builder.Services.AddControllers().AddNewtonsoftJson();
         return builder;
     }
-    
+
     public static WebApplicationBuilder AddBotServices(this WebApplicationBuilder builder, IConfiguration config)
     {
         var botConfig = new BotConfiguration();
@@ -80,16 +82,28 @@ public static class WebApplicationBuilderExtensions
         configSection.Bind(botConfig);
 
         builder.Services.Configure<BotConfiguration>(configSection);
+
+        builder.Services.AddTransient<CallbackQueryHandler>();
+        builder.Services.AddTransient<EditedMessageHandler>();
+        builder.Services.AddTransient<MessageHandler>();
+        builder.Services.AddTransient<UnknownUpdateHandler>();
+
+        builder.Services.AddTransient<TelegramHandlerResolver>(sp => token =>
+            token switch
+            {
+                UpdateType.CallbackQuery => sp.GetRequiredService<CallbackQueryHandler>(),
+                UpdateType.EditedMessage => sp.GetRequiredService<EditedMessageHandler>(),
+                UpdateType.Message => sp.GetRequiredService<MessageHandler>(),
+                _ => sp.GetRequiredService<UnknownUpdateHandler>()
+            });
+
         builder.Services.AddHttpClient("tgwebhook")
             .AddTypedClient<ITelegramBotClient>((httpClient, sp) =>
             {
                 var opt = sp.GetRequiredService<IOptions<BotConfiguration>>().Value;
                 return new TelegramBotClient(opt.BotToken, httpClient);
             });
-
-        builder.Services.AddScoped<ITelegramUpdateHandlerFactory, TelegramUpdateHandlerFactory>();
         if (!botConfig.UsePooling) return builder;
-
         builder.Services.AddScoped<IUpdateHandler, UpdateHandler>();
         builder.Services.AddHostedService<PollingService>();
 

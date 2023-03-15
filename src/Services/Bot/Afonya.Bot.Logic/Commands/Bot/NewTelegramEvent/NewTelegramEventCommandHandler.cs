@@ -1,9 +1,10 @@
 ﻿using Afonya.Bot.Interfaces.Repositories;
-using Afonya.Bot.Interfaces.Services.UpdateHandler;
+using Afonya.Bot.Logic.Delegates;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 
 namespace Afonya.Bot.Logic.Commands.Bot.NewTelegramEvent;
 
@@ -11,23 +12,24 @@ public class NewTelegramEventCommandHandler : IRequestHandler<NewTelegramEventCo
 {
     private readonly ILogger<NewTelegramEventCommandHandler> _logger;
     private readonly IUserRepository _userRepository;
-    private readonly ITelegramUpdateHandlerFactory _handlerFactory;
+    private readonly TelegramHandlerResolver _resolver;
 
-    public NewTelegramEventCommandHandler(IUserRepository userRepository, ILogger<NewTelegramEventCommandHandler> logger, ITelegramUpdateHandlerFactory handlerFactory)
+    public NewTelegramEventCommandHandler(IUserRepository userRepository, 
+        ILogger<NewTelegramEventCommandHandler> logger, TelegramHandlerResolver resolver)
     {
         _userRepository = userRepository;
         _logger = logger;
-        _handlerFactory = handlerFactory;
+        _resolver = resolver;
     }
 
     public async Task<bool> Handle(NewTelegramEventCommand request, CancellationToken cancellationToken)
     {
         var (allowed, chatId) = AllowedUser(request.Update);
-        var handler = _handlerFactory.CreateHandler(request.Update);
+        var handler = _resolver(request.Update.Type);
         
         if (!chatId.HasValue)
         {
-            _logger.LogWarning("Ошибка обработки обновления. отсутствует ChatId");
+            _logger.LogWarning("Ошибка обработки обновления. Отсутствует ChatId");
             return false;
         }
 
@@ -37,10 +39,9 @@ public class NewTelegramEventCommandHandler : IRequestHandler<NewTelegramEventCo
             return false;
         }
 
-
         try
         {
-            await handler.HandleAsync(request.Update, chatId.Value, cancellationToken );
+            await handler.HandleAsync(request.Update, chatId.Value, cancellationToken);
         }
         catch (Exception exception)
         {

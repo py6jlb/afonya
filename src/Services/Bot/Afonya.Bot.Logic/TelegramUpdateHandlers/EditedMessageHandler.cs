@@ -6,7 +6,7 @@ namespace Afonya.Bot.Logic.TelegramUpdateHandlers;
 
 public class EditedMessageHandler : BaseHandler
 {
-    public EditedMessageHandler(ILogger logger, ITelegramBotClient botClient) : base(logger, botClient)
+    public EditedMessageHandler(ILogger<EditedMessageHandler> logger, ITelegramBotClient botClient) : base(logger, botClient)
     {
     }
 
