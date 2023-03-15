@@ -21,8 +21,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Commands\Bot\BotStart\" />
-      <Folder Include="Commands\Bot\BotStop\" />
+      <Folder Include="Commands\Bot\Delete\" />
+      <Folder Include="Commands\Bot\SetCategory\" />
+      <Folder Include="Commands\Bot\NewMessage\" />
+      <Folder Include="Commands\Bot\Unknown\" />
+      <Folder Include="Commands\Bot\RemoveKeyboard\" />
+      <Folder Include="Commands\Bot\Start\" />
       <Folder Include="Commands\Categories\AddCategory\" />
       <Folder Include="Commands\Categories\DeleteCategory\" />
       <Folder Include="Commands\Categories\UpdateCategory\" />
@@ -30,6 +34,7 @@
       <Folder Include="Commands\User\CreateUser\" />
       <Folder Include="Commands\User\DeleteUser\" />
       <Folder Include="Queries\BotWebhookStatus\" />
+      <Folder Include="Queries\Bot\ConfirmDelete\" />
       <Folder Include="Queries\GetUser\" />
       <Folder Include="Queries\GetCategories\" />
       <Folder Include="Queries\GetMoneyTransactions\" />

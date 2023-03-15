@@ -3,4 +3,4 @@ using Telegram.Bot.Types.Enums;
 
 namespace Afonya.Bot.Logic.Delegates;
 
-public delegate ITelegramUpdateHandler TelegramHandlerResolver(UpdateType type);
+public delegate ICommandBuilder TelegramHandlerResolver(UpdateType type);

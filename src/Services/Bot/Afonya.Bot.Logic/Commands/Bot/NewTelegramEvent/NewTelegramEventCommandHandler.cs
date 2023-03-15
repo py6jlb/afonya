@@ -57,18 +57,5 @@ public class NewTelegramEventCommandHandler : IRequestHandler<NewTelegramEventCo
         return true;
     }
 
-    private (bool allowed, long? chatId) AllowedUser(Update? update)
-    {
-        if(update == null) return (false, null);
-
-        var (from, chatId) = update switch
-        {
-            { Message: { } message }                       => (message?.From?.Username, message?.Chat.Id),
-            { EditedMessage: { } message }                 => (message?.From?.Username, message?.Chat.Id),
-            { CallbackQuery: { } callbackQuery }           => (callbackQuery?.From?.Username, callbackQuery?.Message?.Chat.Id),
-            _                                              => (null, null)
-        };
-
-        return (!string.IsNullOrWhiteSpace(from) && _userRepository.GetByName(from) != null, chatId);
-    }
+    
 }
