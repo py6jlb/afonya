@@ -13,21 +13,15 @@ public class BaseEntity
     ObjectId _id;
 
     /// <summary>
-    /// Получить или присвоить идентификатор сущьности
+    /// Получить или присвоить идентификатор сущности
     /// </summary>
     public virtual ObjectId Id
     {
-        get
-        {
-            return _id;
-        }
-        protected set
-        {
-            _id = value;
-        }
+        get => _id;
+        protected set => _id = value;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         return Equals(obj as BaseEntity);
     }

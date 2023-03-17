@@ -1,5 +1,5 @@
 ﻿using Afonya.Bot.Domain.Entities;
-using Afonya.Bot.Interfaces;
+using Afonya.Bot.Infrastructure.Contexts;
 using Afonya.Bot.Interfaces.Repositories;
 using LiteDB;
 using Microsoft.Extensions.Logging;
@@ -11,7 +11,7 @@ public class MoneyTransactionRepository : IMoneyTransactionRepository
 {
     private readonly ILogger<MoneyTransactionRepository> _logger;
     private readonly LiteDatabase _db;
-    public MoneyTransactionRepository(ILogger<MoneyTransactionRepository> logger, ILiteDbContext context)
+    public MoneyTransactionRepository(ILogger<MoneyTransactionRepository> logger, DbContext context)
     {
         _logger = logger;
         _db = context.Database;

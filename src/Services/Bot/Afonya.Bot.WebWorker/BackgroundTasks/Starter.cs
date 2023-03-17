@@ -1,6 +1,6 @@
-﻿using Afonya.Bot.Logic.Commands.Bot.Management.DeleteWebHook;
-using Afonya.Bot.Logic.Commands.Categories.AddCategory;
-using Afonya.Bot.Logic.Queries.GetCategoryCount;
+﻿using Afonya.Bot.Logic.Api.Categories.Commands.AddCategory;
+using Afonya.Bot.Logic.Api.Categories.Queries.GetCategoryCount;
+using Afonya.Bot.Logic.Api.Management.Commands.DeleteWebHook;
 using MediatR;
 using Shared.Contracts;
 

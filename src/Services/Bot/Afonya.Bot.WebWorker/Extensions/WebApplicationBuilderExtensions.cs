@@ -1,17 +1,17 @@
 ﻿using System.Reflection;
+using Afonya.Bot.Domain.Exceptions;
 using Afonya.Bot.Infrastructure.Contexts;
 using Afonya.Bot.Infrastructure.Repositories;
-using Afonya.Bot.Interfaces;
 using Afonya.Bot.Interfaces.Dto;
 using Afonya.Bot.Interfaces.Repositories;
 using Afonya.Bot.Interfaces.Services;
-using Afonya.Bot.Logic.CommandBuilders;
-using Afonya.Bot.Logic.Commands.Bot.NewTelegramEvent;
+using Afonya.Bot.Logic.Bot.CommandBuilders;
+using Afonya.Bot.Logic.Bot.Commands.Start;
+using Afonya.Bot.Logic.Bot.PipelineBehaviors.Auth;
 using Afonya.Bot.Logic.Delegates;
 using Afonya.Bot.Logic.Services;
 using Afonya.Bot.Logic.Services.Pooling;
 using Afonya.Bot.WebWorker.BackgroundTasks;
-using Common.Exceptions;
 using Common.Options;
 using Hellang.Middleware.ProblemDetails;
 using MediatR;
@@ -30,6 +30,14 @@ public static class WebApplicationBuilderExtensions
         builder.Services.AddProblemDetails(options =>
             {
                 options.IncludeExceptionDetails = (ctx, ex) => !env.IsDevelopment();
+
+                options.Map<AfonyaForbiddenException>(exception => new ProblemDetails
+                {
+                    Type = nameof(AfonyaForbiddenException),
+                    Title = "Ошибка авторизации",
+                    Detail = exception.Message,
+                    Status = StatusCodes.Status403Forbidden,
+                });
 
                 options.Map<AfonyaErrorException>(exception => new ProblemDetails
                 {
@@ -60,7 +68,8 @@ public static class WebApplicationBuilderExtensions
 
         //store
         var connectionString = config.GetConnectionString("Default") ?? throw new NullReferenceException("Отсутствует строка подключения к БД");
-        builder.Services.AddSingleton<ILiteDbContext>(_ => new DbContext(connectionString));
+        builder.Services.AddSingleton(_ => new DbContext(connectionString));
+       
         builder.Services.AddTransient<IUserRepository, UserRepository>();
         builder.Services.AddTransient<IMoneyTransactionRepository, MoneyTransactionRepository>();
         builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
@@ -68,8 +77,8 @@ public static class WebApplicationBuilderExtensions
 
         //app
         builder.Services.AddTransient<IBotKeyboardService, BotKeyboardService>();
-        builder.Services.AddTransient<IBotManagementService, BotManagementService>();
-        builder.Services.AddMediatR(typeof(NewTelegramEventCommand).GetTypeInfo().Assembly);
+        builder.Services.AddMediatR(typeof(BotStartCommand).GetTypeInfo().Assembly);
+        builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(BotAuthBehavior<,>));
         builder.Services.AddHostedService<Starter>();
         builder.Services.AddControllers().AddNewtonsoftJson();
         return builder;
@@ -88,7 +97,7 @@ public static class WebApplicationBuilderExtensions
         builder.Services.AddTransient<MessageHandler>();
         builder.Services.AddTransient<UnknownUpdateHandler>();
 
-        builder.Services.AddTransient<TelegramHandlerResolver>(sp => token =>
+        builder.Services.AddTransient<CommandBuilderResolver>(sp => token =>
             token switch
             {
                 UpdateType.CallbackQuery => sp.GetRequiredService<CallbackQueryHandler>(),

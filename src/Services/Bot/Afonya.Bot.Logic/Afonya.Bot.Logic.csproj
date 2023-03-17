@@ -21,23 +21,23 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Commands\Bot\Delete\" />
-      <Folder Include="Commands\Bot\SetCategory\" />
-      <Folder Include="Commands\Bot\NewMessage\" />
-      <Folder Include="Commands\Bot\Unknown\" />
-      <Folder Include="Commands\Bot\RemoveKeyboard\" />
-      <Folder Include="Commands\Bot\Start\" />
-      <Folder Include="Commands\Categories\AddCategory\" />
-      <Folder Include="Commands\Categories\DeleteCategory\" />
-      <Folder Include="Commands\Categories\UpdateCategory\" />
-      <Folder Include="Commands\MoneyTransactions\UpdateMoneyTransaction\" />
-      <Folder Include="Commands\User\CreateUser\" />
-      <Folder Include="Commands\User\DeleteUser\" />
-      <Folder Include="Queries\BotWebhookStatus\" />
-      <Folder Include="Queries\Bot\ConfirmDelete\" />
-      <Folder Include="Queries\GetUser\" />
-      <Folder Include="Queries\GetCategories\" />
-      <Folder Include="Queries\GetMoneyTransactions\" />
+      <Folder Include="Bot\Commands\Delete\" />
+      <Folder Include="Bot\Commands\SetCategory\" />
+      <Folder Include="Bot\Commands\NewMessage\" />
+      <Folder Include="Bot\Commands\Unknown\" />
+      <Folder Include="Bot\Commands\RemoveKeyboard\" />
+      <Folder Include="Bot\Commands\Start\" />
+      <Folder Include="Api\Categories\Commands\AddCategory\" />
+      <Folder Include="Api\Categories\Commands\DeleteCategory\" />
+      <Folder Include="Api\Categories\Commands\UpdateCategory\" />
+      <Folder Include="Api\MoneyTransaction\Commands\UpdateMoneyTransaction\" />
+      <Folder Include="Api\Management\Commands\CreateUser\" />
+      <Folder Include="Api\Management\Commands\DeleteUser\" />
+      <Folder Include="Api\Management\Queries\BotWebhookStatus\" />
+      <Folder Include="Bot\Queries\ConfirmDelete\" />
+      <Folder Include="Api\Management\Queries\GetUser\" />
+      <Folder Include="Api\Categories\Queries\GetCategories\" />
+      <Folder Include="Api\MoneyTransaction\Queries\GetMoneyTransactions\" />
     </ItemGroup>
 
 </Project>

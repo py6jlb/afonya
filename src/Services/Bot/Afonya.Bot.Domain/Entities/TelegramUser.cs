@@ -11,8 +11,8 @@ public class TelegramUser : BaseEntity
 
     public string Login { get; private set; }
 
-    public void SetLogin(string login)
-    {
-        Login = login;
-    }
+    //public void SetLogin(string login)
+    //{
+    //    Login = login;
+    //}
 }

@@ -1,10 +1,9 @@
 ﻿using Afonya.Bot.Domain.Entities;
-using Afonya.Bot.Interfaces;
 using LiteDB;
 
 namespace Afonya.Bot.Infrastructure.Contexts;
 
-public class DbContext : ILiteDbContext
+public class DbContext
 {
     public LiteDatabase Database { get; }
 

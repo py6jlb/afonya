@@ -1,6 +1,6 @@
-﻿using Afonya.Bot.Logic.Commands.Bot.Management.DeleteWebHook;
-using Afonya.Bot.Logic.Commands.Bot.Management.SetWebHook;
-using Afonya.Bot.Logic.Queries.BotWebhookStatus;
+﻿using Afonya.Bot.Logic.Api.Management.Commands.DeleteWebHook;
+using Afonya.Bot.Logic.Api.Management.Commands.SetWebHook;
+using Afonya.Bot.Logic.Api.Management.Queries.BotWebhookStatus;
 using Afonya.Bot.WebWorker.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

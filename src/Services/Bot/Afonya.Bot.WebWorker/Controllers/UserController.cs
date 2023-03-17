@@ -1,6 +1,6 @@
-﻿using Afonya.Bot.Logic.Commands.User.CreateUser;
-using Afonya.Bot.Logic.Commands.User.DeleteUser;
-using Afonya.Bot.Logic.Queries.GetUser;
+﻿using Afonya.Bot.Logic.Api.Management.Commands.CreateUser;
+using Afonya.Bot.Logic.Api.Management.Commands.DeleteUser;
+using Afonya.Bot.Logic.Api.Management.Queries.GetUser;
 using Afonya.Bot.WebWorker.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
