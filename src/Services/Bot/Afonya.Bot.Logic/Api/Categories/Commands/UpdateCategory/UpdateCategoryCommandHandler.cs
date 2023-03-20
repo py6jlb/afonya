@@ -1,4 +1,4 @@
-﻿using Afonya.Bot.Interfaces.Repositories;
+﻿using Afonya.Bot.Domain.Repositories;
 using MediatR;
 using Shared.Contracts;
 

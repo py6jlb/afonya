@@ -1,7 +1,7 @@
 ﻿using Afonya.Bot.Domain.Entities;
 using Afonya.Bot.Domain.Exceptions;
+using Afonya.Bot.Domain.Repositories;
 using Afonya.Bot.Infrastructure.Contexts;
-using Afonya.Bot.Interfaces.Repositories;
 using LiteDB;
 using Microsoft.Extensions.Logging;
 

@@ -1,5 +1,5 @@
 ﻿using Afonya.Bot.Domain.Exceptions;
-using Afonya.Bot.Interfaces.Repositories;
+using Afonya.Bot.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

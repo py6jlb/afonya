@@ -1,8 +1,8 @@
 ﻿using Afonya.Bot.Domain.Entities;
 using Afonya.Bot.Domain.Enums;
 using Afonya.Bot.Domain.Exceptions;
+using Afonya.Bot.Domain.Repositories;
 using Afonya.Bot.Interfaces.Dto.CallbackData;
-using Afonya.Bot.Interfaces.Repositories;
 using Afonya.Bot.Logic.Bot.Commands.Delete;
 using Afonya.Bot.Logic.Bot.Commands.SetCategory;
 using Afonya.Bot.Logic.Bot.Queries.ConfirmDelete;

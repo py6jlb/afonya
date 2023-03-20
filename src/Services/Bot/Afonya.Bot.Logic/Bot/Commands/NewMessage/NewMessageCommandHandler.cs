@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using Afonya.Bot.Domain.Entities;
-using Afonya.Bot.Interfaces.Repositories;
+using Afonya.Bot.Domain.Repositories;
 using Afonya.Bot.Interfaces.Services;
 using MediatR;
 using Telegram.Bot;

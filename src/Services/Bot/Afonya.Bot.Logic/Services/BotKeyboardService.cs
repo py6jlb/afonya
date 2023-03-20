@@ -1,7 +1,7 @@
 ﻿using Afonya.Bot.Domain.Entities;
 using Afonya.Bot.Domain.Enums;
+using Afonya.Bot.Domain.Repositories;
 using Afonya.Bot.Interfaces.Dto.CallbackData;
-using Afonya.Bot.Interfaces.Repositories;
 using Afonya.Bot.Interfaces.Services;
 using Common.Extensions;
 using Newtonsoft.Json;

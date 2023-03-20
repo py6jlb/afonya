@@ -1,6 +1,6 @@
 ﻿using Afonya.Bot.Domain.Entities;
 
-namespace Afonya.Bot.Interfaces.Repositories;
+namespace Afonya.Bot.Domain.Repositories;
 
 public interface IUserRepository
 {

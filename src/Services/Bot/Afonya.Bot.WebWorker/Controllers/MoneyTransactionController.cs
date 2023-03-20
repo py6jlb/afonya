@@ -30,16 +30,14 @@ namespace Afonya.Bot.WebWorker.Controllers
             [FromQuery, SwaggerParameter("Код категории")]string? category, 
             [FromQuery, SwaggerParameter("Включать начало и конец периода")]bool include = true)
         {
-            var filter = new MoneyTransactionFilter
+            var data = await _mediator.Send(new GetMoneyTransactionsQuery
             {
                 IncludeDate = include,
                 StartDate = startDate, 
                 EndDate = endDate, 
                 User = user, 
                 Category = category
-            };
-
-            var data = await _mediator.Send(new GetMoneyTransactionsQuery { Filter = filter });
+            });
             return data;
         }
 

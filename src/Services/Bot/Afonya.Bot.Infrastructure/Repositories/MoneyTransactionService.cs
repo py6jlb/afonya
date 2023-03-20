@@ -1,6 +1,6 @@
 ﻿using Afonya.Bot.Domain.Entities;
+using Afonya.Bot.Domain.Repositories;
 using Afonya.Bot.Infrastructure.Contexts;
-using Afonya.Bot.Interfaces.Repositories;
 using LiteDB;
 using Microsoft.Extensions.Logging;
 using Shared.Contracts;
@@ -31,23 +31,23 @@ public class MoneyTransactionRepository : IMoneyTransactionRepository
         }
     }
 
-    public IEnumerable<MoneyTransaction> Get(MoneyTransactionFilter filter)
+    public IEnumerable<MoneyTransaction> Get(DateTime? start, DateTime? end, bool? includeDate, string? user, string? category)
     {
         var query = _db.GetCollection<MoneyTransaction>().Query();
 
-        filter.StartDate ??= DateTime.MinValue;
-        filter.EndDate ??= DateTime.MaxValue;
+        start ??= DateTime.MinValue;
+        end ??= DateTime.MaxValue;
 
-        if (filter.IncludeDate ?? true)
-            query.Where(x => x.RegisterDate >= filter.StartDate && x.RegisterDate <= filter.EndDate);
+        if (includeDate ?? true)
+            query.Where(x => x.RegisterDate >= start && x.RegisterDate <=end);
         else
-            query.Where(x => x.RegisterDate > filter.StartDate && x.RegisterDate < filter.EndDate);
+            query.Where(x => x.RegisterDate > start && x.RegisterDate < end);
 
-        if (string.IsNullOrWhiteSpace(filter.Category))
-            query.Where(x => x.CategoryName.Equals(filter.Category, StringComparison.InvariantCultureIgnoreCase));
+        if (string.IsNullOrWhiteSpace(category))
+            query.Where(x => x.CategoryName.Equals(category, StringComparison.InvariantCultureIgnoreCase));
 
-        if (string.IsNullOrWhiteSpace(filter.User))
-            query.Where(x => x.FromUserName.Equals(filter.User, StringComparison.InvariantCultureIgnoreCase));
+        if (string.IsNullOrWhiteSpace(user))
+            query.Where(x => x.FromUserName.Equals(user, StringComparison.InvariantCultureIgnoreCase));
 
         var result = query.OrderBy(x => x.RegisterDate).ToEnumerable();
         return result;
