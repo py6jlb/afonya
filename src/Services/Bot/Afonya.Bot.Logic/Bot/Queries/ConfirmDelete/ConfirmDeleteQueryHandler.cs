@@ -19,7 +19,7 @@ public class ConfirmDeleteQueryHandler : IRequestHandler<ConfirmDeleteQuery, boo
         
         var confirmKeyboard = _keyboardService.GetDeleteConfirmKeyboard(request.CallbackData);
         var msg = $"Вы действительно хотите удалить запись: {request.MessageText}";
-        await _botClient.EditMessageTextAsync(request.ChatId, request.MessageId, msg, replyMarkup: confirmKeyboard, cancellationToken: cancellationToken);
+        await _botClient.EditMessageText(request.ChatId, request.MessageId, msg, replyMarkup: confirmKeyboard, cancellationToken: cancellationToken);
         return true;
     }
 }

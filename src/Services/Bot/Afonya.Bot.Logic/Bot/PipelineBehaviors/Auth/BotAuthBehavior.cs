@@ -27,7 +27,7 @@ public class BotAuthBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
     {
         var allowed = !string.IsNullOrWhiteSpace(request.From) && _userRepository.GetByName(request.From) != null;
         if(allowed) return await next();
-        await _botClient.SendTextMessageAsync(chatId: request.ChatId, text: _forbiddenMsg, cancellationToken: cancellationToken);
+        await _botClient.SendMessage(chatId: request.ChatId, text: _forbiddenMsg, cancellationToken: cancellationToken);
         throw new AfonyaForbiddenException("Пользователь не авторизован");
     }
 }

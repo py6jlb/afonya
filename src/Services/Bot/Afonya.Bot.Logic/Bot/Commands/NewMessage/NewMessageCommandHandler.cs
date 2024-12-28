@@ -30,7 +30,7 @@ public class NewMessageCommandHandler : IRequestHandler<NewMessageCommand, bool>
         if (num is null or 0)
         {
             const string msg = "Я не понимаю, что вы от меня хотите.";
-            await _botClient.SendTextMessageAsync(chatId: request.ChatId, text: msg, cancellationToken: cancellationToken);
+            await _botClient.SendMessage(chatId: request.ChatId, text: msg, cancellationToken: cancellationToken);
             return true;
         }
 
@@ -40,8 +40,8 @@ public class NewMessageCommandHandler : IRequestHandler<NewMessageCommand, bool>
 
         var dataId = _moneyTransaction.Insert(savedData);
         var keyboard = _botKeyboard.GetCategoryKeyboard(isIncome, dataId);
-        await _botClient.SendTextMessageAsync(chatId: request.ChatId, text: $"Выберете категорию для: {savedData.Sign}{num} руб", replyMarkup: keyboard, cancellationToken: cancellationToken);
-        await _botClient.DeleteMessageAsync(request.ChatId, request.MessageId, cancellationToken: cancellationToken);
+        await _botClient.SendMessage(chatId: request.ChatId, text: $"Выберете категорию для: {savedData.Sign}{num} руб", replyMarkup: keyboard, cancellationToken: cancellationToken);
+        await _botClient.DeleteMessage(request.ChatId, request.MessageId, cancellationToken: cancellationToken);
         return true;
     }
 

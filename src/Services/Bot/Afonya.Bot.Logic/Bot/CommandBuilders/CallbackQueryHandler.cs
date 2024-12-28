@@ -25,26 +25,22 @@ public class CallbackQueryHandler : BaseCommandBuilder
         if (string.IsNullOrWhiteSpace(update.CallbackQuery?.Data))
             throw new AfonyaErrorException($"Нет данных callback");
         
-        var callback = _callbackRepository.Get(update.CallbackQuery.Data);
-        if (callback == null) 
-            throw new AfonyaErrorException($"Callback с id {update.CallbackQuery.Data} ненайден в БД.");
+        var callback = _callbackRepository.Get(update.CallbackQuery.Data) 
+            ?? throw new AfonyaErrorException($"Callback с id {update.CallbackQuery.Data} не найден в БД.");
 
-        var command = callback.Command switch
+        BaseBotCommand<bool> command = callback.Command switch
         {
             CallbackCommand.SetCategory => BuildSetCategoryCommand(update, callback),
             CallbackCommand.DeleteRequest => BuildConfirmDeleteQuery(update, callback),
             CallbackCommand.Delete => BuildDeleteCommand(update, callback),
-            _ => null
+            _ => throw new AfonyaErrorException("Неизвестный тип команды")
         };
-
-        if (command == null)
-            throw new AfonyaErrorException("Неизвестный тип команды");
 
         var _ = _callbackRepository.Delete(update.CallbackQuery.Data);
         if (!callback.GroupId.HasValue) return command;
 
         var group = _callbackRepository.GetGroup(callback.GroupId.Value);
-        foreach (var groupCallback in group ?? Array.Empty<Callback>())
+        foreach (var groupCallback in group ?? [])
         {
             _callbackRepository.Delete(groupCallback.Id.ToString());
         }
@@ -52,7 +48,7 @@ public class CallbackQueryHandler : BaseCommandBuilder
         return command;
     }
 
-    private IBaseRequest BuildSetCategoryCommand(Update update, Callback callback)
+    private SetCategoryCommand BuildSetCategoryCommand(Update update, Callback callback)
     {
         var callbackData = JsonConvert.DeserializeObject<SetCategoryCallbackData>(callback.JsonData);
         var (from, chatId) = GetFrom(update);
@@ -66,7 +62,7 @@ public class CallbackQueryHandler : BaseCommandBuilder
         };
     }
 
-    private IBaseRequest BuildConfirmDeleteQuery(Update update, Callback callback)
+    private ConfirmDeleteQuery BuildConfirmDeleteQuery(Update update, Callback callback)
     {
         var callbackData = JsonConvert.DeserializeObject<DeleteRequestCallbackData>(callback.JsonData);
         var (from, chatId) = GetFrom(update);
@@ -80,7 +76,7 @@ public class CallbackQueryHandler : BaseCommandBuilder
         };
     }
 
-    private IBaseRequest BuildDeleteCommand(Update update, Callback callback)
+    private DeleteCommand BuildDeleteCommand(Update update, Callback callback)
     {
         var callbackData = JsonConvert.DeserializeObject<DeleteRequestCallbackData>(callback.JsonData);
         var (from, chatId) = GetFrom(update);

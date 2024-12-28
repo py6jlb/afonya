@@ -17,7 +17,7 @@ public class BotHelpQueryHandler : IRequestHandler<BotHelpQuery, bool>
 
     public async Task<bool> Handle(BotHelpQuery request, CancellationToken cancellationToken)
     {
-        await _botClient.SendTextMessageAsync(chatId: request.ChatId, text: _help ?? "", cancellationToken: cancellationToken);
+        await _botClient.SendMessage(chatId: request.ChatId, text: _help ?? "", cancellationToken: cancellationToken);
         return true;
     }
 }

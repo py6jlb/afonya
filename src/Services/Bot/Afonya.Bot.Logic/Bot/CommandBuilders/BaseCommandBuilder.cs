@@ -21,7 +21,7 @@ public abstract class BaseCommandBuilder : ICommandBuilder
         return BuildUnknownUpdateCommand(update);
     }
 
-    protected (string from, long chatId) GetFrom(Update? update)
+    protected static (string from, long chatId) GetFrom(Update? update)
     {
         
 

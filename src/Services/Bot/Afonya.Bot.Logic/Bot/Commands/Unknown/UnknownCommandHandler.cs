@@ -17,7 +17,7 @@ public class UnknownCommandHandler : IRequestHandler<UnknownCommand, bool>
 
     public async Task<bool> Handle(UnknownCommand request, CancellationToken cancellationToken)
     {
-        await _botClient.SendTextMessageAsync(chatId: request.ChatId, text: _unknown ?? "-", cancellationToken: cancellationToken);
+        await _botClient.SendMessage(chatId: request.ChatId, text: _unknown ?? "-", cancellationToken: cancellationToken);
         return true;
     }
 }

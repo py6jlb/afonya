@@ -30,13 +30,13 @@ public class DeleteCommandHandler : IRequestHandler<DeleteCommand, bool>
 
         if (deleted)
         {
-            await _botClient.AnswerCallbackQueryAsync(request.CallbackQueryId, $"Запись удалена", cancellationToken: cancellationToken);
-            await _botClient.DeleteMessageAsync(request.ChatId, request.MessageId, cancellationToken: cancellationToken);
+            await _botClient.AnswerCallbackQuery(request.CallbackQueryId, $"Запись удалена", cancellationToken: cancellationToken);
+            await _botClient.DeleteMessage(request.ChatId, request.MessageId, cancellationToken: cancellationToken);
         }
         else
         {
             var deleteKeyboard = _botKeyboard.GetDeleteKeyboard(request.CallbackData.DataId, request.CallbackData.OriginalMessageText);
-            await _botClient.EditMessageTextAsync(request.ChatId,
+            await _botClient.EditMessageText(request.ChatId,
                 request.MessageId, request.CallbackData.OriginalMessageText, replyMarkup: deleteKeyboard, cancellationToken: cancellationToken);
         }
 

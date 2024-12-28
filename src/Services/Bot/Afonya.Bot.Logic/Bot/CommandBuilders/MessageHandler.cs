@@ -12,7 +12,7 @@ public class MessageHandler : BaseCommandBuilder
 {
     protected override IBaseRequest BuildCommand(Update update)
     {
-        var command = (update.Message?.Text?.Split(' ').FirstOrDefault()?.ToLower()) switch
+        IBaseRequest command = (update.Message?.Text?.Split(' ').FirstOrDefault()?.ToLower()) switch
         {
             "/начать" or "/start"  => BuildStartCommand(update),
             "/закрыть" or "/cancel" => BuildCloseCommand(update),
@@ -24,7 +24,7 @@ public class MessageHandler : BaseCommandBuilder
         return command;
     }
 
-    private IBaseRequest BuildStartCommand(Update update)
+    private static BotStartCommand BuildStartCommand(Update update)
     {
         var (from, chatId) = GetFrom(update);
         return new BotStartCommand
@@ -34,13 +34,13 @@ public class MessageHandler : BaseCommandBuilder
         };
     }
 
-    private IBaseRequest BuildCloseCommand(Update update)
+    private static BotCancelCommand BuildCloseCommand(Update update)
     {
         var (from, chatId) = GetFrom(update);
         return new BotCancelCommand{ChatId = update.Message.Chat.Id};
     }
 
-    private IBaseRequest BuildHelpCommand(Update update)
+    private static BotHelpQuery BuildHelpCommand(Update update)
     {
         var (from, chatId) = GetFrom(update);
         return new BotHelpQuery
@@ -50,7 +50,7 @@ public class MessageHandler : BaseCommandBuilder
         };
     }
 
-    private IBaseRequest BuildRemoveKeyboardCommand(Update update)
+    private static BotRemoveKeyboardCommand BuildRemoveKeyboardCommand(Update update)
     {
         var (from, chatId) = GetFrom(update);
         return new BotRemoveKeyboardCommand
@@ -60,7 +60,7 @@ public class MessageHandler : BaseCommandBuilder
         };
     }
     
-    private IBaseRequest BuildNewMessageCommand(Update update)
+    private static NewMessageCommand BuildNewMessageCommand(Update update)
     {
         var (from, chatId) = GetFrom(update);
         return new NewMessageCommand

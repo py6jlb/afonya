@@ -36,9 +36,9 @@ public class SetCategoryCommandHandler : IRequestHandler<SetCategoryCommand, boo
         data.SetCategory(request.CallbackData.Category.Name, request.CallbackData.Category.Icon, request.CallbackData.Category.HumanName);
         _moneyTransaction.Update(data);
 
-        await _botClient.AnswerCallbackQueryAsync(request.CallbackQueryId, $"Категория выбрана", cancellationToken: cancellationToken);
+        await _botClient.AnswerCallbackQuery(request.CallbackQueryId, $"Категория выбрана", cancellationToken: cancellationToken);
         var deleteKeyboard = _botKeyboard.GetDeleteKeyboard(request.CallbackData.DataId, msg);
-        await _botClient.EditMessageTextAsync(request.ChatId, request.MessageId, msg, replyMarkup: deleteKeyboard, cancellationToken: cancellationToken);
+        await _botClient.EditMessageText(request.ChatId, request.MessageId, msg, replyMarkup: deleteKeyboard, cancellationToken: cancellationToken);
         return true;
     }
 }

@@ -15,7 +15,7 @@ public class BotCancelCommandCommandHandler : IRequestHandler<BotCancelCommand, 
 
     public async Task<bool> Handle(BotCancelCommand request, CancellationToken cancellationToken)
     {
-        await _botClient.SendTextMessageAsync(
+        await _botClient.SendMessage(
             chatId: request.ChatId,
             text: "Клавиатура удалена.",
             replyMarkup: new ReplyKeyboardRemove(), cancellationToken: cancellationToken);

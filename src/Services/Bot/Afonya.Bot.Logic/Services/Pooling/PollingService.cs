@@ -40,9 +40,9 @@ public class PollingService : BackgroundService
                     DropPendingUpdates = true,
                 };
 
-                var me = await botClient.GetMeAsync(stoppingToken);
+                var me = await botClient.GetMe(stoppingToken);
                 _logger.LogInformation("Начато получение событий для бота {BotName}", me.Username ?? "Afonya");
-                await botClient.DeleteWebhookAsync(cancellationToken: stoppingToken);
+                await botClient.DeleteWebhook(cancellationToken: stoppingToken);
                 await botClient.ReceiveAsync(updateHandler: updateHandlers, receiverOptions: receiverOptions, cancellationToken: stoppingToken);
             }
             catch (Exception ex)
