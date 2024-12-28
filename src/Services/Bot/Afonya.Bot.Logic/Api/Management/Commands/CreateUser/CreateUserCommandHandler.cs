@@ -18,10 +18,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserD
     public Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var user = new TelegramUser(request.NewUser.Login);
-        var result = _userRepository.Create(user);
-        if (result == null)
-            throw new AfonyaErrorException("При создании пользователя, что-то пошло не так.");
-
-        return Task.FromResult(new UserDto( result.Id.ToString(), result.Login));
+        var result = _userRepository.Create(user) ?? throw new AfonyaErrorException("При создании пользователя, что-то пошло не так.");
+        return Task.FromResult(new UserDto(result.Id.ToString(), result.Login));
     }
 }

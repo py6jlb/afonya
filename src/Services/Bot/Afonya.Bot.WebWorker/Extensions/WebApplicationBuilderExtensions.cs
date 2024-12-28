@@ -69,7 +69,7 @@ public static class WebApplicationBuilderExtensions
         //store
         var connectionString = config.GetConnectionString("Default") ?? throw new NullReferenceException("Отсутствует строка подключения к БД");
         builder.Services.AddSingleton(_ => new DbContext(connectionString));
-       
+
         builder.Services.AddTransient<IUserRepository, UserRepository>();
         builder.Services.AddTransient<IMoneyTransactionRepository, MoneyTransactionRepository>();
         builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
@@ -77,8 +77,11 @@ public static class WebApplicationBuilderExtensions
 
         //app
         builder.Services.AddTransient<IBotKeyboardService, BotKeyboardService>();
-        builder.Services.AddMediatR(typeof(BotStartCommand).GetTypeInfo().Assembly);
-        builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(BotAuthBehavior<,>));
+        builder.Services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(typeof(BotStartCommand).Assembly);
+            cfg.AddOpenBehavior(typeof(BotAuthBehavior<,>));
+        });
         builder.Services.AddHostedService<Starter>();
         builder.Services.AddControllers().AddNewtonsoftJson();
         return builder;

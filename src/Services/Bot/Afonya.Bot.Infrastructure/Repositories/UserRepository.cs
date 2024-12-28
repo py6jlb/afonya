@@ -10,7 +10,7 @@ public class UserRepository : IUserRepository
 {
     private readonly ILogger<UserRepository> _logger;
     private readonly ILiteDatabase _db;
-    
+
     public UserRepository(ILogger<UserRepository> logger, DbContext context)
     {
         _logger = logger;
@@ -37,7 +37,7 @@ public class UserRepository : IUserRepository
 
     public TelegramUser? GetByName(string userName)
     {
-        var user = _db.GetCollection<TelegramUser>().FindOne(x=>x.Login == userName);
+        var user = _db.GetCollection<TelegramUser>().FindOne(x => x.Login == userName);
         return user == null ? null : user;
     }
 
@@ -50,7 +50,7 @@ public class UserRepository : IUserRepository
 
     public bool Delete(string id)
     {
-        var res = _db.GetCollection<TelegramUser>().Delete(id);
+        var res = _db.GetCollection<TelegramUser>().Delete(new ObjectId(id));
         return res;
     }
 }

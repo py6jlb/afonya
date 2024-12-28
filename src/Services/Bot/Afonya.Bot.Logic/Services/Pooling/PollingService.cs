@@ -37,7 +37,7 @@ public class PollingService : BackgroundService
                 var receiverOptions = new ReceiverOptions()
                 {
                     AllowedUpdates = Array.Empty<UpdateType>(),
-                    ThrowPendingUpdates = true,
+                    DropPendingUpdates = true,
                 };
 
                 var me = await botClient.GetMeAsync(stoppingToken);
