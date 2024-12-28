@@ -1,6 +1,6 @@
 ﻿using Afonya.Bot.Domain.Entities;
-using Afonya.Bot.Interfaces;
-using Afonya.Bot.Interfaces.Repositories;
+using Afonya.Bot.Domain.Repositories;
+using Afonya.Bot.Infrastructure.Contexts;
 using LiteDB;
 using Microsoft.Extensions.Logging;
 
@@ -11,7 +11,7 @@ public class CallbackRepository : ICallbackRepository
     private readonly ILogger<CallbackRepository> _logger;
     private readonly LiteDatabase _db;
 
-    public CallbackRepository(ILogger<CallbackRepository> logger, ILiteDbContext context)
+    public CallbackRepository(ILogger<CallbackRepository> logger, DbContext context)
     {
         _logger = logger;
         _db = context.Database;

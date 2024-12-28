@@ -17,18 +17,18 @@ public class Callback : BaseEntity
     public Guid? GroupId { get; private set; }
     public string JsonData { get; private set; }
 
-    public void SetCallbackCommandType(CallbackCommand type)
-    {
-        Command = type;
-    }
+    //public void SetCallbackCommandType(CallbackCommand type)
+    //{
+    //    Command = type;
+    //}
 
-    public void SetGroupId(Guid groupId)
-    {
-        GroupId = groupId;
-    }
+    //public void SetGroupId(Guid groupId)
+    //{
+    //    GroupId = groupId;
+    //}
 
-    public void SetJsonData(string json)
-    {
-        JsonData = json;
-    }
+    //public void SetJsonData(string json)
+    //{
+    //    JsonData = json;
+    //}
 }

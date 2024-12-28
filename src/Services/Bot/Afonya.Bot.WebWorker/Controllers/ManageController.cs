@@ -1,6 +1,6 @@
-﻿using Afonya.Bot.Logic.Commands.Bot.BotStart;
-using Afonya.Bot.Logic.Commands.Bot.BotStop;
-using Afonya.Bot.Logic.Queries.BotWebhookStatus;
+﻿using Afonya.Bot.Logic.Api.Management.Commands.DeleteWebHook;
+using Afonya.Bot.Logic.Api.Management.Commands.SetWebHook;
+using Afonya.Bot.Logic.Api.Management.Queries.BotWebhookStatus;
 using Afonya.Bot.WebWorker.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -32,13 +32,13 @@ public class ManageController : ControllerBase
     [HttpPost("start")]
     public async Task StartBot(CancellationToken cancellationToken)
     {
-        await _mediator.Send(new BotStartCommand(), cancellationToken);
+        await _mediator.Send(new SetWebHookCommand(), cancellationToken);
     }
     
     [BasicAuthAdmin]
     [HttpPost("stop")]
     public async Task StopBot(CancellationToken cancellationToken)
     {
-        await _mediator.Send(new BotStopCommand(), cancellationToken);
+        await _mediator.Send(new DeleteWebHookCommand(), cancellationToken);
     }
 }

@@ -1,7 +1,7 @@
-﻿using Afonya.Bot.Logic.Commands.Categories.AddCategory;
-using Afonya.Bot.Logic.Commands.Categories.DeleteCategory;
-using Afonya.Bot.Logic.Commands.Categories.UpdateCategory;
-using Afonya.Bot.Logic.Queries.GetCategories;
+﻿using Afonya.Bot.Logic.Api.Categories.Commands.AddCategory;
+using Afonya.Bot.Logic.Api.Categories.Commands.DeleteCategory;
+using Afonya.Bot.Logic.Api.Categories.Commands.UpdateCategory;
+using Afonya.Bot.Logic.Api.Categories.Queries.GetCategories;
 using Afonya.Bot.WebWorker.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

@@ -1,6 +1,6 @@
-﻿using Afonya.Bot.Logic.Commands.Bot.BotStop;
-using Afonya.Bot.Logic.Commands.Categories.AddCategory;
-using Afonya.Bot.Logic.Queries.GetCategoryCount;
+﻿using Afonya.Bot.Logic.Api.Categories.Commands.AddCategory;
+using Afonya.Bot.Logic.Api.Categories.Queries.GetCategoryCount;
+using Afonya.Bot.Logic.Api.Management.Commands.DeleteWebHook;
 using MediatR;
 using Shared.Contracts;
 
@@ -33,7 +33,7 @@ public class Starter : IHostedService
     {
         _logger.LogDebug("Завершение работы приложение, попытка отключить webhook.");
         var mediator = Scope.ServiceProvider.GetRequiredService<IMediator>();
-        await mediator.Send(new BotStopCommand(), cancellationToken);
+        await mediator.Send(new DeleteWebHookCommand(), cancellationToken);
         Scope.Dispose();
 
     }

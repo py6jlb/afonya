@@ -1,7 +1,7 @@
 ﻿using Afonya.Bot.Domain.Entities;
-using Afonya.Bot.Interfaces;
-using Afonya.Bot.Interfaces.Repositories;
-using Common.Exceptions;
+using Afonya.Bot.Domain.Exceptions;
+using Afonya.Bot.Domain.Repositories;
+using Afonya.Bot.Infrastructure.Contexts;
 using LiteDB;
 using Microsoft.Extensions.Logging;
 
@@ -12,7 +12,7 @@ public class CategoryRepository : ICategoryRepository
     private readonly ILogger<CategoryRepository> _logger;
     private readonly LiteDatabase _db;
 
-    public CategoryRepository(ILogger<CategoryRepository> logger, ILiteDbContext context)
+    public CategoryRepository(ILogger<CategoryRepository> logger, DbContext context)
     {
         _logger = logger;
         _db = context.Database;

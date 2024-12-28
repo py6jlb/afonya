@@ -35,15 +35,15 @@ public class MoneyTransaction : BaseEntity
         Value = value;
     }
 
-    public void SetMessageId(int messageId)
-    {
-        MessageId = messageId;
-    }
+    //public void SetMessageId(int messageId)
+    //{
+    //    MessageId = messageId;
+    //}
 
-    public void SetChatId(long chatId)
-    {
-        ChatId = chatId;
-    }
+    //public void SetChatId(long chatId)
+    //{
+    //    ChatId = chatId;
+    //}
 
     public void SetSign(string sign)
     {
