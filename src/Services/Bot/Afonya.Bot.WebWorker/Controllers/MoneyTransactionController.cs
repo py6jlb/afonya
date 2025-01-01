@@ -24,17 +24,15 @@ namespace Afonya.Bot.WebWorker.Controllers
         [HttpGet]
         [BasicAuthAdmin]
         public async Task<IReadOnlyCollection<MoneyTransactionDto>> Get(
-            [FromQuery, SwaggerParameter("Начало периода")]DateTime? startDate, 
-            [FromQuery, SwaggerParameter("Конец периода")]DateTime? endDate, 
+            [FromQuery, SwaggerParameter("Месяц")]int? month, 
+            [FromQuery, SwaggerParameter("Год")]int? year, 
             [FromQuery, SwaggerParameter("Пользователь")]string? user, 
-            [FromQuery, SwaggerParameter("Код категории")]string? category, 
-            [FromQuery, SwaggerParameter("Включать начало и конец периода")]bool include = true)
+            [FromQuery, SwaggerParameter("Код категории")]string? category)
         {
             var data = await _mediator.Send(new GetMoneyTransactionsQuery
             {
-                IncludeDate = include,
-                StartDate = startDate, 
-                EndDate = endDate, 
+                Month = month, 
+                Year = year, 
                 User = user, 
                 Category = category
             });

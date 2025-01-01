@@ -31,18 +31,38 @@ public class MoneyTransactionRepository : IMoneyTransactionRepository
         }
     }
 
-    public IEnumerable<MoneyTransaction> Get(DateTime? start, DateTime? end, bool? includeDate, string? user, string? category)
+    public IEnumerable<MoneyTransaction> Get(int? month, int? year, string? user, string? category)
     {
         var query = _db.GetCollection<MoneyTransaction>().Query();
 
-        start ??= DateTime.MinValue;
-        end ??= DateTime.MaxValue;
+        var start = DateTime.MinValue;
+        var end = DateTime.MaxValue;
 
-        if (includeDate ?? true)
-            query.Where(x => x.RegisterDate >= start && x.RegisterDate <=end);
+        if (month.HasValue)
+        {
+            start = DateTime.MinValue.AddMonths(month.Value - 1);
+            end = DateTime.MinValue.AddMonths(month.Value);
+        }
         else
-            query.Where(x => x.RegisterDate > start && x.RegisterDate < end);
+        {
+            var monthNow = DateTime.Now.Month;
+            start = start.AddMonths(monthNow - 1);
+            end = DateTime.MinValue.AddMonths(monthNow);
+        }
 
+        if (year.HasValue)
+        {
+            start = start.AddYears(year.Value - 1);
+            end = end.AddYears(year.Value);
+        }
+        else
+        {
+            var yearNow = DateTime.Now.Year;
+            start = start.AddYears(yearNow - 1);
+            end = end.AddYears(yearNow);
+        }
+
+        query.Where(x => x.RegisterDate >= start && x.RegisterDate < end);
         if (string.IsNullOrWhiteSpace(category))
             query.Where(x => x.CategoryName.Equals(category, StringComparison.InvariantCultureIgnoreCase));
 
@@ -58,7 +78,7 @@ public class MoneyTransactionRepository : IMoneyTransactionRepository
         try
         {
             var objectId = new ObjectId(id);
-            var result =  _db.GetCollection<MoneyTransaction>().FindById(new ObjectId(objectId));
+            var result = _db.GetCollection<MoneyTransaction>().FindById(new ObjectId(objectId));
             return result;
         }
         catch (Exception e)
