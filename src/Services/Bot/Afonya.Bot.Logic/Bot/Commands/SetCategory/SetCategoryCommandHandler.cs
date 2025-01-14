@@ -24,7 +24,8 @@ public class SetCategoryCommandHandler : IRequestHandler<SetCategoryCommand, boo
 
     public async Task<bool> Handle(SetCategoryCommand request, CancellationToken cancellationToken)
     {
-        var msg = $"{request.MessageText}, в категории \"{request.CallbackData.Category.HumanName}\" {request.CallbackData.Category.Icon}";
+        var parts = request.MessageText.Split(": ").Skip(1);
+        var msg = $"{string.Join(": ", parts)}, в категории \"{request.CallbackData.Category.HumanName}\" {request.CallbackData.Category.Icon}";
         var data = _moneyTransaction.Get(request.CallbackData.DataId);
 
         if (data == null)
