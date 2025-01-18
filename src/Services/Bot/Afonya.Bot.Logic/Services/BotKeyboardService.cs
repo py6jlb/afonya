@@ -35,11 +35,11 @@ public class BotKeyboardService : IBotKeyboardService
             var callback = new Callback(CallbackCommand.SetCategory, groupId, JsonConvert.SerializeObject(data));
             var callbackId = _callbackRepository.Create(callback);
 
-            var button = InlineKeyboardButton.WithCallbackData(category.Icon, callbackId.Id.ToString());
+            var button = InlineKeyboardButton.WithCallbackData($"{category.Icon} {category.HumanName}", callbackId.Id.ToString());
             buttons.Add(button);
         }
 
-        var buttonRows = buttons.ToArray().SplitArray(7);
+        var buttonRows = buttons.ToArray().SplitArray(2);
         var inlineKeyboard = new InlineKeyboardMarkup(buttonRows);
         return inlineKeyboard;
     }
