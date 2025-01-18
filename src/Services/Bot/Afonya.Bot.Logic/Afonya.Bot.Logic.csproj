@@ -18,9 +18,11 @@
       <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
       <PackageReference Include="MediatR" Version="12.4.1" />
+      <PackageReference Include="OxyPlot.SkiaSharp" Version="2.2.0"/>
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Bot/Queries/StartStatistics/" />
       <Folder Include="Bot\Commands\Delete\" />
       <Folder Include="Bot\Commands\SetCategory\" />
       <Folder Include="Bot\Commands\NewMessage\" />

@@ -6,6 +6,8 @@ using Afonya.Bot.Interfaces.Dto.CallbackData;
 using Afonya.Bot.Logic.Bot.Commands.Delete;
 using Afonya.Bot.Logic.Bot.Commands.SetCategory;
 using Afonya.Bot.Logic.Bot.Queries.ConfirmDelete;
+using Afonya.Bot.Logic.Bot.Queries.Statistics;
+using Afonya.Bot.Logic.Bot.Queries.YearKeyboard;
 using MediatR;
 using Newtonsoft.Json;
 using Telegram.Bot.Types;
@@ -24,15 +26,17 @@ public class CallbackQueryHandler : BaseCommandBuilder
     {
         if (string.IsNullOrWhiteSpace(update.CallbackQuery?.Data))
             throw new AfonyaErrorException($"Нет данных callback");
-        
-        var callback = _callbackRepository.Get(update.CallbackQuery.Data) 
-            ?? throw new AfonyaErrorException($"Callback с id {update.CallbackQuery.Data} не найден в БД.");
+
+        var callback = _callbackRepository.Get(update.CallbackQuery.Data)
+        ?? throw new AfonyaErrorException($"Callback с id {update.CallbackQuery.Data} не найден в БД.");
 
         BaseBotCommand<bool> command = callback.Command switch
         {
             CallbackCommand.SetCategory => BuildSetCategoryCommand(update, callback),
             CallbackCommand.DeleteRequest => BuildConfirmDeleteQuery(update, callback),
             CallbackCommand.Delete => BuildDeleteCommand(update, callback),
+            CallbackCommand.YearKeyboardRequest => BuildYearKeyboardQuery(update, callback),
+            CallbackCommand.StatisticRequest => BuildStatisticQuery(update, callback),
             _ => throw new AfonyaErrorException("Неизвестный тип команды")
         };
 
@@ -44,7 +48,7 @@ public class CallbackQueryHandler : BaseCommandBuilder
         {
             _callbackRepository.Delete(groupCallback.Id.ToString());
         }
-        
+
         return command;
     }
 
@@ -52,8 +56,9 @@ public class CallbackQueryHandler : BaseCommandBuilder
     {
         var callbackData = JsonConvert.DeserializeObject<SetCategoryCallbackData>(callback.JsonData);
         var (from, chatId) = GetFrom(update);
-        return new SetCategoryCommand{ 
-            MessageText  = update.CallbackQuery.Message.Text,
+        return new SetCategoryCommand
+        {
+            MessageText = update.CallbackQuery.Message.Text,
             CallbackData = callbackData,
             CallbackQueryId = update.CallbackQuery.Id,
             MessageId = update.CallbackQuery.Message.MessageId,
@@ -82,12 +87,39 @@ public class CallbackQueryHandler : BaseCommandBuilder
         var (from, chatId) = GetFrom(update);
         return new DeleteCommand
         {
-            MessageText  = update.CallbackQuery.Message.Text,
+            MessageText = update.CallbackQuery.Message.Text,
             CallbackData = callbackData,
             CallbackQueryId = update.CallbackQuery.Id,
             MessageId = update.CallbackQuery.Message.MessageId,
             ChatId = chatId,
             From = from
+        };
+    }
+
+    private StatisticQuery BuildStatisticQuery(Update update, Callback callback)
+    {
+        var (from, chatId) = GetFrom(update);
+        var callbackData = JsonConvert.DeserializeObject<StatisticsRequestCallbackData>(callback.JsonData);
+        return new StatisticQuery
+        {
+            ChatId = chatId,
+            From = from,
+            Month = callbackData.Month,
+            Year = callbackData.Year,
+            OriginalMessageId = callbackData.OriginalMessageId,
+        };
+    }
+
+    private YearKeyboardQuery BuildYearKeyboardQuery(Update update, Callback callback)
+    {
+        var callbackData = JsonConvert.DeserializeObject<YearKeyboardRequestCallbackData>(callback.JsonData);
+        var (from, chatId) = GetFrom(update);
+        return new YearKeyboardQuery
+        {
+            ChatId = chatId,
+            From = from,
+            Year = callbackData.Year,
+            OriginalMessageId = callbackData.OriginalMessageId,
         };
     }
 }

@@ -5,4 +5,6 @@ public enum CallbackCommand
     SetCategory,
     DeleteRequest,
     Delete,
+    StatisticRequest,
+    YearKeyboardRequest
 }

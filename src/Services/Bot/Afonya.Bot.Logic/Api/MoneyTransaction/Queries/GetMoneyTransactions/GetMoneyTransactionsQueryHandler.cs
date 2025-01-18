@@ -17,17 +17,17 @@ public class GetMoneyTransactionsQueryHandler : IRequestHandler<GetMoneyTransact
     {
         var result = _moneyTransactionRepository.Get(request.Month, request.Year,
             request.User, request.Category).Select(x => new MoneyTransactionDto
-        {
-            Id = x.Id?.ToString(),
-            CategoryName = x.CategoryName,
-            CategoryHumanName = x.CategoryHumanName,
-            CategoryIcon = x.CategoryIcon,
-            Value = x.Value,
-            Sign = x.Sign,
-            RegisterDate = x.RegisterDate,
-            TransactionDate = x.TransactionDate,
-            FromUserName = x.FromUserName
-        }).ToArray();
+            {
+                Id = x.Id?.ToString(),
+                CategoryName = x.CategoryName,
+                CategoryHumanName = x.CategoryHumanName,
+                CategoryIcon = x.CategoryIcon,
+                Value = x.Value,
+                Sign = x.Sign,
+                RegisterDate = x.RegisterDate,
+                TransactionDate = x.TransactionDate,
+                FromUserName = x.FromUserName
+            }).ToArray();
 
         return Task.FromResult<IReadOnlyCollection<MoneyTransactionDto>>(result);
     }
