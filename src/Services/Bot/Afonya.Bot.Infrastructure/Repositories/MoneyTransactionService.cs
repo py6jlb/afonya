@@ -53,20 +53,20 @@ public class MoneyTransactionRepository : IMoneyTransactionRepository
         if (year.HasValue)
         {
             start = start.AddYears(year.Value - 1);
-            end = end.AddYears(year.Value);
+            end = end.AddYears(year.Value - 1);
         }
         else
         {
             var yearNow = DateTime.Now.Year;
             start = start.AddYears(yearNow - 1);
-            end = end.AddYears(yearNow);
+            end = end.AddYears(yearNow - 1);
         }
 
         query.Where(x => x.RegisterDate >= start && x.RegisterDate < end);
-        if (string.IsNullOrWhiteSpace(category))
+        if (!string.IsNullOrWhiteSpace(category))
             query.Where(x => x.CategoryName.Equals(category, StringComparison.InvariantCultureIgnoreCase));
 
-        if (string.IsNullOrWhiteSpace(user))
+        if (!string.IsNullOrWhiteSpace(user))
             query.Where(x => x.FromUserName.Equals(user, StringComparison.InvariantCultureIgnoreCase));
 
         var result = query.OrderBy(x => x.RegisterDate).ToEnumerable();
