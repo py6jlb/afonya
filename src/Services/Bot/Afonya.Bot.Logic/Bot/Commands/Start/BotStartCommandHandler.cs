@@ -18,7 +18,7 @@ public class BotStartCommandHandler : IRequestHandler<BotStartCommand, bool>
 
     public async Task<bool> Handle(BotStartCommand request, CancellationToken cancellationToken)
     {
-        var replyKeyboardMarkup = new ReplyKeyboardMarkup(new[] { new KeyboardButton("/Помощь") }) { ResizeKeyboard = true };
+        var replyKeyboardMarkup = new ReplyKeyboardMarkup(new[] { new KeyboardButton("/Помощь"), new KeyboardButton("/Статистика") }) { ResizeKeyboard = true };
         await _botClient.SendMessage(chatId: request.ChatId, text: "Привет!", replyMarkup: replyKeyboardMarkup, cancellationToken: cancellationToken);
         await _botClient.SendMessage(chatId: request.ChatId, text: _help ?? "", cancellationToken: cancellationToken);
         return true;

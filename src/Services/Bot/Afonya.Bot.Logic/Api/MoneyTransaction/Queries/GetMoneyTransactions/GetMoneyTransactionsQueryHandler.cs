@@ -15,19 +15,19 @@ public class GetMoneyTransactionsQueryHandler : IRequestHandler<GetMoneyTransact
 
     public Task<IReadOnlyCollection<MoneyTransactionDto>> Handle(GetMoneyTransactionsQuery request, CancellationToken cancellationToken)
     {
-        var result = _moneyTransactionRepository.Get(request.StartDate, request.EndDate,
-            request.IncludeDate, request.User, request.Category).Select(x => new MoneyTransactionDto
-        {
-            Id = x.Id?.ToString(),
-            CategoryName = x.CategoryName,
-            CategoryHumanName = x.CategoryHumanName,
-            CategoryIcon = x.CategoryIcon,
-            Value = x.Value,
-            Sign = x.Sign,
-            RegisterDate = x.RegisterDate,
-            TransactionDate = x.TransactionDate,
-            FromUserName = x.FromUserName
-        }).ToArray();
+        var result = _moneyTransactionRepository.Get(request.Month, request.Year,
+            request.User, request.Category).Select(x => new MoneyTransactionDto
+            {
+                Id = x.Id?.ToString(),
+                CategoryName = x.CategoryName,
+                CategoryHumanName = x.CategoryHumanName,
+                CategoryIcon = x.CategoryIcon,
+                Value = x.Value,
+                Sign = x.Sign,
+                RegisterDate = x.RegisterDate,
+                TransactionDate = x.TransactionDate,
+                FromUserName = x.FromUserName
+            }).ToArray();
 
         return Task.FromResult<IReadOnlyCollection<MoneyTransactionDto>>(result);
     }
