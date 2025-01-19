@@ -1,6 +1,5 @@
 using Afonya.Bot.Domain.Repositories;
 using Afonya.Bot.Interfaces.Services;
-using Common.Extensions;
 using MediatR;
 using Shared.Contracts;
 using Telegram.Bot;
@@ -44,9 +43,11 @@ public class StatisticsQueryHandler : IRequestHandler<StatisticQuery, bool>
         }).ToArray();
 
         var month = $"{request.Month}".Length == 1 ? $"0{request.Month}" : $"{request.Month}";
-        await _chartService.GetStatisticPng($"Статистика за {month}.{request.Year}", result, categories);
-        await _botClient.EditMessageText(request.ChatId, request.OriginalMessageId, $"Статистика за {month}.{request.Year}", replyMarkup: new InlineKeyboardMarkup(), cancellationToken: cancellationToken);
-        //await _botClient.SendPhoto();
+        var filePath = await _chartService.GetStatisticPng($"Статистика за {month}.{request.Year}", result, categories);
+        await _botClient.DeleteMessage(request.ChatId, request.OriginalMessageId, cancellationToken: cancellationToken);
+        await using Stream stream = System.IO.File.OpenRead(filePath);
+        await _botClient.SendPhoto(request.ChatId, stream, cancellationToken: cancellationToken);
+        System.IO.File.Delete(filePath);
         return true;
     }
 }
