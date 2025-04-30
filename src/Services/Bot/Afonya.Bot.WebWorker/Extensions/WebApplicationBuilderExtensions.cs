@@ -11,10 +11,12 @@ using Afonya.Bot.Logic.Bot.PipelineBehaviors.Auth;
 using Afonya.Bot.Logic.Delegates;
 using Afonya.Bot.Logic.Services;
 using Afonya.Bot.Logic.Services.Pooling;
+using Afonya.Bot.WebWorker.Auth;
 using Afonya.Bot.WebWorker.BackgroundTasks;
 using Common.Options;
 using Hellang.Middleware.ProblemDetails;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
@@ -64,7 +66,9 @@ public static class WebApplicationBuilderExtensions
     {
         //config
         builder.Services.Configure<AdminUser>(config.GetSection("AdminUser"));
+        builder.Services.Configure<IEnumerable<AdminUser>>(config.GetSection("Users"));
         builder.Services.Configure<ReverseProxyConfig>(config.GetSection("ProxyConfig"));
+        builder.Services.Configure<AppSettings>(config.GetSection("AppSettings"));
 
         //store
         var connectionString = config.GetConnectionString("Default") ?? throw new NullReferenceException("Отсутствует строка подключения к БД");
@@ -85,6 +89,7 @@ public static class WebApplicationBuilderExtensions
         });
         builder.Services.AddHostedService<Starter>();
         builder.Services.AddControllers().AddNewtonsoftJson();
+
         return builder;
     }
 

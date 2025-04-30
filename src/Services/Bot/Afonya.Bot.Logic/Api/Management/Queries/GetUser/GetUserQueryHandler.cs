@@ -16,10 +16,10 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDto?>
     public Task<UserDto?> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
 
-        if (string.IsNullOrWhiteSpace(request.UserName)) return null;
+        if (string.IsNullOrWhiteSpace(request.UserName)) return Task.FromResult<UserDto?>(null);
         var result = _userRepository.GetByName(request.UserName);
-        return result == null ? 
-            Task.FromResult<UserDto?>(null) : 
+        return result == null ?
+            Task.FromResult<UserDto?>(null) :
             Task.FromResult<UserDto?>(new UserDto(result.Id.ToString(), result.Login));
     }
 }

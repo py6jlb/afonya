@@ -1,7 +1,8 @@
-﻿using Afonya.Bot.Logic.Api.MoneyTransaction.Commands.UpdateMoneyTransaction;
+﻿using Afonya.Bot.Logic.Api.MoneyTransaction.Commands.CreateMoneyTransaction;
+using Afonya.Bot.Logic.Api.MoneyTransaction.Commands.UpdateMoneyTransaction;
 using Afonya.Bot.Logic.Api.MoneyTransaction.Queries.GetMoneyTransactions;
-using Afonya.Bot.WebWorker.Auth;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts;
 using Swashbuckle.AspNetCore.Annotations;
@@ -10,6 +11,7 @@ namespace Afonya.Bot.WebWorker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class MoneyTransactionController : ControllerBase
     {
         private readonly ILogger<MoneyTransactionController> _logger;
@@ -22,7 +24,6 @@ namespace Afonya.Bot.WebWorker.Controllers
         }
 
         [HttpGet]
-        [BasicAuthAdmin]
         public async Task<IReadOnlyCollection<MoneyTransactionDto>> Get(
             [FromQuery, SwaggerParameter("Месяц")]int? month, 
             [FromQuery, SwaggerParameter("Год")]int? year, 
@@ -40,10 +41,17 @@ namespace Afonya.Bot.WebWorker.Controllers
         }
 
         [HttpPut]
-        [BasicAuthAdmin]
         public async Task<bool> Put(MoneyTransactionDto data)
         {
             var result = await _mediator.Send(new UpdateMoneyTransactionCommand { MoneyTransaction = data });
+            return result;
+        }
+
+
+        [HttpPost]
+        public async Task<bool> Post(MoneyTransactionDto data)
+        {
+            var result = await _mediator.Send(new CreateMoneyTransactionCommand { MoneyTransaction = data });
             return result;
         }
     }

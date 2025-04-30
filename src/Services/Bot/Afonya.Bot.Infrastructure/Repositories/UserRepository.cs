@@ -32,13 +32,13 @@ public class UserRepository : IUserRepository
     public TelegramUser? Get(string id)
     {
         var user = _db.GetCollection<TelegramUser>().FindById(new ObjectId(id));
-        return user == null ? null : user;
+        return user ?? null;
     }
 
     public TelegramUser? GetByName(string userName)
     {
         var user = _db.GetCollection<TelegramUser>().FindOne(x => x.Login == userName);
-        return user == null ? null : user;
+        return user ?? null;
     }
 
     public TelegramUser? Create(TelegramUser user)
@@ -52,5 +52,19 @@ public class UserRepository : IUserRepository
     {
         var res = _db.GetCollection<TelegramUser>().Delete(new ObjectId(id));
         return res;
+    }
+
+    public TelegramUser? Authenticate(string username, string password)
+    {
+        var user = _db.GetCollection<TelegramUser>().FindOne(x => x.Login == username && x.Password == password);
+        return user ?? null;
+    }
+
+    public TelegramUser? ChangePassword(string id, string password)
+    {
+        var user = _db.GetCollection<TelegramUser>().FindById(new ObjectId(id));
+        user.SetPassword(password);
+        _db.GetCollection<TelegramUser>().Update(user);
+        return user;
     }
 }
