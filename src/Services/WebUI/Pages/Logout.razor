@@ -1,0 +1,12 @@
+﻿@page "/logout"
+@inject IAuthenticationService AuthenticationService
+
+@using WebUI.Services
+@using WebUI.Services.Interfaces
+
+@code {
+    protected override async void OnInitialized()
+    {
+        await AuthenticationService.Logout();
+    }
+}
