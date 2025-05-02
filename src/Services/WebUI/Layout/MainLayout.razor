@@ -7,17 +7,29 @@
 
 <MudLayout>
     <MudAppBar>
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
+            OnClick="@((e) => DrawerToggle())" />
         <MudText Typo="Typo.h5" Class="ml-3">Application</MudText>
         <MudSpacer />
-        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+        <MudMenu>
+            <ActivatorContent>
+                <MudAvatar Color="Color.Inherit" Variant="Variant.Outlined">
+                    <MudIcon Icon="@Icons.Material.Filled.FormatListNumbered" />
+                </MudAvatar>
+            </ActivatorContent>
+            <ChildContent>
+                <MudMenuItem Label="LogIn" Href="/login"/>
+                <MudMenuItem Label="LogOut" Href="/logout"/>
+            </ChildContent>
+        </MudMenu>
     </MudAppBar>
     <MudDrawer @bind-Open="@_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
-        <NavMenu/>
+        <NavMenu />
     </MudDrawer>
     <MudMainContent>
         @Body
     </MudMainContent>
+
 </MudLayout>
 @code {
     bool _drawerOpen = true;

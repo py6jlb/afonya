@@ -1,4 +1,5 @@
-﻿@using System.ComponentModel.DataAnnotations
+﻿@page "/login"
+@using System.ComponentModel.DataAnnotations
 @inject IAuthenticationService AuthenticationService
 @inject NavigationManager NavigationManager
 
@@ -7,42 +8,31 @@
 @using Microsoft.AspNetCore.Components.Routing
 @using WebUI.Services.Interfaces
 
-<div class="col-md-6 offset-md-3 mt-5">
-    
-    <b>Last updated: </b>11-01-2025<br /><br />
-
-    <div class="alert alert-info">
-        Username: test<br />
-        Password: test
-    </div>
-    <div class="card">
-        <h4 class="card-header">Blazor WebAssembly Basic Authentication</h4>
-        <div class="card-body">
-            <EditForm Model="@model" OnValidSubmit="HandleValidSubmit">
-                <DataAnnotationsValidator />
-                <div class="form-group">
-                    <label>Username</label>
-                    <InputText @bind-Value="model.Username" class="form-control" />
-                    <ValidationMessage For="@(() => model.Username)" />
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <InputText @bind-Value="model.Password" type="password" class="form-control" />
-                    <ValidationMessage For="@(() => model.Password)" />
-                </div>
-                <button class="btn btn-primary">
-                    @if (loading) {
-                        <span class="spinner-border spinner-border-sm mr-1"></span>
-                    }
-                    Login
-                </button>
-                @if (!string.IsNullOrEmpty(error)) {
-                    <div class="alert alert-danger mt-3 mb-0">@error</div>
-                }
-            </EditForm>
-        </div>
-    </div>
-</div>
+<EditForm Model="@model" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="8" sm="5" md="4" Class="ma-4">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h3">Вход</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudTextField T="string" Label="Имя пользователя" Required="true" RequiredError="Login is required!"
+                        @bind-Value="model.Username" For="@(() => model.Username)" />
+                    <MudTextField T="string" Label="Пароль" InputType="InputType.Password" Required="true"
+                        RequiredError="Password is required!" @bind-Value="model.Password"
+                        For="@(() => model.Password)" />
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary"
+                        Class="ml-auto">Login</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</EditForm>
 
 @code {
     private Model model = new Model();
@@ -65,8 +55,8 @@
         {
             await AuthenticationService.Login(model.Username, model.Password);
 
-            var returnUrl = NavigationManager.GetUriWithQueryParameter("returnUrl", false);        
-            if( returnUrl == "returnUrl")
+            var returnUrl = NavigationManager.GetUriWithQueryParameter("returnUrl", false);
+            if (returnUrl == "returnUrl")
                 NavigationManager.NavigateTo(returnUrl);
             else
                 NavigationManager.NavigateTo("");
@@ -79,15 +69,12 @@
         }
     }
 
-
-
-
     private class Model
     {
-        [Required]
+        [Required(ErrorMessage = "Username is required")]
         public string Username { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
     }
 }
