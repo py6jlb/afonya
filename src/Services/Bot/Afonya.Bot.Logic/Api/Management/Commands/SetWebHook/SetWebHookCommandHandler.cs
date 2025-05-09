@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
-using Telegram.Bot.Types.Enums;
 
 namespace Afonya.Bot.Logic.Api.Management.Commands.SetWebHook;
 
@@ -28,12 +27,12 @@ public class SetWebHookCommandHandler : IRequestHandler<SetWebHookCommand, bool>
     {
         if (_botConfig.UsePooling) return true;
 
-        var webHookAddress = _proxyConfig?.UseReverseProxy ?? false ? 
-            $"{_botConfig.HostAddress}{_proxyConfig?.SubDir ?? ""}/bot/{_botConfig.BotToken}" : 
+        var webHookAddress = _proxyConfig?.UseReverseProxy ?? false ?
+            $"{_botConfig.HostAddress}{_proxyConfig?.SubDir ?? ""}/bot/{_botConfig.BotToken}" :
             $"{_botConfig.HostAddress}/bot/{_botConfig.BotToken}";
         _logger.LogInformation("Set webHook: {WebHookAddress}", $"{webHookAddress}/webhook");
-        await _telegramBotClient.SetWebhookAsync(url: $"{webHookAddress}/webhook", 
-            allowedUpdates: Array.Empty<UpdateType>(), cancellationToken: cancellationToken);
+        await _telegramBotClient.SetWebhook(url: $"{webHookAddress}/webhook",
+            allowedUpdates: [], cancellationToken: cancellationToken);
 
         return true;
     }

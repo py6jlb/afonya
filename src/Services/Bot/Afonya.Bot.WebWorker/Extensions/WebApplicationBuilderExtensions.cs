@@ -90,6 +90,7 @@ public static class WebApplicationBuilderExtensions
         builder.Services.AddHostedService<Starter>();
         builder.Services.AddControllers().AddNewtonsoftJson();
 
+        builder.Services.AddCors();
         return builder;
     }
 

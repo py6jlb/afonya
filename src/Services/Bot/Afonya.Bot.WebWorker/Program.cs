@@ -12,12 +12,15 @@ builder.AddBotServices(builder.Configuration);
 builder.Host.UseSerilog();
 
 var app = builder.Build();
-if(app.Environment.IsDevelopment()) app.UseSwaggerUi(builder);
+if (app.Environment.IsDevelopment()) app.UseSwaggerUi(builder);
 
-app.UseMiddleware<JwtMiddleware>();
 app.UseRouting();
+if (app.Environment.IsDevelopment()) app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+app.UseAuthorization();
 app.UseProblemDetails();
 app.UseReverseProxy();
+
+app.UseMiddleware<JwtMiddleware>();
 app.MapControllers();
 app.MapBotController();
 app.Run();

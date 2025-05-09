@@ -31,7 +31,7 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task Login(string username, string password)
     {
-        AuthenticateResponse = await _httpService.Post<AuthenticateResponse>("/user/authenticate",
+        AuthenticateResponse = await _httpService.Post<AuthenticateResponse>("user/authenticate",
             new { Login = username, Password = password });
         await _localStorageService.SetItem("authenticateResponse", AuthenticateResponse);
     }

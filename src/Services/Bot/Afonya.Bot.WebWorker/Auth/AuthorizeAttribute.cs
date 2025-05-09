@@ -1,6 +1,7 @@
-using Afonya.Bot.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Shared.Contracts;
 
 namespace Afonya.Bot.WebWorker.Auth;
 
@@ -9,7 +10,12 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 {
     public void OnAuthorization(AuthorizationFilterContext context)
     {
-        var user = (TelegramUser?)context.HttpContext.Items["User"];
+
+        var allowAnonymous = context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
+        if (allowAnonymous)
+            return;
+
+        var user = (UserDto?)context.HttpContext.Items["User"];
         if (user == null)
         {
             context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };

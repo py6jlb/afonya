@@ -1,0 +1,10 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+services:
+  bot:
+    image: bot
+    build:
+      context: .
+      dockerfile: src/Services/Bot/Afonya.Bot.WebWorker/Dockerfile.dev
+    ports:
+      - 5001:8080

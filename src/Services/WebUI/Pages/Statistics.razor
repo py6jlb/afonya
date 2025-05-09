@@ -1,8 +1,11 @@
-﻿@page "/counter"
+﻿@page "/statistics"
 
-<PageTitle>Counter</PageTitle>
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 
-<h1>Counter</h1>
+<PageTitle>Statistics</PageTitle>
+
+<h1>Statistics</h1>
 
 <MudText Typo="Typo.h6" role="status">Current count: @currentCount</MudText >
 

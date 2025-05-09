@@ -1,0 +1,25 @@
+﻿@page "/"
+
+@using Microsoft.AspNetCore.Authorization
+@using Shared.Contracts
+@using WebUI.Services.Interfaces
+@attribute [Authorize]
+
+@inject IOperationsService OperationsService
+@using Microsoft.Extensions.Logging
+@inject ILogger<Operations> _logger
+
+<PageTitle>Operations</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@code {
+    IEnumerable<MoneyTransactionDto>? data;
+    protected override async void OnInitialized()
+    {
+        data = await OperationsService.LoadOperations();
+        _logger.LogInformation("Loaded data", data);
+    }
+}

@@ -1,8 +1,8 @@
 ﻿using Afonya.Bot.Logic.Api.MoneyTransaction.Commands.CreateMoneyTransaction;
 using Afonya.Bot.Logic.Api.MoneyTransaction.Commands.UpdateMoneyTransaction;
 using Afonya.Bot.Logic.Api.MoneyTransaction.Queries.GetMoneyTransactions;
+using Afonya.Bot.WebWorker.Auth;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts;
 using Swashbuckle.AspNetCore.Annotations;

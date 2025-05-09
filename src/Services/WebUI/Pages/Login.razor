@@ -19,10 +19,10 @@
                     </CardHeaderContent>
                 </MudCardHeader>
                 <MudCardContent>
-                    <MudTextField T="string" Label="Имя пользователя" Required="true" RequiredError="Login is required!"
+                    <MudTextField T="string" Label="Имя пользователя" Required="true" RequiredError="Логин обязателен!"
                         @bind-Value="model.Username" For="@(() => model.Username)" />
                     <MudTextField T="string" Label="Пароль" InputType="InputType.Password" Required="true"
-                        RequiredError="Password is required!" @bind-Value="model.Password"
+                        RequiredError="Пароль обязателен!" @bind-Value="model.Password"
                         For="@(() => model.Password)" />
                 </MudCardContent>
                 <MudCardActions>
