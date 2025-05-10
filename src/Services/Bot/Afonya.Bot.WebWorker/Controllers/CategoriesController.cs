@@ -22,6 +22,7 @@ namespace Afonya.Bot.WebWorker.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IReadOnlyCollection<CategoryDto>> Get([FromQuery, SwaggerParameter("Включая неактивные")]bool all = false)
         {
             var data = await _mediator.Send(new GetCategoriesQuery{All = all});

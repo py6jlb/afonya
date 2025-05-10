@@ -18,7 +18,8 @@ builder.Services
                 .AddScoped<IAuthenticationService, AuthenticationService>()
                 .AddScoped<IHttpService, HttpService>()
                 .AddScoped<ILocalStorageService, LocalStorageService>()
-                .AddScoped<IOperationsService, OperationsService>();
+                .AddScoped<IOperationsService, OperationsService>()
+                .AddScoped<ICategoryService, CategoryService>();
 var host = builder.Build();
 
 var authenticationService = host.Services.GetRequiredService<IAuthenticationService>();

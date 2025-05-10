@@ -1,6 +1,11 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "WebUI",
+      "type": "blazorwasm",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/src/Services/WebUI"
+    }
+  ]
 }
