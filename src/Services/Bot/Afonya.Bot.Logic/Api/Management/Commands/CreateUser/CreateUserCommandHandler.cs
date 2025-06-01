@@ -20,12 +20,12 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserD
     {
         var existUser = _userRepository.GetByName(request.Login);
         if (existUser != null)
-            throw new AfonyaErrorException("При создании пользователя, что-то пошло не так.");
+            throw new AfonyaErrorException("Пользователь уже существует.");
 
         var hash = HashService.HashPassword(request.Password);
-        var user = new TelegramUser(request.Login, hash);
+        var user = new User(request.Login, hash, request.IsAdmin);
         var result = _userRepository.Create(user)
             ?? throw new AfonyaErrorException("При создании пользователя, что-то пошло не так.");
-        return Task.FromResult(new UserDto(result.Id.ToString(), result.Login));
+        return Task.FromResult(new UserDto(result.Id.ToString(), result.Login, result.IsAdmin));
     }
 }

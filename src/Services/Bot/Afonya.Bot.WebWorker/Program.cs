@@ -21,6 +21,7 @@ app.UseProblemDetails();
 app.UseReverseProxy();
 
 app.UseMiddleware<JwtMiddleware>();
+await app.InitUsers();
 app.MapControllers();
 app.MapBotController();
 app.Run();

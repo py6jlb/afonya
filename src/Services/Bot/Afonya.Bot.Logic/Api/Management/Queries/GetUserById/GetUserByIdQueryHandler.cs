@@ -19,6 +19,6 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto
         var result = _userRepository.Get(request.UserId);
         return result == null ?
             Task.FromResult<UserDto?>(null) :
-            Task.FromResult<UserDto?>(new UserDto(result.Id.ToString(), result.Login));
+            Task.FromResult<UserDto?>(new UserDto(result.Id.ToString(), result.Login, result.IsAdmin));
     }
 }

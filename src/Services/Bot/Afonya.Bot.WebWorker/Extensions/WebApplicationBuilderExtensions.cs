@@ -65,13 +65,12 @@ public static class WebApplicationBuilderExtensions
     public static WebApplicationBuilder AddServices(this WebApplicationBuilder builder, IConfiguration config)
     {
         //config
-        builder.Services.Configure<AdminUser>(config.GetSection("AdminUser"));
-        builder.Services.Configure<IEnumerable<AdminUser>>(config.GetSection("Users"));
         builder.Services.Configure<ReverseProxyConfig>(config.GetSection("ProxyConfig"));
         builder.Services.Configure<AppSettings>(config.GetSection("AppSettings"));
 
         //store
-        var connectionString = config.GetConnectionString("Default") ?? throw new NullReferenceException("Отсутствует строка подключения к БД");
+        var connectionString = config.GetConnectionString("Default")
+            ?? throw new NullReferenceException("Отсутствует строка подключения к БД");
         builder.Services.AddSingleton(_ => new DbContext(connectionString));
 
         builder.Services.AddTransient<IUserRepository, UserRepository>();

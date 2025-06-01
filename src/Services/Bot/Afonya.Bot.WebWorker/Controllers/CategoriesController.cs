@@ -29,7 +29,7 @@ namespace Afonya.Bot.WebWorker.Controllers
             return data;
         }
     
-        [BasicAuthAdmin]
+        [ForAdmin]
         [HttpPost]
         public async Task<CategoryDto> Post(CategoryDto category)
         {
@@ -37,7 +37,7 @@ namespace Afonya.Bot.WebWorker.Controllers
             return data;
         }
         
-        [BasicAuthAdmin]
+        [ForAdmin]
         [HttpPut]
         public async Task<CategoryDto> Put(CategoryDto category)
         {
@@ -45,7 +45,7 @@ namespace Afonya.Bot.WebWorker.Controllers
             return data;
         }
     
-        [BasicAuthAdmin]
+        [ForAdmin]
         [HttpDelete]
         public async Task<bool> Delete(string id)
         {

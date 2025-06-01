@@ -2,10 +2,47 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "WebUI",
-      "type": "blazorwasm",
+      "name": "Containers .NET Attach (Preview)",
+      "type": "docker",
+      "request": "attach",
+      "platform": "netCore",
+      "sourceFileMap": {
+        "/src": "${workspaceFolder}"
+      }
+    },
+    {
+      "name": ".NET Core Launch (web)",
+      "type": "coreclr",
       "request": "launch",
-      "cwd": "${workspaceFolder}/src/Services/WebUI"
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/Services/Bot/Afonya.Bot.WebWorker/bin/Debug/net8.0/Afonya.Bot.WebWorker.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/Services/Bot/Afonya.Bot.WebWorker",
+      "stopAtEntry": false,
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/Views"
+      }
+    },
+    {
+      "name": ".NET Core Attach",
+      "type": "coreclr",
+      "request": "attach"
+    },
+    {
+      "name": "Containers: .NET Launch",
+      "type": "docker",
+      "request": "launch",
+      "preLaunchTask": "docker-run: debug",
+      "netCore": {
+        "appProject": "${workspaceFolder}/src/Services/Bot/Afonya.Bot.WebWorker/Afonya.Bot.WebWorker.csproj"
+      }
     }
   ]
 }

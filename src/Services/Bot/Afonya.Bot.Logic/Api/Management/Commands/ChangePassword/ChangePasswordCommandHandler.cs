@@ -22,6 +22,6 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
         var result = _userRepository.ChangePassword(request.Id, hash);
         return result == null ?
             Task.FromResult<UserDto?>(null) :
-            Task.FromResult<UserDto?>(new UserDto(result.Id.ToString(), result.Login));
+            Task.FromResult<UserDto?>(new UserDto(result.Id.ToString(), result.Login, result.IsAdmin));
     }
 }

@@ -1,3 +1,3 @@
 ﻿namespace Shared.Contracts;
 
-public record UserDto(string? Id, string Login);
+public record UserDto(string? Id, string Login, bool IsAdmin);

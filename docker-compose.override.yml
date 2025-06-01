@@ -3,14 +3,12 @@ services:
     image: bot
     build:
       context: .
-      dockerfile: src/Services/Bot/Afonya.Bot.WebWorker/Dockerfile.dev
+      dockerfile: src/Services/Bot/Afonya.Bot.WebWorker/Dockerfile
       args:
         - configuration=Debug
+    ports:
+      - 5000:5000
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
-      - data:/app/db:rw
-
-volumes:
-    data:

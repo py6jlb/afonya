@@ -19,52 +19,52 @@ public class UserRepository : IUserRepository
 
     public int Count()
     {
-        var res = _db.GetCollection<TelegramUser>().Count();
+        var res = _db.GetCollection<User>().Count();
         return res;
     }
 
-    public IEnumerable<TelegramUser> Get()
+    public IEnumerable<User> Get()
     {
-        var users = _db.GetCollection<TelegramUser>().FindAll();
+        var users = _db.GetCollection<User>().FindAll();
         return users;
     }
 
-    public TelegramUser? Get(string id)
+    public User? Get(string id)
     {
-        var user = _db.GetCollection<TelegramUser>().FindById(new ObjectId(id));
+        var user = _db.GetCollection<User>().FindById(new ObjectId(id));
         return user ?? null;
     }
 
-    public TelegramUser? GetByName(string userName)
+    public User? GetByName(string userName)
     {
-        var user = _db.GetCollection<TelegramUser>().FindOne(x => x.Login == userName);
+        var user = _db.GetCollection<User>().FindOne(x => x.Login == userName);
         return user ?? null;
     }
 
-    public TelegramUser? Create(TelegramUser user)
+    public User? Create(User user)
     {
-        var id = _db.GetCollection<TelegramUser>().Insert(user);
+        var id = _db.GetCollection<User>().Insert(user);
         var result = Get(id.AsObjectId.ToString());
         return result;
     }
 
     public bool Delete(string id)
     {
-        var res = _db.GetCollection<TelegramUser>().Delete(new ObjectId(id));
+        var res = _db.GetCollection<User>().Delete(new ObjectId(id));
         return res;
     }
 
-    public TelegramUser? Authenticate(string username, string password)
+    public User? Authenticate(string username, string password)
     {
-        var user = _db.GetCollection<TelegramUser>().FindOne(x => x.Login == username && x.Password == password);
+        var user = _db.GetCollection<User>().FindOne(x => x.Login == username && x.Password == password);
         return user ?? null;
     }
 
-    public TelegramUser? ChangePassword(string id, string password)
+    public User? ChangePassword(string id, string password)
     {
-        var user = _db.GetCollection<TelegramUser>().FindById(new ObjectId(id));
+        var user = _db.GetCollection<User>().FindById(new ObjectId(id));
         user.SetPassword(password);
-        _db.GetCollection<TelegramUser>().Update(user);
+        _db.GetCollection<User>().Update(user);
         return user;
     }
 }

@@ -33,7 +33,7 @@ namespace Afonya.Bot.WebWorker.Controllers
         }
 
 
-        [BasicAuthAdmin]
+        [ForAdmin]
         [HttpGet]
         public async Task<UserDto?> Get(string? userName)
         {
@@ -41,7 +41,7 @@ namespace Afonya.Bot.WebWorker.Controllers
             return data;
         }
 
-        [BasicAuthAdmin]
+        [ForAdmin]
         [HttpPost]
         public async Task<UserDto?> Post([FromBody] LoginDto user)
         {
@@ -49,7 +49,7 @@ namespace Afonya.Bot.WebWorker.Controllers
             return data;
         }
 
-        [BasicAuthAdmin]
+        [ForAdmin]
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] ChangePasswordDto data)
         {
@@ -59,7 +59,7 @@ namespace Afonya.Bot.WebWorker.Controllers
             return Ok(result);
         }
 
-        [BasicAuthAdmin]
+        [ForAdmin]
         [HttpDelete]
         public async Task<bool> Delete(string id)
         {

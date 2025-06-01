@@ -31,13 +31,13 @@ public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, A
         var user = _userRepository.GetByName(request.Username);
         if (user == null) return null;
 
-        var dto = new UserDto(user.Id.ToString(), user.Login);
+        var dto = new UserDto(user.Id.ToString(), user.Login, user.IsAdmin);
         var token = await GenerateJwtToken(user);
-        
+
         return new AuthenticateResponse(dto, token);
     }
 
-    private async Task<string> GenerateJwtToken(TelegramUser user)
+    private async Task<string> GenerateJwtToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = await Task.Run(() =>
@@ -46,7 +46,11 @@ public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, A
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity([new Claim("id", user.Id.ToString()), new Claim("name", user.Login)]),
+                Subject = new ClaimsIdentity([
+                    new Claim("id", user.Id.ToString()),
+                    new Claim("name", user.Login),
+                    new Claim("isAdmin", user.IsAdmin.ToString())
+                ]),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };

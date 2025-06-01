@@ -1,27 +1,25 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 8080
+EXPOSE 5000
 
-RUN apt-get update && apt-get install -y libfontconfig1
+ENV ASPNETCORE_URLS=http://+:5000
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+USER app
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG configuration=Release
 WORKDIR /src
-COPY ["Services/Bot/Afonya.Bot.WebWorker/Afonya.Bot.WebWorker.csproj", "Services/Bot/Afonya.Bot.WebWorker/"]
-COPY ["Services/Bot/Afonya.Bot.Logic/Afonya.Bot.Logic.csproj", "Services/Bot/Afonya.Bot.Logic/"]
-COPY ["Services/Bot/Afonya.Bot.Interfaces/Afonya.Bot.Interfaces.csproj", "Services/Bot/Afonya.Bot.Interfaces/"]
-COPY ["Services/Bot/Afonya.Bot.Domain/Afonya.Bot.Domain.csproj", "Services/Bot/Afonya.Bot.Domain/"]
-COPY ["Services/Bot/Afonya.Bot.Infrastructure/Afonya.Bot.Infrastructure.csproj", "Services/Bot/Afonya.Bot.Infrastructure/"]
-COPY ["Shared/Shared.csproj", "Shared/"]
-COPY ["Common/Common.csproj", "Common/"]
-RUN dotnet restore "Services/Bot/Afonya.Bot.WebWorker/Afonya.Bot.WebWorker.csproj"
+COPY ["src/Services/Bot/Afonya.Bot.WebWorker/Afonya.Bot.WebWorker.csproj", "src/Services/Bot/Afonya.Bot.WebWorker/"]
+RUN dotnet restore "src/Services/Bot/Afonya.Bot.WebWorker/Afonya.Bot.WebWorker.csproj"
 COPY . .
-WORKDIR "/src/Services/Bot/Afonya.Bot.WebWorker"
-RUN dotnet build "Afonya.Bot.WebWorker.csproj" -c Release -o /app/build
+WORKDIR "/src/src/Services/Bot/Afonya.Bot.WebWorker"
+RUN dotnet build "Afonya.Bot.WebWorker.csproj" -c $configuration -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Afonya.Bot.WebWorker.csproj" -c Release -o /app/publish
+ARG configuration=Release
+RUN dotnet publish "Afonya.Bot.WebWorker.csproj" -c $configuration -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
+USER root
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Afonya.Bot.WebWorker.dll"]

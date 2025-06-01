@@ -20,7 +20,7 @@ public class ManageController : ControllerBase
         _mediator = mediator;
     }
 
-    [BasicAuthAdmin]
+    [ForAdmin]
     [HttpPost("status")]
     public async Task<WebhookInfo> StatusBot(CancellationToken cancellationToken)
     {
@@ -28,14 +28,14 @@ public class ManageController : ControllerBase
         return result;
     }
     
-    [BasicAuthAdmin]
+    [ForAdmin]
     [HttpPost("start")]
     public async Task StartBot(CancellationToken cancellationToken)
     {
         await _mediator.Send(new SetWebHookCommand(), cancellationToken);
     }
     
-    [BasicAuthAdmin]
+    [ForAdmin]
     [HttpPost("stop")]
     public async Task StopBot(CancellationToken cancellationToken)
     {
