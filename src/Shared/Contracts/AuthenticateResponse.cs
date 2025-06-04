@@ -8,6 +8,7 @@ public class AuthenticateResponse
     public string Id { get; set; }
     public string Name { get; set; }
     public string Token { get; set; }
+    public bool IsAdmin { get; set; }
 
     // [JsonConstructor]
     // public AuthenticateResponse(string? id, string login, string token)
@@ -26,6 +27,7 @@ public class AuthenticateResponse
     {
         Id = user.Id;
         Name = user.Login;
+        IsAdmin = user.IsAdmin;
         Token = token;
     }
 }

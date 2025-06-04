@@ -8,6 +8,7 @@ using Telegram.Bot.Types;
 
 namespace Afonya.Bot.WebWorker.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ManageController : ControllerBase

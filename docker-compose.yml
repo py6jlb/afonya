@@ -1,13 +1,12 @@
 services:
   bot:
     image: bot
+    container_name: Afonya
     build:
       context: .
       dockerfile: src/Services/Bot/Afonya.Bot.WebWorker/Dockerfile
     ports:
       - 5000:5000
-    environment:
-      - ASPNETCORE_ADMIN_CREDENTIALS="admin:admin""
     volumes:
       - data:/app/db:rw
 

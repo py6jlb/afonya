@@ -21,15 +21,13 @@ function request(method) {
     }
 }
 
-// helper functions
 
 function authHeader(url) {
-    // return auth header with basic auth credentials if user is logged in and request is to the api url
     const { user } = useAuthStore();
-    const isLoggedIn = !!user?.authdata;
+    const isLoggedIn = !!user?.token;
     const isApiUrl = url.startsWith(import.meta.env.VITE_API_URL);
     if (isLoggedIn && isApiUrl) {
-        return { Authorization: `Basic ${user.authdata}` };
+        return { Authorization: `Bearer ${user.token}` };
     } else {
         return {};
     }
