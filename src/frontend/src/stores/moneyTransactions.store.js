@@ -7,10 +7,14 @@ const baseUrl = `${import.meta.env.VITE_API_URL}`
 export const useMoneyTransactionStore = defineStore('moneyTransaction', {
   state: () => ({
     moneyTransaction: {},
+    isLoading: false,
+    loadAllError: undefined,
+    addNewError: undefined,
   }),
   actions: {
     async getAll(month, year, user, category) {
-      this.moneyTransaction = { loading: true }
+      this.isLoading = true
+      this.moneyTransaction = []
       const url = `${baseUrl}/MoneyTransaction`
       const params = new URLSearchParams()
       if (month != null) {
@@ -33,8 +37,28 @@ export const useMoneyTransactionStore = defineStore('moneyTransaction', {
       const resUrl = paramsStr != null && paramsStr !== '' ? `${url}?${paramsStr}` : url
       return fetchWrapper
         .get(resUrl)
-        .then((mt) => (this.moneyTransaction = mt))
-        .catch((error) => (this.moneyTransaction = { error }))
+        .then((mt) => {
+          this.moneyTransaction = mt
+          this.isLoading = false
+        })
+        .catch((error) => {
+          this.moneyTransaction = { error }
+          this.loadAllError = false
+        })
+    },
+    async new(values) {
+      this.isLoading = true
+      const url = `${baseUrl}/MoneyTransaction`
+      return fetchWrapper
+        .post(url, values)
+        .then((mt) => {
+          this.moneyTransaction = [mt, ...this.moneyTransaction]
+          this.isLoading = false
+        })
+        .catch((error) => {
+          this.addNewError = { error }
+          console.error(error)
+        })
     },
   },
 })
