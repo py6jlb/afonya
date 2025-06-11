@@ -85,6 +85,7 @@ public static class WebApplicationBuilderExtensions
             cfg.AddOpenBehavior(typeof(BotAuthBehavior<,>));
         });
         builder.Services.AddHostedService<Starter>();
+        builder.Services.AddRazorPages().AddNewtonsoftJson();
         builder.Services.AddControllers().AddNewtonsoftJson();
 
         builder.Services.AddCors();

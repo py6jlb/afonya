@@ -1,13 +1,10 @@
 using System.Text;
 using Afonya.Domain.Entities;
 using Afonya.Domain.Repositories;
-using Afonya.Bot.Interfaces.Services;
 using MediatR;
 using Shared.Contracts;
 using Telegram.Bot;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Afonya.Bot.Logic.Bot.Queries.Statistics;
 
@@ -16,17 +13,14 @@ public class StatisticsQueryHandler : IRequestHandler<StatisticQuery, bool>
     private readonly ITelegramBotClient _botClient;
     private readonly IMoneyTransactionRepository _moneyTransactionRepository;
     private readonly ICategoryRepository _categoryRepository;
-    private readonly IChartService _chartService;
 
     public StatisticsQueryHandler(ITelegramBotClient botClient,
         IMoneyTransactionRepository moneyTransactionRepository,
-        ICategoryRepository categoryRepository,
-        IChartService chartService)
+        ICategoryRepository categoryRepository)
     {
         _botClient = botClient;
         _moneyTransactionRepository = moneyTransactionRepository;
         _categoryRepository = categoryRepository;
-        _chartService = chartService;
     }
 
     public async Task<bool> Handle(StatisticQuery request, CancellationToken cancellationToken)
@@ -46,12 +40,8 @@ public class StatisticsQueryHandler : IRequestHandler<StatisticQuery, bool>
         }).ToArray();
 
         var month = $"{request.Month}".Length == 1 ? $"0{request.Month}" : $"{request.Month}";
-        //var filePath = await _chartService.GetStatisticPng($"Статистика за {month}.{request.Year}", result, categories);
         var message = PrepareStatistics(result, categories, month, request.Year);
         await _botClient.DeleteMessage(request.ChatId, request.OriginalMessageId, cancellationToken: cancellationToken);
-        //await using Stream stream = System.IO.File.OpenRead(filePath);
-        //await _botClient.SendPhoto(request.ChatId, stream, cancellationToken: cancellationToken);
-        //System.IO.File.Delete(filePath);
         await _botClient.SendMessage(request.ChatId, message, parseMode: ParseMode.Html, cancellationToken: cancellationToken);
         return true;
     }

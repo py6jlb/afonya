@@ -24,7 +24,7 @@ public class DeleteWebHookCommandHandler : IRequestHandler<DeleteWebHookCommand,
     {
         if (_botConfig.UsePooling) return true;
         _logger.LogInformation("Delete webHook");
-        await _telegramBotClient.DeleteWebhookAsync(cancellationToken: cancellationToken);
+        await _telegramBotClient.DeleteWebhook(cancellationToken: cancellationToken);
         return true;
     }
 }

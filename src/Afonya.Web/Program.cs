@@ -14,14 +14,16 @@ builder.Host.UseSerilog();
 var app = builder.Build();
 if (app.Environment.IsDevelopment()) app.UseSwaggerUi(builder);
 
+app.UseStaticFiles();
 app.UseRouting();
-if (app.Environment.IsDevelopment()) app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+//if (app.Environment.IsDevelopment()) app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 app.UseAuthorization();
 app.UseProblemDetails();
 app.UseReverseProxy();
 
 app.UseMiddleware<JwtMiddleware>();
 await app.InitUsers();
+app.MapRazorPages();
 app.MapControllers();
 app.MapBotController();
 app.Run();
