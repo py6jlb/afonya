@@ -19,31 +19,6 @@
       <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
       <PackageReference Include="MediatR" Version="12.4.1" />
-      <PackageReference Include="OxyPlot.SkiaSharp" Version="2.2.0" />
-      <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.8" />
-      <PackageReference Include="HarfBuzzSharp" Version="8.3.0.1" />
-      <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="8.3.0.1" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Bot/Queries/StartStatistics/" />
-      <Folder Include="Bot\Commands\Delete\" />
-      <Folder Include="Bot\Commands\SetCategory\" />
-      <Folder Include="Bot\Commands\NewMessage\" />
-      <Folder Include="Bot\Commands\Unknown\" />
-      <Folder Include="Bot\Commands\RemoveKeyboard\" />
-      <Folder Include="Bot\Commands\Start\" />
-      <Folder Include="Api\Categories\Commands\AddCategory\" />
-      <Folder Include="Api\Categories\Commands\DeleteCategory\" />
-      <Folder Include="Api\Categories\Commands\UpdateCategory\" />
-      <Folder Include="Api\MoneyTransaction\Commands\UpdateMoneyTransaction\" />
-      <Folder Include="Api\Management\Commands\CreateUser\" />
-      <Folder Include="Api\Management\Commands\DeleteUser\" />
-      <Folder Include="Api\Management\Queries\BotWebhookStatus\" />
-      <Folder Include="Bot\Queries\ConfirmDelete\" />
-      <Folder Include="Api\Management\Queries\GetUser\" />
-      <Folder Include="Api\Categories\Queries\GetCategories\" />
-      <Folder Include="Api\MoneyTransaction\Queries\GetMoneyTransactions\" />
     </ItemGroup>
 
 </Project>

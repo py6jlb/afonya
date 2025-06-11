@@ -44,12 +44,12 @@
       "dockerBuild": {
         "tag": "afonya:dev",
         "target": "base",
-        "dockerfile": "${workspaceFolder}/src/Services/Bot/Afonya.Bot.WebWorker/Dockerfile",
+        "dockerfile": "${workspaceFolder}/src/Afonya.Bot.WebWorker/Dockerfile",
         "context": "${workspaceFolder}",
         "pull": true
       },
       "netCore": {
-        "appProject": "${workspaceFolder}/src/Services/Bot/Afonya.Bot.WebWorker/Afonya.Bot.WebWorker.csproj"
+        "appProject": "${workspaceFolder}/src/Afonya.Bot.WebWorker/Afonya.Bot.WebWorker.csproj"
       }
     },
     {
@@ -58,7 +58,7 @@
       "dependsOn": ["build"],
       "dockerBuild": {
         "tag": "afonya:latest",
-        "dockerfile": "${workspaceFolder}/src/Services/Bot/Afonya.Bot.WebWorker/Dockerfile",
+        "dockerfile": "${workspaceFolder}/src/Afonya.Bot.WebWorker/Dockerfile",
         "context": "${workspaceFolder}",
         "platform": {
           "os": "linux",
@@ -67,7 +67,7 @@
         "pull": true
       },
       "netCore": {
-        "appProject": "${workspaceFolder}/src/Services/Bot/Afonya.Bot.WebWorker/Afonya.Bot.WebWorker.csproj"
+        "appProject": "${workspaceFolder}/src/Afonya.Bot.WebWorker/Afonya.Bot.WebWorker.csproj"
       }
     },
     {
@@ -76,7 +76,7 @@
       "dependsOn": ["docker-build: debug"],
       "dockerRun": {},
       "netCore": {
-        "appProject": "${workspaceFolder}/src/Services/Bot/Afonya.Bot.WebWorker/Afonya.Bot.WebWorker.csproj",
+        "appProject": "${workspaceFolder}/src/Afonya.Bot.WebWorker/Afonya.Bot.WebWorker.csproj",
         "enableDebugging": true
       }
     },
@@ -86,7 +86,7 @@
       "dependsOn": ["docker-build: release"],
       "dockerRun": {},
       "netCore": {
-        "appProject": "${workspaceFolder}/src/Services/Bot/Afonya.Bot.WebWorker/Afonya.Bot.WebWorker.csproj"
+        "appProject": "${workspaceFolder}/src/Afonya.Bot.WebWorker/Afonya.Bot.WebWorker.csproj"
       }
     }
   ]

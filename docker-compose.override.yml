@@ -3,7 +3,7 @@ services:
     image: bot
     build:
       context: .
-      dockerfile: src/Services/Bot/Afonya.Bot.WebWorker/Dockerfile
+      dockerfile: src/Afonya.Bot.WebWorker/Dockerfile
       args:
         - configuration=Debug
     ports:

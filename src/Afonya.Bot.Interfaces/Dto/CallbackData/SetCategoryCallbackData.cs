@@ -1,4 +1,4 @@
-﻿using Afonya.Bot.Domain.Entities;
+﻿using Afonya.Domain.Entities;
 
 namespace Afonya.Bot.Interfaces.Dto.CallbackData;
 

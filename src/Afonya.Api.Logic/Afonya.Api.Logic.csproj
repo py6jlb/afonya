@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Afonya.Api.Interfaces/Afonya.Api.Interfaces.csproj" />
+    <ProjectReference Include="../Afonya.Bot.Interfaces/Afonya.Bot.Interfaces.csproj" />
+    <ProjectReference Include="../Afonya.Infrastructure/Afonya.Infrastructure.csproj" />
+    <ProjectReference Include="../Shared/Shared.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+  </ItemGroup>
+ 
+
+</Project>

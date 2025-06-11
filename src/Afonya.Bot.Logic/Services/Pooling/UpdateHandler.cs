@@ -1,4 +1,4 @@
-﻿using Afonya.Bot.Domain.Exceptions;
+﻿using Afonya.Domain.Exceptions;
 using Afonya.Bot.Logic.Delegates;
 using MediatR;
 using Microsoft.Extensions.Logging;
