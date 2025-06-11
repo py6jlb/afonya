@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Shared\Shared.csproj" />
+      <ProjectReference Include="..\Shared\Shared.csproj" />
       <ProjectReference Include="..\Afonya.Bot.Domain\Afonya.Bot.Domain.csproj" />
     </ItemGroup>
 

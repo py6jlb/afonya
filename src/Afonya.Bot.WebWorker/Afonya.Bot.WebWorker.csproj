@@ -11,7 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Common\Common.csproj" />
+      <ProjectReference Include="..\Common\Common.csproj" />
       <ProjectReference Include="..\Afonya.Bot.Infrastructure\Afonya.Bot.Infrastructure.csproj" />
       <ProjectReference Include="..\Afonya.Bot.Logic\Afonya.Bot.Logic.csproj" />
     </ItemGroup>
