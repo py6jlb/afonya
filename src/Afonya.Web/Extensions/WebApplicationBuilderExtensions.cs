@@ -20,6 +20,8 @@ using Telegram.Bot.Polling;
 using Telegram.Bot.Types.Enums;
 using Afonya.Api.Interfaces.Services;
 using Afonya.Api.Logic.Services;
+using Afonya.Api.Logic.Management.Commands.CreateUser;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Afonya.Web.Extensions;
 
@@ -75,20 +77,23 @@ public static class WebApplicationBuilderExtensions
         builder.Services.AddTransient<IMoneyTransactionRepository, MoneyTransactionRepository>();
         builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
         builder.Services.AddTransient<ICallbackRepository, CallbackRepository>();
-        builder.Services.AddTransient<IHashService, HashService>();
+        builder.Services.AddSingleton<IHashService, HashService>();
+
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt=>
+        {
+            opt.LoginPath = "/Account/Login";
+            opt.LogoutPath = "/Account/Logout";
+        });
 
         //app
-        builder.Services.AddTransient<IBotKeyboardService, BotKeyboardService>();
         builder.Services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(BotStartCommand).Assembly);
+            cfg.RegisterServicesFromAssembly(typeof(CreateUserCommand).Assembly);
             cfg.AddOpenBehavior(typeof(BotAuthBehavior<,>));
         });
         builder.Services.AddHostedService<Starter>();
         builder.Services.AddRazorPages().AddNewtonsoftJson();
-        builder.Services.AddControllers().AddNewtonsoftJson();
-
-        builder.Services.AddCors();
         return builder;
     }
 
@@ -104,6 +109,7 @@ public static class WebApplicationBuilderExtensions
         builder.Services.AddTransient<EditedMessageHandler>();
         builder.Services.AddTransient<MessageHandler>();
         builder.Services.AddTransient<UnknownUpdateHandler>();
+         builder.Services.AddTransient<IBotKeyboardService, BotKeyboardService>();
 
         builder.Services.AddTransient<CommandBuilderResolver>(sp => token =>
             token switch

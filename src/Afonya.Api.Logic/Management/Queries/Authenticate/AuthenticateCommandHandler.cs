@@ -32,9 +32,8 @@ public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, A
         if (user == null) return null;
 
         var dto = new UserDto(user.Id.ToString(), user.Login, user.IsAdmin);
-        var token = await GenerateJwtToken(user);
 
-        return new AuthenticateResponse(dto, token);
+        return new AuthenticateResponse(dto);
     }
 
     private async Task<string> GenerateJwtToken(User user)

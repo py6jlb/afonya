@@ -15,9 +15,9 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/src/Afonya.Bot.WebWorker/bin/Debug/net8.0/Afonya.Bot.WebWorker.dll",
+      "program": "${workspaceFolder}/src/Afonya.Web/bin/Debug/net8.0/Afonya.Web.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/src/Afonya.Bot.WebWorker",
+      "cwd": "${workspaceFolder}/src/Afonya.Web",
       "stopAtEntry": false,
       "serverReadyAction": {
         "action": "openExternally",
@@ -41,7 +41,7 @@
       "request": "launch",
       "preLaunchTask": "docker-run: debug",
       "netCore": {
-        "appProject": "${workspaceFolder}/src/Afonya.Bot.WebWorker/Afonya.Bot.WebWorker.csproj"
+        "appProject": "${workspaceFolder}/src/Afonya.Web/Afonya.Web.csproj"
       }
     }
   ]
