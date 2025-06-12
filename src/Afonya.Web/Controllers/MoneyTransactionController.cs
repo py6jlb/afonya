@@ -48,11 +48,11 @@ public class MoneyTransactionController : ControllerBase
     }
 
 
-    [HttpPost]
-    public async Task<bool> Post(MoneyTransactionDto data)
-    {
-        var result = await _mediator.Send(new CreateMoneyTransactionCommand { MoneyTransaction = data });
-        return result;
-    }
+    // [HttpPost]
+    // public async Task<bool> Post(MoneyTransactionDto data)
+    // {
+    //     var result = await _mediator.Send(new CreateMoneyTransactionCommand { });
+    //     return result;
+    // }
 }
 

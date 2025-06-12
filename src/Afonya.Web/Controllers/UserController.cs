@@ -2,7 +2,6 @@
 using Afonya.Api.Logic.Management.Commands.CreateUser;
 using Afonya.Api.Logic.Management.Commands.DeleteUser;
 using Afonya.Api.Logic.Management.Queries.Authenticate;
-using Afonya.Api.Logic.Management.Queries.GetUser;
 using Afonya.Web.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -36,13 +35,13 @@ public class UserController : ControllerBase
     }
 
 
-    [ForAdmin]
-    [HttpGet]
-    public async Task<UserDto?> Get(string? userName)
-    {
-        var data = await _mediator.Send(new GetUserQuery { UserName = userName });
-        return data;
-    }
+    // [ForAdmin]
+    // [HttpGet]
+    // public async Task<UserDto?> Get(string? userName)
+    // {
+    //     var data = await _mediator.Send(new GetUserQuery { UserName = userName });
+    //     return data;
+    // }
 
     [ForAdmin]
     [HttpPost]

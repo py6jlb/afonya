@@ -28,4 +28,13 @@
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.15" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Pages/Categories/" />
+      <Folder Include="Pages/Management/" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="Pages/Transactions/_TableRow.cshtml" />
+    </ItemGroup>
+
 </Project>

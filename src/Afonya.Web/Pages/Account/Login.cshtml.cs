@@ -63,7 +63,7 @@ public class LoginModel : PageModel
                 return Redirect(returnUrl);
             }
 
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            ModelState.AddModelError(string.Empty, "Ошибка входа.");
         }
 
         // If we got this far, something failed, redisplay form

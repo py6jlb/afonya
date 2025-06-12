@@ -8,7 +8,7 @@
 <html>
 
 <head>
-    <title>Login | Simple App Test</title>
+    <title>Вход | Afonya</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -23,21 +23,21 @@
         <div class="row">
             <form id="loginForm" method="post" class="col-md-4 mx-auto">
                 <div class="text-center mt-5" style="font-size: 20px;">
-                    Simple App Test
+                    Afonya
                 </div>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="accordion">
                     <div class="form-group">
-                        <label asp-for="Username"></label>
+                        <label asp-for="Username">Имя пользователя</label>
                         <input asp-for="Username" class="form-control" autocomplete="off" />
                         <span asp-validation-for="Username" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Password"></label>
+                        <label asp-for="Password">Пароль</label>
                         <input asp-for="Password" class="form-control" autocomplete="off" />
                         <div class="invalid-feedback" style="margin-top: 0; font-size: 16px;">
-                            The Password field is required.
+                            Пароль обязательный
                         </div>
                     </div>
                     <div class="form-group text-center mt-2">
@@ -50,7 +50,8 @@
 
     <partial name="_ValidationScriptsPartial" />
     <style>
-        .form-control.is-invalid, .was-validated .form-control:invalid {
+        .form-control.is-invalid,
+        .was-validated .form-control:invalid {
             background-image: none;
             border-color: #ced4da;
         }
@@ -76,4 +77,5 @@
         });
     </script>
 </body>
+
 </html>

@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Afonya.Web.Pages;
+namespace Afonya.Web.Pages.Categories;
 
 public class IndexModel : PageModel
 {

@@ -1,12 +1,6 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Afonya.Domain.Entities;
+using Afonya.Api.Interfaces.Services;
 using Afonya.Domain.Repositories;
-using Common.Options;
 using MediatR;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Shared.Contracts;
 
 namespace Afonya.Api.Logic.Management.Queries.Authenticate;
@@ -15,47 +9,27 @@ public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, A
 {
 
     private readonly IUserRepository _userRepository;
-    private readonly AppSettings _appSettings;
+    private readonly IHashService _hashService;
 
-    public AuthenticateCommandHandler(IUserRepository userRepository, IOptions<AppSettings> appSettings)
+    public AuthenticateCommandHandler(IUserRepository userRepository, IHashService hashService)
     {
         _userRepository = userRepository;
-        _appSettings = appSettings.Value;
+        _hashService = hashService;
     }
 
-    public async Task<AuthenticateResponse?> Handle(AuthenticateCommand request, CancellationToken cancellationToken)
+    public Task<AuthenticateResponse?> Handle(AuthenticateCommand request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
-            return null;
+            return Task.FromResult<AuthenticateResponse?>(null);
 
         var user = _userRepository.GetByName(request.Username);
-        if (user == null) return null;
+        if (user == null) return Task.FromResult<AuthenticateResponse?>(null);
+
+        var success = _hashService.VerifyPassword(user.Password, request.Password);
+        if (!success) return Task.FromResult<AuthenticateResponse?>(null);
 
         var dto = new UserDto(user.Id.ToString(), user.Login, user.IsAdmin);
-
-        return new AuthenticateResponse(dto);
-    }
-
-    private async Task<string> GenerateJwtToken(User user)
-    {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var token = await Task.Run(() =>
-        {
-
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity([
-                    new Claim("id", user.Id.ToString()),
-                    new Claim("name", user.Login),
-                    new Claim("isAdmin", user.IsAdmin.ToString())
-                ]),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            return tokenHandler.CreateToken(tokenDescriptor);
-        });
-
-        return tokenHandler.WriteToken(token);
+        var result = new AuthenticateResponse(dto);
+        return Task.FromResult<AuthenticateResponse?>(result);
     }
 }

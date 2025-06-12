@@ -79,7 +79,7 @@ public static class WebApplicationBuilderExtensions
         builder.Services.AddTransient<ICallbackRepository, CallbackRepository>();
         builder.Services.AddSingleton<IHashService, HashService>();
 
-        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt=>
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt =>
         {
             opt.LoginPath = "/Account/Login";
             opt.LogoutPath = "/Account/Logout";
@@ -93,7 +93,10 @@ public static class WebApplicationBuilderExtensions
             cfg.AddOpenBehavior(typeof(BotAuthBehavior<,>));
         });
         builder.Services.AddHostedService<Starter>();
-        builder.Services.AddRazorPages().AddNewtonsoftJson();
+        builder.Services.AddRazorPages().AddRazorPagesOptions(opt =>
+        {
+            opt.Conventions.AddPageRoute("/Transactions/Index", "");
+        }).AddNewtonsoftJson();
         return builder;
     }
 
@@ -109,7 +112,7 @@ public static class WebApplicationBuilderExtensions
         builder.Services.AddTransient<EditedMessageHandler>();
         builder.Services.AddTransient<MessageHandler>();
         builder.Services.AddTransient<UnknownUpdateHandler>();
-         builder.Services.AddTransient<IBotKeyboardService, BotKeyboardService>();
+        builder.Services.AddTransient<IBotKeyboardService, BotKeyboardService>();
 
         builder.Services.AddTransient<CommandBuilderResolver>(sp => token =>
             token switch
