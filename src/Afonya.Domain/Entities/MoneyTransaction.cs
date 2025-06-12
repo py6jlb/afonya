@@ -2,14 +2,15 @@
 
 public class MoneyTransaction : BaseEntity
 {
-    protected MoneyTransaction(){}
+    protected MoneyTransaction() { }
 
-    public MoneyTransaction(float value, int messageId, long chatId, string sign, string? categoryName, string? categoryHumanName, string? categoryIcon, DateTime registerDate, DateTime? transactionDate, string fromUserName)
+    public MoneyTransaction(float value, int messageId, long chatId, string sign, string? categoryId, string? categoryName, string? categoryHumanName, string? categoryIcon, DateTime registerDate, DateTime? transactionDate, string fromUserName)
     {
         Value = value;
         MessageId = messageId;
         ChatId = chatId;
         Sign = sign;
+        CategoryId = categoryId;
         CategoryName = categoryName;
         CategoryHumanName = categoryHumanName;
         CategoryIcon = categoryIcon;
@@ -18,10 +19,11 @@ public class MoneyTransaction : BaseEntity
         FromUserName = fromUserName;
     }
 
-    public MoneyTransaction(float value, string sign, string? categoryName, string? categoryHumanName, string? categoryIcon, DateTime registerDate, DateTime? transactionDate, string fromUserName)
+    public MoneyTransaction(float value, string sign, string? categoryId, string? categoryName, string? categoryHumanName, string? categoryIcon, DateTime registerDate, DateTime? transactionDate, string fromUserName)
     {
         Value = value;
         Sign = sign;
+        CategoryId = categoryId;
         CategoryName = categoryName;
         CategoryHumanName = categoryHumanName;
         CategoryIcon = categoryIcon;
@@ -34,6 +36,7 @@ public class MoneyTransaction : BaseEntity
     public int? MessageId { get; private set; }
     public long? ChatId { get; private set; }
     public string Sign { get; private set; }
+    public string CategoryId { get; private set; }
     public string CategoryName { get; private set; }
     public string CategoryHumanName { get; private set; }
     public string CategoryIcon { get; private set; }
@@ -42,7 +45,7 @@ public class MoneyTransaction : BaseEntity
     public string FromUserName { get; private set; }
 
 
-    public void SetValue( float value)
+    public void SetValue(float value)
     {
         Value = value;
     }
@@ -62,8 +65,9 @@ public class MoneyTransaction : BaseEntity
         Sign = sign;
     }
 
-    public void SetCategory(string name, string icon, string humanName)
+    public void SetCategory(string id, string name, string icon, string humanName)
     {
+        CategoryId = id;
         CategoryName = name;
         CategoryIcon = icon;
         CategoryHumanName = humanName;

@@ -36,7 +36,7 @@ public class NewMessageCommandHandler : IRequestHandler<NewMessageCommand, bool>
 
         var savedData = new MoneyTransaction(
             num.Value, request.MessageId, request.ChatId, isIncome ? "+" : "-",
-            null, null, null, request.MessageDate, DateTime.Now, request.From);
+            null, null, null, null, request.MessageDate, DateTime.Now, request.From);
 
         var dataId = _moneyTransaction.Insert(savedData);
         var keyboard = _botKeyboard.GetCategoryKeyboard(isIncome, dataId);

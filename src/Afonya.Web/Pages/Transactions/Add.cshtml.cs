@@ -7,13 +7,12 @@ using Shared.Contracts;
 
 namespace Afonya.Web.Pages.Transactions
 {
-    public class AddTransactionModel : PageModel
+    public class AddModel : PageModel
     {
-
-        private readonly ILogger<AddTransactionModel> _logger;
+        private readonly ILogger<AddModel> _logger;
         private readonly IMediator _mediator;
 
-        public AddTransactionModel(ILogger<AddTransactionModel> logger, IMediator mediator)
+        public AddModel(ILogger<AddModel> logger, IMediator mediator)
         {
             _logger = logger;
             _mediator = mediator;
@@ -50,6 +49,4 @@ namespace Afonya.Web.Pages.Transactions
             return RedirectToPage("/Transactions/Index");
         }
     }
-
-
 }

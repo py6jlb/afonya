@@ -1,4 +1,4 @@
-using Afonya.Api.Logic.Categories.Queries.GetCategories;
+using Afonya.Api.Logic.MoneyTransaction.Commands.DeleteMoneyTransaction;
 using Afonya.Api.Logic.MoneyTransaction.Queries.GetMoneyTransaction;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -7,12 +7,13 @@ using Shared.Contracts;
 
 namespace Afonya.Web.Pages.Transactions
 {
-    public class EditModel : PageModel
+    public class DeleteModel : PageModel
     {
-        private readonly ILogger<EditModel> _logger;
+
+        private readonly ILogger<DeleteModel> _logger;
         private readonly IMediator _mediator;
 
-        public EditModel(ILogger<EditModel> logger, IMediator mediator)
+        public DeleteModel(ILogger<DeleteModel> logger, IMediator mediator)
         {
             _logger = logger;
             _mediator = mediator;
@@ -21,18 +22,23 @@ namespace Afonya.Web.Pages.Transactions
         [BindProperty(SupportsGet = true)]
         public string Id { get; set; }
 
-        public IEnumerable<CategoryDto> Categories { get; set; }
-
         public MoneyTransactionDto Transaction { get; set; }
 
         public async Task OnGetAsync()
         {
-            var categories = await _mediator.Send(new GetCategoriesQuery { All = false });
-            Categories = categories;
-
             var transaction = await _mediator.Send(new GetMoneyTransactionQuery { Id = Id })
                 ?? throw new Exception("Транзакция не найдена");
             Transaction = transaction;
+        }
+        
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var command = new DeleteMoneyTransactionCommand
+            {
+                Id = Id
+            };
+            await _mediator.Send(command);
+            return RedirectToPage("/Transactions/Index");
         }
     }
 }

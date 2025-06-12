@@ -1,7 +1,45 @@
-﻿@page
-@model Afonya.Web.Pages.Transactions.EditTransactionModel
+﻿@page "{id}"
+@model Afonya.Web.Pages.Transactions.EditModel
 @{
-     ViewData["Title"] = "Редактирование транзакции";
+    ViewData["Title"] = "Редактирование транзакции";
 }
 
+<form method="post">
+    <div class="mb-3">
+        <label for="sign" class="form-label">Тип операции</label>
+        <select id="sign" name="sign" class="form-select" aria-describedby="signHelp" asp-for="@Model.Transaction.Sign">
+            <option value="-" selected>Расход</option>
+            <option value="+">Приход</option>
+        </select>
+        <div id="signHelp" class="form-text">Выберете Тип операции</div>
+    </div>
+    <div class="mb-3">
+        <label for="sum" class="form-label">Сумма</label>
+        <input type="number" name="value" min="1" step="0.1" class="form-control" id="sum" aria-describedby="sumHelp"
+            asp-for="@Model.Transaction.Value">
+        <div id="sumHelp" class="form-text">Введите сумму</div>
+    </div>
+    <div class="mb-3">
+        <label for="date" class="form-label">Дата операции</label>
+        <input type="date" name="date" class="form-control" id="date" aria-describedby="dateHelp"
+            asp-for="@Model.Transaction.TransactionDate">
+        <div id="dateHelp" class="form-text">Введите дату операции</div>
+    </div>
 
+    <div class="mb-3">
+        <label for="category" class="form-label">Категория</label>
+        <select id="category" name="categoryId" class="form-select" aria-describedby="categoryHelp"
+            asp-for="@Model.Transaction.CategoryId">
+            <option value="-1"></option>
+            @foreach (var category in Model.Categories)
+            {
+                <option value="@category.Id">@category.Icon@category.HumanName</option>
+            }
+        </select>
+        <div id="categoryHelp" class="form-text">Выберете категорию операции</div>
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a class="btn btn-secondary" asp-area="" asp-page="/Transactions/Index">Отмена</a>
+    </div>
+</form>

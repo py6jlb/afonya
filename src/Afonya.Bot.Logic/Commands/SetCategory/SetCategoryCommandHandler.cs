@@ -13,7 +13,7 @@ public class SetCategoryCommandHandler : IRequestHandler<SetCategoryCommand, boo
     private readonly ITelegramBotClient _botClient;
     private readonly IBotKeyboardService _botKeyboard;
 
-    public SetCategoryCommandHandler(IMoneyTransactionRepository moneyTransaction, 
+    public SetCategoryCommandHandler(IMoneyTransactionRepository moneyTransaction,
         ILogger<SetCategoryCommandHandler> logger, ITelegramBotClient botClient, IBotKeyboardService botKeyboard)
     {
         _moneyTransaction = moneyTransaction;
@@ -34,7 +34,7 @@ public class SetCategoryCommandHandler : IRequestHandler<SetCategoryCommand, boo
             return false;
         }
 
-        data.SetCategory(request.CallbackData.Category.Name, request.CallbackData.Category.Icon, request.CallbackData.Category.HumanName);
+        data.SetCategory(request.CallbackData.Category.Id.ToString(), request.CallbackData.Category.Name, request.CallbackData.Category.Icon, request.CallbackData.Category.HumanName);
         _moneyTransaction.Update(data);
 
         await _botClient.AnswerCallbackQuery(request.CallbackQueryId, $"Категория выбрана", cancellationToken: cancellationToken);

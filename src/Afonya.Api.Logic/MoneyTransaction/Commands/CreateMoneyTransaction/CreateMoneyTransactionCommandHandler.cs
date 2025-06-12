@@ -1,6 +1,5 @@
 using System;
 using Afonya.Domain.Repositories;
-using Afonya.Infrastructure.Repositories;
 using MediatR;
 using Afonya.Domain.Entities;
 
@@ -23,6 +22,7 @@ public class CreateMoneyTransactionCommandHandler : IRequestHandler<CreateMoneyT
         var newTransaction = new Domain.Entities.MoneyTransaction(
             request.Value,
             request.Sign,
+            category.Id.ToString(),
             category.Name,
             category.HumanName,
             category.Icon,

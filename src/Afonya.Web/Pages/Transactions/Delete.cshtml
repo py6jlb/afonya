@@ -1,0 +1,21 @@
+﻿@page "{id}"
+@model Afonya.Web.Pages.Transactions.DeleteModel
+@{
+    ViewData["Title"] = "Удаление транзакции";
+}
+
+<form method="post">
+    <dl class="mb-2">
+        <dt>Дата:</dt>
+        <dd>@Model.Transaction.RegisterDate.ToString("D")</dd>
+        <dt>Сумма:</dt>
+        <dd>@Model.Transaction.Sign@Model.Transaction.Value</dd>
+        <dt>Категория:</dt>
+        <dd>@Model.Transaction.CategoryIcon@Model.Transaction.CategoryHumanName</dd>
+    </dl>
+    <p>Вы уверены, что хотите удалить транзакцию?</p>
+    <div class="mb-3"></div>
+    <button type="submit" class="btn btn-danger">Удалить</button>
+    <a class="btn btn-secondary" asp-area="" asp-page="/Transactions/Index">Отмена</a>
+    </div>
+</form>

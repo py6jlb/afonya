@@ -7,6 +7,7 @@ public class MoneyTransactionDto
     public int MessageId { get; set; }
     public long ChatId { get; set; }
     public string Sign { get; set; }
+    public string CategoryId { get; set; }
     public string CategoryName { get; set; }
     public string CategoryHumanName { get; set; }
     public string CategoryIcon { get; set; }

@@ -24,7 +24,7 @@ public class UpdateMoneyTransactionCommandHandler : IRequestHandler<UpdateMoneyT
 
         entity.SetValue(request.MoneyTransaction.Value);
         entity.SetSign(request.MoneyTransaction.Sign);
-        entity.SetCategory(request.MoneyTransaction.CategoryName, 
+        entity.SetCategory(request.MoneyTransaction.CategoryId, request.MoneyTransaction.CategoryName, 
             request.MoneyTransaction.CategoryIcon,
             request.MoneyTransaction.CategoryHumanName);
         entity.SetRegisterDate(request.MoneyTransaction.RegisterDate);
