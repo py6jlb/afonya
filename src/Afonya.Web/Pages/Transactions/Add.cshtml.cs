@@ -3,6 +3,7 @@ using Afonya.Api.Logic.MoneyTransaction.Commands.CreateMoneyTransaction;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Shared.Contracts;
 
 namespace Afonya.Web.Pages.Transactions
@@ -18,7 +19,7 @@ namespace Afonya.Web.Pages.Transactions
             _mediator = mediator;
         }
 
-        public IEnumerable<CategoryDto> Categories { get; set; }
+        public IEnumerable<SelectListItem> Categories { get; set; }
 
         [BindProperty]
         public string Sign { get; set; } = "-";
@@ -26,13 +27,17 @@ namespace Afonya.Web.Pages.Transactions
         public float Value { get; set; } = 0f;
         [BindProperty]
         public DateTime Date { get; set; } = DateTime.Now;
-        [BindProperty]
+        [BindProperty(Name = "category")]
         public string? CategoryId { get; set; }
 
         public async Task OnGetAsync()
         {
             var data = await _mediator.Send(new GetCategoriesQuery { All = false });
-            Categories = data;
+            Categories = data.Select(x => new SelectListItem
+            {
+                Value = x.Id,
+                Text = $"{x.Icon}{x.HumanName}"
+            });
         }
 
         public async Task<IActionResult> OnPostAsync()

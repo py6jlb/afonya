@@ -3,6 +3,7 @@ using Afonya.Api.Logic.MoneyTransaction.Queries.GetMoneyTransaction;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Shared.Contracts;
 
 namespace Afonya.Web.Pages.Transactions
@@ -21,14 +22,18 @@ namespace Afonya.Web.Pages.Transactions
         [BindProperty(SupportsGet = true)]
         public string Id { get; set; }
 
-        public IEnumerable<CategoryDto> Categories { get; set; }
+        public IEnumerable<SelectListItem> Categories { get; set; }
 
         public MoneyTransactionDto Transaction { get; set; }
-
+ 
         public async Task OnGetAsync()
         {
             var categories = await _mediator.Send(new GetCategoriesQuery { All = false });
-            Categories = categories;
+            Categories = categories.Select(x => new SelectListItem
+            {
+                Value = x.Id,
+                Text = $"{x.Icon}{x.HumanName}"
+            });
 
             var transaction = await _mediator.Send(new GetMoneyTransactionQuery { Id = Id })
                 ?? throw new Exception("Транзакция не найдена");

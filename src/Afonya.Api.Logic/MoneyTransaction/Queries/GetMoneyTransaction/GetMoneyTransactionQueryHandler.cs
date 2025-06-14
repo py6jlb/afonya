@@ -23,6 +23,7 @@ public class GetMoneyTransactionQueryHandler : IRequestHandler<GetMoneyTransacti
             CategoryName = t.CategoryName,
             CategoryHumanName = t.CategoryHumanName,
             CategoryIcon = t.CategoryIcon,
+            CategoryId = t.CategoryId,
             Value = t.Value,
             Sign = t.Sign,
             RegisterDate = t.RegisterDate,

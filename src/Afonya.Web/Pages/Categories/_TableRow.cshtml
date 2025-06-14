@@ -1,0 +1,21 @@
+﻿@model CategoryDto
+
+<tr>
+  <td>@Model.Icon</td>
+  <td>@Model.Name</td>
+  <td>@Model.HumanName</td>
+  <td>@(Model.IsActive ? "Да": "Нет")</td>
+  <td>
+    @if(Model.IsActive){
+        <a class="icon-link text-decoration-none me-3" asp-page="Toggle" asp-route-id="@Model.Id"
+            data-bs-toggle="tooltip" data-bs-placement="top" title="Отключить">
+            <i class="bi bi-toggle-off"></i>
+        </a>
+    }else{
+        <a class="icon-link text-decoration-none me-3" asp-page="Toggle" asp-route-id="@Model.Id"
+            data-bs-toggle="tooltip" data-bs-placement="top" title="Включить">
+            <i class="bi bi-toggle-on"></i>
+        </a>
+    }    
+  </td>
+</tr>

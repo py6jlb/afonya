@@ -1,6 +1,5 @@
 using Afonya.Api.Logic.Management.Queries.GetUsers;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Shared.Contracts;
 
