@@ -4,18 +4,25 @@
   <td>@Model.Icon</td>
   <td>@Model.Name</td>
   <td>@Model.HumanName</td>
-  <td>@(Model.IsActive ? "Да": "Нет")</td>
+  <td>@(Model.IsActive ? "Да" : "Нет")</td>
   <td>
-    @if(Model.IsActive){
-        <a class="icon-link text-decoration-none me-3" asp-page="Toggle" asp-route-id="@Model.Id"
-            data-bs-toggle="tooltip" data-bs-placement="top" title="Отключить">
-            <i class="bi bi-toggle-off"></i>
-        </a>
-    }else{
-        <a class="icon-link text-decoration-none me-3" asp-page="Toggle" asp-route-id="@Model.Id"
-            data-bs-toggle="tooltip" data-bs-placement="top" title="Включить">
-            <i class="bi bi-toggle-on"></i>
-        </a>
-    }    
+    <form method="post">
+      <input type="text" hidden name="id" value="@Model.Id" />
+      <input type="text" hidden name="icon" value="@Model.Icon" />
+      <input type="text" hidden name="name" value="@Model.Name" />
+      <input type="text" hidden name="humanName" value="@Model.HumanName" />
+      <input type="text" hidden name="isActive" value="@(Model.IsActive ? "1" :"0")" />
+      <button type="submit" class="btn btn-outline-primary btn-sm" asp-page-handler="Toggle">
+        @if (Model.IsActive)
+        {
+          <i class="bi bi-toggle-on"></i>
+        }
+        else
+        {
+          <i class="bi bi-toggle-off"></i>
+        }
+      </button>
+
+    </form>
   </td>
 </tr>

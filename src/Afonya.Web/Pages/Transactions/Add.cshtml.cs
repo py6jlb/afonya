@@ -32,7 +32,7 @@ namespace Afonya.Web.Pages.Transactions
 
         public async Task OnGetAsync()
         {
-            var data = await _mediator.Send(new GetCategoriesQuery { All = false });
+            var data = await _mediator.Send(new GetCategoriesQuery { OnlyActive = false });
             Categories = data.Select(x => new SelectListItem
             {
                 Value = x.Id,

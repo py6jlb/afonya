@@ -15,7 +15,7 @@ public class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesQuery, IRe
 
     public Task<IReadOnlyCollection<CategoryDto>> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
     {
-        var categories = _categoryRepository.Get(request.All);
+        var categories = _categoryRepository.Get(request.OnlyActive);
         var result = categories.Select(x => 
             new CategoryDto
             {

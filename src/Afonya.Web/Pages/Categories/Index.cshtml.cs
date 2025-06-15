@@ -1,5 +1,7 @@
+using Afonya.Api.Logic.Categories.Commands.UpdateCategory;
 using Afonya.Api.Logic.Categories.Queries.GetCategories;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Shared.Contracts;
 
@@ -21,7 +23,24 @@ public class IndexModel : PageModel
 
     public async Task OnGetAsync()
     {
-        var data = await _mediator.Send(new GetCategoriesQuery { All = true });
+        var data = await _mediator.Send(new GetCategoriesQuery { OnlyActive = false });
         Categories = data;
+    }
+
+    public async Task<IActionResult> OnPostToggle(string id, string icon, string name, string humanName, string isActive)
+    {
+        var request = new UpdateCategoryCommand
+        {
+            Category = new CategoryDto
+            {
+                Id = id,
+                HumanName = humanName,
+                Icon = icon,
+                IsActive = isActive != "1",
+                Name = name
+            }
+        };
+        await _mediator.Send(request);
+        return RedirectToPage("/Categories/Index");
     }
 }

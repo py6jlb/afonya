@@ -25,7 +25,7 @@ public class CategoriesController : ControllerBase
     [HttpGet]
     public async Task<IReadOnlyCollection<CategoryDto>> Get([FromQuery, SwaggerParameter("Включая неактивные")] bool all = false)
     {
-        var data = await _mediator.Send(new GetCategoriesQuery { All = all });
+        var data = await _mediator.Send(new GetCategoriesQuery { OnlyActive = all });
         return data;
     }
 
