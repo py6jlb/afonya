@@ -1,6 +1,8 @@
 ﻿using Afonya.Api.Logic.Categories.Commands.AddCategory;
 using Afonya.Api.Logic.Categories.Queries.GetCategoryCount;
+using Afonya.Api.Logic.Management.Commands.CreateUser;
 using Afonya.Api.Logic.Management.Commands.DeleteWebHook;
+using Afonya.Bot.Interfaces.Dto;
 using MediatR;
 using Shared.Contracts;
 
@@ -12,7 +14,7 @@ public class Starter : IHostedService
     private readonly IConfiguration _configuration;
 
     public Starter(
-        ILogger<Starter> logger, 
+        ILogger<Starter> logger,
         IServiceScopeFactory scopeFactory,
         IConfiguration configuration)
     {
@@ -50,7 +52,7 @@ public class Starter : IHostedService
         }
         var categories = _configuration.GetSection("Categories").GetChildren().ToArray();
         _logger.LogDebug("Получено {Count} категорий, из файла конфигурации.", categories.Count());
-        
+
         foreach (var category in categories)
         {
             var categoryDto = category.Get<CategoryDto>();
@@ -60,6 +62,30 @@ public class Starter : IHostedService
             {
                 NewCategory = categoryDto
             }, cancellationToken);
+        }
+    }
+
+    public async Task InitUsers(CancellationToken cancellationToken)
+    {
+        var mediator = Scope.ServiceProvider.GetRequiredService<IMediator>();
+        var configuration = Scope.ServiceProvider.GetRequiredService<IConfiguration>();
+        var users = configuration.GetSection("Users").Get<UserConfig[]>() ?? [];
+        foreach (var userConfig in users)
+        {
+            try
+            {
+                await mediator.Send(new CreateUserCommand
+                {
+                    Login = userConfig.Username,
+                    Password = userConfig.Password,
+                    IsAdmin = userConfig.IsAdmin
+                }, cancellationToken);
+                _logger.LogInformation("Пользователь создан: {username}", userConfig.Username);
+            }
+            catch (Exception error)
+            {
+                _logger.LogInformation("Пользователь не создан: {message}", error.Message);
+            }
         }
     }
 }

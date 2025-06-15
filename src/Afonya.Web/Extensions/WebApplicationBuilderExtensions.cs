@@ -134,8 +134,9 @@ public static class WebApplicationBuilderExtensions
                 var opt = sp.GetRequiredService<IOptions<BotConfiguration>>().Value;
                 return new TelegramBotClient(opt.BotToken, httpClient);
             });
-        if (!botConfig.UsePooling) return builder;
         builder.Services.AddScoped<IUpdateHandler, UpdateHandler>();
+
+        if (!botConfig.RunPooling) return builder;
         builder.Services.AddHostedService<PollingService>();
 
         return builder;
