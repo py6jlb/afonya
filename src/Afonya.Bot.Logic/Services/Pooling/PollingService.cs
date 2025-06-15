@@ -7,49 +7,72 @@ using Telegram.Bot.Types.Enums;
 
 namespace Afonya.Bot.Logic.Services.Pooling;
 
-public class PollingService : BackgroundService
+public class PollingService
 {
     private readonly ILogger _logger;
-    private readonly IServiceScopeFactory _scopeFactory;
+    private readonly ITelegramBotClient _botClient;
+    private readonly IUpdateHandler _updateHandler;
+    private CancellationTokenSource _cancelTokenSource;
+    private bool _running = false;
 
-    public PollingService(ILogger<PollingService> logger, IServiceScopeFactory scopeFactory)
+    public PollingService(ILogger<PollingService> logger, ITelegramBotClient botClient, IUpdateHandler updateHandler)
     {
         _logger = logger;
-        _scopeFactory = scopeFactory;
+        _botClient = botClient;
+        _updateHandler = updateHandler;
+        _cancelTokenSource = new CancellationTokenSource();
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    public async Task Start()
     {
-        _logger.LogInformation("Starting polling service");
-        await DoWork(stoppingToken);
-    }
-
-    private async Task DoWork(CancellationToken stoppingToken)
-    {
-        while (!stoppingToken.IsCancellationRequested)
+        try
         {
-            try
+            if (_running) return;
+            _cancelTokenSource = new CancellationTokenSource();
+            var stoppingToken = _cancelTokenSource.Token;
+            var receiverOptions = new ReceiverOptions()
             {
-                using var scope = _scopeFactory.CreateScope();
-                var botClient = scope.ServiceProvider.GetRequiredService<ITelegramBotClient>();
-                var updateHandlers = scope.ServiceProvider.GetRequiredService<IUpdateHandler>();
+                AllowedUpdates = Array.Empty<UpdateType>(),
+                DropPendingUpdates = true,
+            };
 
-                var receiverOptions = new ReceiverOptions()
-                {
-                    AllowedUpdates = Array.Empty<UpdateType>(),
-                    DropPendingUpdates = true,
-                };
+            var me = await _botClient.GetMe(stoppingToken);
+            _logger.LogInformation("Начато получение событий для бота {BotName}", me.Username ?? "Afonya");
+            await _botClient.DeleteWebhook(cancellationToken: stoppingToken);
+            var task = _botClient.ReceiveAsync(updateHandler: _updateHandler,
+                receiverOptions: receiverOptions,
+                cancellationToken: stoppingToken);
+            SetState(true);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Polling failed with exception: {Exception}", ex);
+            SetState(false);
+        }
+    }
 
-                var me = await botClient.GetMe(stoppingToken);
-                _logger.LogInformation("Начато получение событий для бота {BotName}", me.Username ?? "Afonya");
-                await botClient.DeleteWebhook(cancellationToken: stoppingToken);
-                await botClient.ReceiveAsync(updateHandler: updateHandlers, receiverOptions: receiverOptions, cancellationToken: stoppingToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Polling failed with exception: {Exception}", ex);
-                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
-            }
+    public Task Stop()
+    {
+        _cancelTokenSource.Cancel();
+        SetState(false);
+        return Task.CompletedTask;
+    }
+
+    public Task<bool> IsRunning()
+    {
+        return Task.FromResult(_running);
+    }
+
+    private void SetState(bool state)
+    {
+        if (!state)
+        {
+            _cancelTokenSource.Dispose();
+        }
+        object locker = new();
+        lock (locker)
+        {
+            _running = state;
         }
     }
 }

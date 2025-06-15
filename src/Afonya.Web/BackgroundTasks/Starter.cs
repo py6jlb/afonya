@@ -1,7 +1,6 @@
 ﻿using Afonya.Api.Logic.Categories.Commands.AddCategory;
 using Afonya.Api.Logic.Categories.Queries.GetCategoryCount;
 using Afonya.Api.Logic.Management.Commands.CreateUser;
-using Afonya.Api.Logic.Management.Commands.DeleteWebHook;
 using Afonya.Bot.Interfaces.Dto;
 using MediatR;
 using Shared.Contracts;
@@ -29,15 +28,14 @@ public class Starter : IHostedService
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         await InitCategories(cancellationToken);
+        await InitUsers(cancellationToken);
     }
 
-    public async Task StopAsync(CancellationToken cancellationToken)
+    public Task StopAsync(CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Завершение работы приложение, попытка отключить webhook.");
-        var mediator = Scope.ServiceProvider.GetRequiredService<IMediator>();
-        await mediator.Send(new DeleteWebHookCommand(), cancellationToken);
+        _logger.LogDebug("Завершение работы приложение");
         Scope.Dispose();
-
+        return Task.CompletedTask;
     }
 
     private async Task InitCategories(CancellationToken cancellationToken)
