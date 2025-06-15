@@ -95,9 +95,9 @@ public class StatisticsService : IStatisticsService
                 CategoryId = c.Id.ToString(),
                 CategoryName = c.HumanName,
                 Minus = categoryMinusValue,
-                MinusPercent = minusPercents,
+                MinusPercent = Math.Round(minusPercents, 2),
                 Plus = categoryPlusValue,
-                PlusPercent = plusPercents
+                PlusPercent = Math.Round(plusPercents, 2),
             };
             items.Add(item);
         }
