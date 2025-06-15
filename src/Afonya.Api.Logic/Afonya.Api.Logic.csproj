@@ -11,6 +11,7 @@
     <ProjectReference Include="../Afonya.Bot.Interfaces/Afonya.Bot.Interfaces.csproj" />
     <ProjectReference Include="../Afonya.Infrastructure/Afonya.Infrastructure.csproj" />
     <ProjectReference Include="../Shared/Shared.csproj" />
+    <ProjectReference Include="..\Afonya.Shared.Interfaces\Afonya.Shared.Interfaces.csproj" />
   </ItemGroup>
   
   <ItemGroup>

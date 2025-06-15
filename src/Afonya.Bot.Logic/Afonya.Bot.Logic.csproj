@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Afonya.Shared.Interfaces\Afonya.Shared.Interfaces.csproj" />
       <ProjectReference Include="..\Common\Common.csproj" />
       <ProjectReference Include="..\Afonya.Bot.Interfaces\Afonya.Bot.Interfaces.csproj" />
     </ItemGroup>

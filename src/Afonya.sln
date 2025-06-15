@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Afonya.Api.Logic", "Afonya.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Afonya.Api.Interfaces", "Afonya.Api.Interfaces\Afonya.Api.Interfaces.csproj", "{318E3D50-23E3-4034-B63E-E2D36164597A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Afonya.Shared.Interfaces", "Afonya.Shared.Interfaces\Afonya.Shared.Interfaces.csproj", "{831D4E91-055B-4E8C-8BA0-C30FCED12624}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Afonya.Shared.Logic", "Afonya.Shared.Logic\Afonya.Shared.Logic.csproj", "{12C085F5-C6B5-415E-9C04-B06678C9AEE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +67,14 @@ Global
 		{318E3D50-23E3-4034-B63E-E2D36164597A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{318E3D50-23E3-4034-B63E-E2D36164597A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{318E3D50-23E3-4034-B63E-E2D36164597A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{831D4E91-055B-4E8C-8BA0-C30FCED12624}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{831D4E91-055B-4E8C-8BA0-C30FCED12624}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{831D4E91-055B-4E8C-8BA0-C30FCED12624}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{831D4E91-055B-4E8C-8BA0-C30FCED12624}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12C085F5-C6B5-415E-9C04-B06678C9AEE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12C085F5-C6B5-415E-9C04-B06678C9AEE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12C085F5-C6B5-415E-9C04-B06678C9AEE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12C085F5-C6B5-415E-9C04-B06678C9AEE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

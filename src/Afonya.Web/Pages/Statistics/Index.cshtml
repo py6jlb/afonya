@@ -1,0 +1,46 @@
+﻿@page
+@model Afonya.Web.Pages.Statistics.IndexModel
+@{
+    ViewData["Title"] = "Статистика";
+}
+
+<div itemid="=content">
+    <div class="container-fluid">
+        <div class="d-flex flex-row">
+            <h4 class="p-2 mb-1 font-weight-bold text-primary">Статистика за @($"{Model.Date.Month}".Length == 1 ?
+                                $"0{Model.Date.Month}" : $"{Model.Date.Month}").@(Model.Date.Year)
+            </h4>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Категория</th>
+                    <th scope="col">Расход</th>
+                    <th scope="col">Расход(проценты)</th>
+                    <th scope="col">Приход</th>
+                    <th scope="col">Приход(проценты)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var stat in Model.Statistics.ByCategories)
+                {
+                    <tr>
+                        <th scope="row">@stat.CategoryIcon@stat.CategoryName</th>
+                        <td>@(stat.Minus == 0 ? "-" : stat.Minus)</td>
+                        <td>@(stat.MinusPercent == 0 ? "-" : stat.MinusPercent)</td>
+                        <td>@(stat.Plus == 0 ? "-" : stat.Plus)</td>
+                        <td>@(stat.PlusPercent == 0 ? "-" : stat.PlusPercent)</td>
+                    </tr>
+                }
+                <tr>
+                    <th scope="row">ИТОГО</th>
+                    <td>@(Model.Statistics.TotalMinus == 0 ? "-" : Model.Statistics.TotalMinus)</td>
+                    <td>--</td>
+                    <td>@(Model.Statistics.TotalPlus == 0 ? "-" : Model.Statistics.TotalPlus)</td>
+                    <td>--</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

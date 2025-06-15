@@ -22,6 +22,8 @@ using Afonya.Api.Interfaces.Services;
 using Afonya.Api.Logic.Services;
 using Afonya.Api.Logic.Management.Commands.CreateUser;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Afonya.Shared.Interfaces;
+using Afonya.Shared.Logic.Services;
 
 namespace Afonya.Web.Extensions;
 
@@ -72,6 +74,9 @@ public static class WebApplicationBuilderExtensions
         var connectionString = config.GetConnectionString("Default")
             ?? throw new NullReferenceException("Отсутствует строка подключения к БД");
         builder.Services.AddSingleton(_ => new DbContext(connectionString));
+
+        //shared logic
+        builder.Services.AddTransient<IStatisticsService, StatisticsService>();
 
         builder.Services.AddTransient<IUserRepository, UserRepository>();
         builder.Services.AddTransient<IMoneyTransactionRepository, MoneyTransactionRepository>();
