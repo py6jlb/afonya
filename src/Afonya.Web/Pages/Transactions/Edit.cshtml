@@ -5,6 +5,7 @@
 }
 
 <form method="post">
+    <input type="text" name="id" hidden class="form-control" id="sum" asp-for="@Model.Transaction.Id">
     <div class="mb-3">
         <label for="sign" class="form-label">Тип операции</label>
         <select id="sign" name="sign" class="form-select" aria-describedby="signHelp" asp-for="@Model.Transaction.Sign">
@@ -21,11 +22,10 @@
     </div>
     <div class="mb-3">
         <label for="date" class="form-label">Дата операции</label>
-        <input type="date" name="date" class="form-control" id="date" aria-describedby="dateHelp"
+        <input type="date" name="transactionDate" class="form-control" id="date" aria-describedby="dateHelp"
             asp-for="@Model.Transaction.TransactionDate">
         <div id="dateHelp" class="form-text">Введите дату операции</div>
     </div>
-
     <div class="mb-3">
         <label for="category" class="form-label">Категория</label>
         <select id="category" name="categoryId" class="form-select" aria-describedby="categoryHelp"

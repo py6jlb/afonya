@@ -1,0 +1,17 @@
+﻿@page "{id}"
+@model Afonya.Web.Pages.Users.DeleteModel
+@{
+    ViewData["Title"] = "Удаление пользователя";
+}
+
+<form method="post">
+    <dl class="mb-2">
+        <dt>Логин:</dt>
+        <dd>@Model.User.Login</dd>
+    </dl>
+    <p>Вы уверены, что хотите удалить пользователя?</p>
+    <div class="mb-3"></div>
+    <button type="submit" class="btn btn-danger">Удалить</button>
+    <a class="btn btn-secondary" asp-area="" asp-page="/Users/Index">Отмена</a>
+    </div>
+</form>

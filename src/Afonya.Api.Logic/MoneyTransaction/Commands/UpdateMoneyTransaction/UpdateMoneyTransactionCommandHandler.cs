@@ -7,29 +7,29 @@ namespace Afonya.Api.Logic.MoneyTransaction.Commands.UpdateMoneyTransaction;
 public class UpdateMoneyTransactionCommandHandler : IRequestHandler<UpdateMoneyTransactionCommand, bool>
 {
     private readonly IMoneyTransactionRepository _moneyTransactionRepository;
+    private readonly ICategoryRepository _categoryRepository;
 
-    public UpdateMoneyTransactionCommandHandler(IMoneyTransactionRepository moneyTransactionRepository)
+    public UpdateMoneyTransactionCommandHandler(IMoneyTransactionRepository moneyTransactionRepository, ICategoryRepository categoryRepository)
     {
         _moneyTransactionRepository = moneyTransactionRepository;
+        _categoryRepository = categoryRepository;
     }
 
     public Task<bool> Handle(UpdateMoneyTransactionCommand request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(request.MoneyTransaction.Id))
-            throw new AfonyaErrorException("Отсуствует id записи для обновления.");
+        if (string.IsNullOrWhiteSpace(request.Id))
+            throw new AfonyaErrorException("Отсутствует id записи для обновления.");
 
-        var entity = _moneyTransactionRepository.Get(request.MoneyTransaction.Id);
-        if (entity == null)
-            throw new AfonyaErrorException("Транзакция для обновления не найдена");
+        var category = _categoryRepository.Get(request.CategoryId) ?? throw new AfonyaErrorException("Отсутствует категория для записи.");
 
-        entity.SetValue(request.MoneyTransaction.Value);
-        entity.SetSign(request.MoneyTransaction.Sign);
-        entity.SetCategory(request.MoneyTransaction.CategoryId, request.MoneyTransaction.CategoryName, 
-            request.MoneyTransaction.CategoryIcon,
-            request.MoneyTransaction.CategoryHumanName);
-        entity.SetRegisterDate(request.MoneyTransaction.RegisterDate);
-        entity.SetTransactionDate(request.MoneyTransaction.TransactionDate);
-        entity.SetUser(request.MoneyTransaction.FromUserName);
+        var entity = _moneyTransactionRepository.Get(request.Id) ?? throw new AfonyaErrorException("Транзакция для обновления не найдена");
+        entity.SetValue(request.Value);
+        entity.SetSign(request.Sign);
+        entity.SetCategory(category.Id.ToString(), category.Name,
+            category.Icon,
+            category.HumanName);
+        entity.SetTransactionDate(request.TransactionDate);
+        entity.SetUser(request.FromUserName);
 
         var res = _moneyTransactionRepository.Update(entity);
         return Task.FromResult(res);

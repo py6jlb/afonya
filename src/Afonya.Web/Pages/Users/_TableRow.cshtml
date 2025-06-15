@@ -1,27 +1,13 @@
 ﻿@model UserDto
 
 <tr>
-    <td>@Model.Login</td>
-    <td>@(Model.IsAdmin ? "Да" : "Нет")
-    </td>
-    <td></td>
-
-    @* <td>
-        <button class="btn btn-danger"
-                hx-get="/EditRow/edit/@Model.Id"
-                hx-trigger="edit" _="on click
-                     if .editing is not empty
-                       Swal.fire({title: 'You are editing another row',
-                                  showCancelButton: true,
-                                  confirmButtonText: 'Edit this row',
-                                  text:'You are already editing a row.  Cancel and continue with @Model.Name?'})
-                       if the result's isConfirmed is false
-                         halt
-                       end
-                       send cancel to .editing
-                     end
-                     trigger edit">
-            Edit
-        </button>
-    </td> *@
+  <td>@Model.Login</td>
+  <td>@(Model.IsAdmin ? "Да" : "Нет")
+  </td>
+  <td>
+    <a class="btn btn-outline-danger btn-sm text-decoration-none me-3" asp-page="Delete" asp-route-id="@Model.Id"
+      data-bs-toggle="tooltip" data-bs-placement="top" title="Удалить">
+      <i class="bi bi-trash"></i>
+    </a>
+  </td>
 </tr>

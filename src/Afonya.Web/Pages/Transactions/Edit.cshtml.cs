@@ -1,4 +1,5 @@
 using Afonya.Api.Logic.Categories.Queries.GetCategories;
+using Afonya.Api.Logic.MoneyTransaction.Commands.UpdateMoneyTransaction;
 using Afonya.Api.Logic.MoneyTransaction.Queries.GetMoneyTransaction;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -24,8 +25,9 @@ namespace Afonya.Web.Pages.Transactions
 
         public IEnumerable<SelectListItem> Categories { get; set; }
 
+        [BindProperty]
         public MoneyTransactionDto Transaction { get; set; }
- 
+
         public async Task OnGetAsync()
         {
             var categories = await _mediator.Send(new GetCategoriesQuery { OnlyActive = false });
@@ -38,6 +40,22 @@ namespace Afonya.Web.Pages.Transactions
             var transaction = await _mediator.Send(new GetMoneyTransactionQuery { Id = Id })
                 ?? throw new Exception("Транзакция не найдена");
             Transaction = transaction;
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var request = new UpdateMoneyTransactionCommand
+            {
+                Id = Transaction.Id,
+                CategoryId = Transaction.CategoryId,
+                FromUserName = User.Identity.Name,
+                Sign = Transaction.Sign,
+                TransactionDate = Transaction.TransactionDate,
+                Value = Transaction.Value
+            };
+
+            await _mediator.Send(request);
+            return RedirectToPage("/Transactions/Index");
         }
     }
 }

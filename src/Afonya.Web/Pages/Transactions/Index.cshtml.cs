@@ -1,5 +1,7 @@
+using System.ComponentModel.DataAnnotations;
 using Afonya.Api.Logic.MoneyTransaction.Queries.GetMoneyTransactions;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Shared.Contracts;
 
@@ -16,22 +18,43 @@ public class IndexModel : PageModel
         _mediator = mediator;
     }
 
-    public int? Month { get; set; }
-    public int? Year { get; set; }
-    public string? AppUser { get; set; }
-    public string? Category { get; set; }
+    [BindProperty, DataType("month")]
+    public DateTime Date { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public int Month { get; set; }
+    [BindProperty(SupportsGet = true)]
+    public int Year { get; set; }
 
     public IEnumerable<MoneyTransactionDto>? Transactions { get; set; }
 
     public async Task OnGetAsync()
     {
+        if (Month == 0)
+        {
+            Month = DateTime.Now.Month;
+        }
+
+        if (Year == 0)
+        {
+            Year = DateTime.Now.Year;
+        }
+
+        Date = new DateTime(Year, Month, 1, 0, 0, 0);
 
         Transactions = await _mediator.Send(new GetMoneyTransactionsQuery
         {
             Month = Month,
             Year = Year,
-            User = AppUser,
-            Category = Category
+            User = null,
+            Category = null
         });
+    }
+
+    public IActionResult OnPost()
+    {
+        var month = Date.Month;
+        var year = Date.Year;
+        return RedirectToPage($"/Transactions/Index", new { month = month, year = year });
     }
 }
