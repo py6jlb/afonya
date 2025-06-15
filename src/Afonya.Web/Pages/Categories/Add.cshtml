@@ -1,0 +1,45 @@
+﻿@page
+@model Afonya.Web.Pages.Categories.AddModel
+@{
+    ViewData["Title"] = "Новая категория";
+}
+
+<form method="post">
+    <div class="mb-3">
+        <label for="code" class="form-label">Код категории</label>
+        <input type="text" name="code" class="form-control" id="code" aria-describedby="codeHelp">
+        <div id="codeHelp" class="form-text">Код категории на латинице без пробелов и спец символов(например:
+            bars_and_cafe)</div>
+    </div>
+    <div class="mb-3">
+        <label for="humanName" class="form-label">Название категории</label>
+        <input type="text" name="humanName" class="form-control" id="humanName" aria-describedby="humanNameHelp">
+        <div id="humanNameHelp" class="form-text">Название категории. То, что будет отображаися в интерфейсе и
+            статистике</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="icon" class="form-label">Иконка категории</label>
+        <input type="text" name="icon" class="form-control emoji-picker" id="icon" aria-describedby="iconHelp">
+        <div id="iconHelp" class="form-text">Иконка для категории, нужна для отображения в боте и для наглядности в
+            интерфейсе</div>
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a class="btn btn-secondary" asp-area="" asp-page="/Categories/Index">Отмена</a>
+    </div>
+</form>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        new lc_emoji_picker('.emoji-picker', {
+            emoji_json_url: '/lib/lc-emoji-picker/emoji-list.min.json',
+            labels: [
+                'вставить emoji',
+                'поиск emoji',
+                '.. нет результатов ..',
+            ]
+        });
+    </script>
+}
