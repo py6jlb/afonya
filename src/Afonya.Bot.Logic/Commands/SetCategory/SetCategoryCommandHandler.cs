@@ -25,21 +25,25 @@ public class SetCategoryCommandHandler : IRequestHandler<SetCategoryCommand, boo
     public async Task<bool> Handle(SetCategoryCommand request, CancellationToken cancellationToken)
     {
         var parts = request.MessageText.Split(": ").Skip(1);
-        var msg = $"{string.Join(": ", parts)}, в категории \"{request.CallbackData.Category.HumanName}\" {request.CallbackData.Category.Icon}";
+        var msg = $"{string.Join(": ", parts)}, в категории \"{request.CallbackData.HumanName}\" {request.CallbackData.Icon}";
         var data = _moneyTransaction.Get(request.CallbackData.DataId);
 
         if (data == null)
         {
-            _logger.LogError("Отсутствуют данные для обновления. {msq}", request.CallbackData.Category);
+            _logger.LogError("Отсутствуют данные для обновления. {catId}, {catName}",
+            request.CallbackData.CategoryId, request.CallbackData.HumanName);
             return false;
         }
 
-        data.SetCategory(request.CallbackData.Category.Id.ToString(), request.CallbackData.Category.Name, request.CallbackData.Category.Icon, request.CallbackData.Category.HumanName);
+        data.SetCategory(request.CallbackData.CategoryId, request.CallbackData.Name,
+            request.CallbackData.Icon, request.CallbackData.HumanName);
         _moneyTransaction.Update(data);
 
-        await _botClient.AnswerCallbackQuery(request.CallbackQueryId, $"Категория выбрана", cancellationToken: cancellationToken);
+        await _botClient.AnswerCallbackQuery(request.CallbackQueryId, $"Категория выбрана",
+            cancellationToken: cancellationToken);
         var deleteKeyboard = _botKeyboard.GetDeleteKeyboard(request.CallbackData.DataId, msg);
-        await _botClient.EditMessageText(request.ChatId, request.MessageId, msg, replyMarkup: deleteKeyboard, cancellationToken: cancellationToken);
+        await _botClient.EditMessageText(request.ChatId, request.MessageId, msg,
+            replyMarkup: deleteKeyboard, cancellationToken: cancellationToken);
         return true;
     }
 }

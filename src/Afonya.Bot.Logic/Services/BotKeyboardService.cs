@@ -30,7 +30,10 @@ public class BotKeyboardService : IBotKeyboardService
             var data = new SetCategoryCallbackData
             {
                 DataId = savedDataId,
-                Category = category
+                CategoryId = category.Id.ToString(),
+                Icon = category.Icon,
+                HumanName = category.HumanName,
+                Name = category.Name
             };
             var callback = new Callback(CallbackCommand.SetCategory, groupId, JsonConvert.SerializeObject(data));
             var callbackId = _callbackRepository.Create(callback);
@@ -85,7 +88,7 @@ public class BotKeyboardService : IBotKeyboardService
             var data = new StatisticsRequestCallbackData { OriginalMessageId = originalMsgId, Year = year, Month = i + 1 };
             var newCallback = new Callback(CallbackCommand.StatisticRequest, groupId, JsonConvert.SerializeObject(data));
             var callbackId = _callbackRepository.Create(newCallback);
-            var month= $"{i+1}".Length == 1 ? $"0{i+1}" : $"{i+1}";
+            var month = $"{i + 1}".Length == 1 ? $"0{i + 1}" : $"{i + 1}";
             buttons.Add(InlineKeyboardButton.WithCallbackData($"{month}.{year}", callbackId.Id.ToString()));
         }
         var buttonRows = buttons.ToArray().SplitArray(4).ToList();
