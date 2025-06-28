@@ -1,0 +1,24 @@
+﻿@page "{id}"
+@model Afonya.Web.Pages.Users.EditModel
+@{
+    ViewData["Title"] = "Редактирование пользователя";
+}
+
+<form method="post">
+    <input type="text" hidden class="form-control" id="sum" asp-for="@Model.AppUser.Id">
+    <div class="mb-3">
+        <label for="login" class="form-label">Логин</label>
+        <input type="text" class="form-control" id="login" aria-describedby="loginHelp"
+            asp-for="@Model.AppUser.Login">
+        <div id="loginHelp" class="form-text">Введите логин. Для сопоставления транзакций записанных через бота, логин
+            должен быть такой же как ник в телеграмм.</div>
+    </div>
+    <div class="mb-3">
+        <input type="checkbox" class="form-check-input" id="isAdmin" asp-for="@Model.AppUser.IsAdmin">
+        <label for="isAdmin" class="form-label">Пользователь является администратором</label>
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a class="btn btn-secondary" asp-area="" asp-page="/Users/Index">Отмена</a>
+    </div>
+</form>

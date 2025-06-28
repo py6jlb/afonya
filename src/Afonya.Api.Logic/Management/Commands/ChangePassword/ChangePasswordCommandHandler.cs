@@ -3,10 +3,11 @@ using Afonya.Api.Logic.Services;
 using MediatR;
 using Shared.Contracts;
 using Afonya.Api.Interfaces.Services;
+using Afonya.Domain.Exceptions;
 
 namespace Afonya.Api.Logic.Management.Commands.ChangePassword;
 
-public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, UserDto?>
+public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, bool>
 {
     private readonly IUserRepository _userRepository;
     private readonly IHashService _hashService;
@@ -16,15 +17,13 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
         _userRepository = userRepository;
         _hashService = hashService;
     }
-    public Task<UserDto?> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
+    public Task<bool> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(request.Id) || string.IsNullOrWhiteSpace(request.Password)) 
-            return Task.FromResult<UserDto?>(null);
+        if (string.IsNullOrWhiteSpace(request.Id) || string.IsNullOrWhiteSpace(request.Password))
+            throw new AfonyaErrorException("Неверные параметры запроса");
 
         var hash = _hashService.HashPassword(request.Password);
         var result = _userRepository.ChangePassword(request.Id, hash);
-        return result == null ?
-            Task.FromResult<UserDto?>(null) :
-            Task.FromResult<UserDto?>(new UserDto(result.Id.ToString(), result.Login, result.IsAdmin));
+        return Task.FromResult(result);
     }
 }

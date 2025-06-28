@@ -27,4 +27,9 @@ public class User : BaseEntity
     {
         this.IsAdmin = isAdmin;
     }
+
+    public void SetLogin(string login)
+    {
+        this.Login = login;
+    }
 }

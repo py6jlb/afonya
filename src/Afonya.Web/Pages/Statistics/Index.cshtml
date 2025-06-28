@@ -6,7 +6,7 @@
 
 <div itemid="=content">
     <div class="container-fluid">
-        <form method="post" class="row">
+        <form method="post" class="row mb-3">
             <div class="col-1">
                 <button type="submit" class="btn btn-primary">Обновить</button>
             </div>
@@ -14,44 +14,127 @@
                 <input type="month" name="date" class="form-control" id="date" asp-for="@Model.Date">
             </div>
         </form>
-        <div class="row">
-            <div class="col-12">
-                <h4 class="p-2 mb-1 font-weight-bold text-primary">Статистика за @($"{Model.Month}".Length == 1 ?
-                                        $"0{Model.Month}" : $"{Model.Month}").@(Model.Year)
-                </h4>
+        <ul class="nav nav-tabs">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="table-tab" data-bs-toggle="tab" data-bs-target="#table"
+                    type="button" role="tab" aria-controls="table" aria-selected="true">Таблица</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="graph-tab" data-bs-toggle="tab" data-bs-target="#graph" type="button"
+                    role="tab" aria-controls="graph">График</button>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="table" role="tabpanel" aria-labelledby="table-tab">
+                <partial name="_Table" model="@Model" />
             </div>
-
+            <div class="tab-pane fade" id="graph" role="tabpanel" aria-labelledby="graph-tab">
+                <div style="width: 100%;">
+                    <h4 class="ps-4 mt-4">Расходы(всего @Model.Statistics.TotalMinus руб)</h4>
+                    <canvas id="graph-minus"></canvas>
+                    <h4 class="ps-4 mt-4">Доходы(всего @Model.Statistics.TotalPlus руб)</h4>
+                    <canvas id="graph-plus"></canvas>
+                </div>
+            </div>
         </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Расход(руб)</th>
-                    <th scope="col">Расход(%)</th>
-                    <th scope="col">Приход(руб)</th>
-                    <th scope="col">Приход(%)</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var stat in Model.Statistics.ByCategories)
-                {
-                    <tr>
-                        <th scope="row">@stat.CategoryIcon@stat.CategoryName</th>
-                        <td>@(stat.Minus == 0 ? "-" : stat.Minus)</td>
-                        <td>@(stat.MinusPercent == 0 ? "-" : stat.MinusPercent)</td>
-                        <td>@(stat.Plus == 0 ? "-" : stat.Plus)</td>
-                        <td>@(stat.PlusPercent == 0 ? "-" : stat.PlusPercent)</td>
-                    </tr>
-                }
-                <tr>
-                    <th scope="row">ИТОГО</th>
-                    <td>@(Model.Statistics.TotalMinus == 0 ? "-" : Model.Statistics.TotalMinus)</td>
-                    <td>--</td>
-                    <td>@(Model.Statistics.TotalPlus == 0 ? "-" : Model.Statistics.TotalPlus)</td>
-                    <td>--</td>
-                </tr>
-            </tbody>
-        </table>
     </div>
-
 </div>
+
+@section Scripts {
+    <script src="~/lib/chartjs/chart.umd.min.js"></script>
+    <script>
+        const t = @Json.Serialize(Model.Statistics);
+        const backgroundColor = [
+            'rgba(255, 99, 132, 0.3)',
+            'rgba(255, 159, 64, 0.3)',
+            'rgba(255, 205, 86, 0.3)',
+            'rgba(75, 192, 192, 0.3)',
+            'rgba(54, 162, 235, 0.3)',
+            'rgba(153, 102, 255, 0.3)',
+            'rgba(201, 203, 207, 0.3)',
+            "rgba(255, 0, 0, 0.3)",
+            "rgba(0, 255, 0, 0.3)",
+            "rgba(0, 0, 255, 0.3)",
+            "rgba(255, 255, 0, 0.3)",
+            "rgba(255, 0, 255, 0.3)",
+            "rgba(0, 255, 255, 0.3)",
+            "rgba(128, 0, 0, 0.3)",
+            "rgba(128, 128, 0, 0.3)",
+            "rgba(0, 128, 0, 0.3)",
+            "rgba(128, 0, 128, 0.3)",
+            "rgba(0, 128, 128, 0.3)",
+            "rgba(0, 0, 128, 0.3)",
+            "rgba(255, 165, 0, 0.3)",
+            "rgba(255, 192, 203, 0.3)",
+            "rgba(128, 128, 128, 0.3)",
+            "rgba(255, 255, 255, 0.3)",
+            "rgba(0, 0, 0, 0.3)",
+            "rgba(139, 69, 19, 0.3)",
+            "rgba(210, 105, 30, 0.3)",
+            "rgba(240, 230, 140, 0.3)",
+        ];
+        const labels = [];
+        const minus = [];
+        const plus = [];
+        for (let i = 0; i < t.byCategories.length; i++) {
+            const item = t.byCategories[i]
+            labels.push(`${item.categoryIcon} ${item.categoryName}`);
+            minus.push(-item.minus);
+            plus.push(item.plus);
+        }
+        const minusChart = new Chart(document.getElementById('graph-minus'), {
+            type: 'bar',
+            options: {
+                animation: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                },
+                scales: {
+                    yAxis: {
+                        max: Math.max(...minus) + 100,
+                        min: 0
+                    }
+                }
+            },
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        yAxisID: 'yAxis',
+                        data: minus,
+                        backgroundColor
+                    }
+                ]
+            }
+        });
+        const plusChart = new Chart(document.getElementById('graph-plus'), {
+            type: 'bar',
+            options: {
+                animation: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                },
+                scales: {
+                    yAxis: {
+                        max: Math.max(...plus) + 100,
+                        min: 0
+                    }
+                }
+            },
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        yAxisID: 'yAxis',
+                        data: plus,
+                        backgroundColor
+                    }
+                ]
+            }
+        });
+    </script>
+}

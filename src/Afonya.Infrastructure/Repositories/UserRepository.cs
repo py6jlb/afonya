@@ -1,4 +1,5 @@
 ﻿using Afonya.Domain.Entities;
+using Afonya.Domain.Exceptions;
 using Afonya.Domain.Repositories;
 using Afonya.Infrastructure.Contexts;
 using LiteDB;
@@ -60,11 +61,23 @@ public class UserRepository : IUserRepository
         return user ?? null;
     }
 
-    public User? ChangePassword(string id, string password)
+    public bool ChangePassword(string id, string password)
     {
-        var user = _db.GetCollection<User>().FindById(new ObjectId(id));
+        var user = _db.GetCollection<User>().FindById(new ObjectId(id))
+            ?? throw new AfonyaErrorException("Пользователь не найден");
         user.SetPassword(password);
         _db.GetCollection<User>().Update(user);
-        return user;
+        return true;
     }
+
+    public bool Update(string id, string login, bool isAdmin)
+    {
+        var user = _db.GetCollection<User>().FindById(new ObjectId(id))
+            ?? throw new AfonyaErrorException("Пользователь не найден");
+        user.SetAdmin(isAdmin);
+        user.SetLogin(login);
+        _db.GetCollection<User>().Update(user);
+        return true;
+    }
+
 }
