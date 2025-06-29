@@ -29,6 +29,8 @@ namespace Afonya.Web.Pages.Transactions
         public DateTime Date { get; set; } = DateTime.Now;
         [BindProperty(Name = "category")]
         public string? CategoryId { get; set; }
+        [BindProperty]
+        public string Note { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -48,7 +50,8 @@ namespace Afonya.Web.Pages.Transactions
                 Value = Value,
                 Date = Date,
                 CategoryId = CategoryId,
-                FromUsername = User.Identity.Name
+                FromUsername = User.Identity.Name,
+                Note = Note
             };
             await _mediator.Send(command);
             return RedirectToPage("/Transactions/Index");

@@ -63,10 +63,10 @@ public class MoneyTransactionRepository : IMoneyTransactionRepository
 
         query.Where(x => x.RegisterDate >= start && x.RegisterDate < end);
         if (!string.IsNullOrWhiteSpace(category))
-            query.Where(x => x.CategoryName.Equals(category, StringComparison.InvariantCultureIgnoreCase));
+            query.Where(x => x.CategoryId.Equals(category, StringComparison.OrdinalIgnoreCase));
 
         if (!string.IsNullOrWhiteSpace(user))
-            query.Where(x => x.FromUserName.Equals(user, StringComparison.InvariantCultureIgnoreCase));
+            query.Where(x => x.FromUserName.Equals(user, StringComparison.OrdinalIgnoreCase));
 
         var result = query.OrderBy(x => x.RegisterDate).ToEnumerable();
         return result;

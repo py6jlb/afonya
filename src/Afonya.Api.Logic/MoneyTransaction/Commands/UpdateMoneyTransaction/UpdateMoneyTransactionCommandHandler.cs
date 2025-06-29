@@ -30,6 +30,7 @@ public class UpdateMoneyTransactionCommandHandler : IRequestHandler<UpdateMoneyT
             category.HumanName);
         entity.SetTransactionDate(request.TransactionDate);
         entity.SetUser(request.FromUserName);
+        entity.SetNote(request.Note);
 
         var res = _moneyTransactionRepository.Update(entity);
         return Task.FromResult(res);

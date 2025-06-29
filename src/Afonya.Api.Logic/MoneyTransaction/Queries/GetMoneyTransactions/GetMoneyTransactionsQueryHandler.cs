@@ -26,7 +26,8 @@ public class GetMoneyTransactionsQueryHandler : IRequestHandler<GetMoneyTransact
                 Sign = x.Sign,
                 RegisterDate = x.RegisterDate,
                 TransactionDate = x.TransactionDate,
-                FromUserName = x.FromUserName
+                FromUserName = x.FromUserName,
+                Note = x.Note,
             }).ToArray();
 
         return Task.FromResult<IReadOnlyCollection<MoneyTransactionDto>>(result);

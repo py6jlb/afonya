@@ -30,9 +30,14 @@
         <label for="category" class="form-label">Категория</label>
         <select id="category" name="categoryId" class="form-select" aria-describedby="categoryHelp"
             asp-for="@Model.Transaction.CategoryId" asp-items="Model.Categories">
-
         </select>
         <div id="categoryHelp" class="form-text">Выберете категорию операции</div>
+    </div>
+    <div class="mb-3">
+        <label for="note" class="form-label">Заметка</label>
+        <input type="text" id="note" name="note" class="form-select" aria-describedby="noteHelp"
+            asp-for="@Model.Transaction.Note">
+        <div id="noteHelp" class="form-text">Можно добавить заметку</div>
     </div>
     <div class="mb-3">
         <button type="submit" class="btn btn-primary">Сохранить</button>

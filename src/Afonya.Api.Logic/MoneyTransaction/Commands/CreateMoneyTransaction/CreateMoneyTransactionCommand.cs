@@ -9,4 +9,5 @@ public class CreateMoneyTransactionCommand : IRequest<bool>
     public DateTime Date { get; set; }
     public string? CategoryId { get; set; }
     public string FromUsername { get; set; }
+    public string Note { get; set; }
 }

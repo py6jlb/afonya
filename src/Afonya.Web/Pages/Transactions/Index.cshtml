@@ -1,4 +1,4 @@
-﻿@page "{month?}/{year?}"
+﻿@page "{month?}/{year?}/{category?}"
 @model Afonya.Web.Pages.Transactions.IndexModel
 @{
     ViewData["Title"] = "Транзакции";
@@ -7,17 +7,25 @@
 <div id="content">
     <div class="container-fluid">
         <form method="post" class="row">
-            <div class="col-1">
-                <button type="submit" class="btn btn-primary">Обновить</button>
-            </div>
             <div class="col-2">
+                <label for="date" class="form-label">Месяц</label>
                 <input type="month" name="date" class="form-control" id="date" asp-for="@Model.Date">
+            </div>
+            <div class="col-3">
+                <label for="category" class="form-label">Категория</label>
+                <select id="category" name="category" class="form-select" aria-describedby="categoryHelp"
+                    asp-for="@Model.Category" asp-items="Model.Categories">
+                </select>
+            </div>
+            <div class="col-1">
+                <label class="form-label">&nbsp;</label>
+                <button type="submit" class="btn btn-primary">Обновить</button>
             </div>
         </form>
         <div class="d-flex flex-row">
             <h4 class="p-2 mb-1 font-weight-bold text-primary">Транзакции</h4>
-            <a class="p-2 icon-link link-primary" asp-area="" asp-page="/Transactions/Add"
-                data-bs-toggle="tooltip" data-bs-placement="top" title="Создать"><i class="bi bi-plus-square"></i></a>
+            <a class="p-2 icon-link link-primary" asp-area="" asp-page="/Transactions/Add" data-bs-toggle="tooltip"
+                data-bs-placement="top" title="Создать"><i class="bi bi-plus-square"></i></a>
         </div>
         @if (Model?.Transactions?.Count() > 0)
         {
@@ -28,6 +36,7 @@
                         <th scope="col">Автор</th>
                         <th scope="col">Сумма</th>
                         <th scope="col">Категория</th>
+                        <th scope="col">Заметка</th>
                         <th scope="col">Действия</th>
                     </tr>
                 </thead>

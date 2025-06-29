@@ -4,7 +4,9 @@ public class MoneyTransaction : BaseEntity
 {
     protected MoneyTransaction() { }
 
-    public MoneyTransaction(float value, int messageId, long chatId, string sign, string? categoryId, string? categoryName, string? categoryHumanName, string? categoryIcon, DateTime registerDate, DateTime? transactionDate, string fromUserName)
+    public MoneyTransaction(float value, int messageId, long chatId,
+        string sign, string? categoryId, string? categoryName, string? categoryHumanName,
+        string? categoryIcon, DateTime registerDate, DateTime? transactionDate, string fromUserName, string? note)
     {
         Value = value;
         MessageId = messageId;
@@ -17,9 +19,12 @@ public class MoneyTransaction : BaseEntity
         RegisterDate = registerDate;
         TransactionDate = transactionDate;
         FromUserName = fromUserName;
+        Note = note;
     }
 
-    public MoneyTransaction(float value, string sign, string? categoryId, string? categoryName, string? categoryHumanName, string? categoryIcon, DateTime registerDate, DateTime? transactionDate, string fromUserName)
+    public MoneyTransaction(float value, string sign, string? categoryId,
+        string? categoryName, string? categoryHumanName, string? categoryIcon,
+        DateTime registerDate, DateTime? transactionDate, string fromUserName, string? note)
     {
         Value = value;
         Sign = sign;
@@ -30,6 +35,7 @@ public class MoneyTransaction : BaseEntity
         RegisterDate = registerDate;
         TransactionDate = transactionDate;
         FromUserName = fromUserName;
+        Note = note;
     }
 
     public float Value { get; private set; }
@@ -43,6 +49,7 @@ public class MoneyTransaction : BaseEntity
     public DateTime RegisterDate { get; private set; }
     public DateTime? TransactionDate { get; private set; }
     public string FromUserName { get; private set; }
+    public string Note { get; private set; }
 
 
     public void SetValue(float value)
@@ -86,5 +93,10 @@ public class MoneyTransaction : BaseEntity
     public void SetRegisterDate(DateTime date)
     {
         RegisterDate = date;
+    }
+
+    public void SetNote(string note)
+    {
+        Note = note;
     }
 }

@@ -11,4 +11,5 @@ public class UpdateMoneyTransactionCommand : IRequest<bool>
     public string CategoryId { get; set; }
     public DateTime? TransactionDate { get; set; }
     public string FromUserName { get; set; }
+    public string Note { get; set; }
 }

@@ -28,7 +28,8 @@ public class CreateMoneyTransactionCommandHandler : IRequestHandler<CreateMoneyT
             category.Icon,
             DateTime.Now,
             request.Date,
-            request.FromUsername);
+            request.FromUsername,
+            request.Note);
 
         _moneyTransactionRepository.Insert(newTransaction);
         return Task.FromResult(true);

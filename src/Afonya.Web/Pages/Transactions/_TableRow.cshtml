@@ -5,6 +5,7 @@
   <td>@Model.FromUserName</td>
   <td>@Model.Sign@Model.Value</td>
   <td>@Model.CategoryIcon@Model.CategoryHumanName</td>
+  <td>@(Model.Note ?? "-")</td>
   <td>
     <a class="btn btn-outline-warning btn-sm text-decoration-none me-1" asp-page="Edit" asp-route-id="@Model.Id"
       data-bs-toggle="tooltip" data-bs-placement="top" title="Редактировать">

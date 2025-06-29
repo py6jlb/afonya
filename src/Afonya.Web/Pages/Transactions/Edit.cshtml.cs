@@ -51,7 +51,8 @@ namespace Afonya.Web.Pages.Transactions
                 FromUserName = User.Identity.Name,
                 Sign = Transaction.Sign,
                 TransactionDate = Transaction.TransactionDate,
-                Value = Transaction.Value
+                Value = Transaction.Value,
+                Note = Transaction.Note
             };
 
             await _mediator.Send(request);

@@ -1,8 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using Afonya.Api.Logic.Categories.Queries.GetCategories;
 using Afonya.Api.Logic.MoneyTransaction.Queries.GetMoneyTransactions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Shared.Contracts;
 
 namespace Afonya.Web.Pages.Transactions;
@@ -22,11 +24,16 @@ public class IndexModel : PageModel
     public DateTime Date { get; set; }
 
     [BindProperty(SupportsGet = true)]
+    public string Category { get; set; }
+
+    [BindProperty(SupportsGet = true)]
     public int Month { get; set; }
+
     [BindProperty(SupportsGet = true)]
     public int Year { get; set; }
 
     public IEnumerable<MoneyTransactionDto>? Transactions { get; set; }
+    public IEnumerable<SelectListItem>? Categories { get; set; }
 
     public async Task OnGetAsync()
     {
@@ -47,14 +54,30 @@ public class IndexModel : PageModel
             Month = Month,
             Year = Year,
             User = null,
-            Category = null
+            Category = Category
         });
+
+        var categories = await _mediator.Send(new GetCategoriesQuery { OnlyActive = false });
+        var c = new List<SelectListItem>
+        {
+            new() {
+                Value = "",
+                Text = "Все"
+            }
+        };
+        c.AddRange(categories.Select(x => new SelectListItem
+        {
+            Value = x.Id,
+            Text = $"{x.Icon}{x.HumanName}"
+        }));
+
+        Categories = c;
     }
 
     public IActionResult OnPost()
     {
         var month = Date.Month;
         var year = Date.Year;
-        return RedirectToPage($"/Transactions/Index", new { month = month, year = year });
+        return RedirectToPage($"/Transactions/Index", new { month = month, year = year, category = Category });
     }
 }

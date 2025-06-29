@@ -28,7 +28,8 @@ public class GetMoneyTransactionQueryHandler : IRequestHandler<GetMoneyTransacti
             Sign = t.Sign,
             RegisterDate = t.RegisterDate,
             TransactionDate = t.TransactionDate,
-            FromUserName = t.FromUserName
+            FromUserName = t.FromUserName,
+            Note = t.Note
         };
         return result;
     }

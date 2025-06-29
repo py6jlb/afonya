@@ -32,6 +32,12 @@
         <div id="categoryHelp" class="form-text">Выберете категорию операции</div>
     </div>
     <div class="mb-3">
+        <label for="note" class="form-label">Заметка</label>
+        <input type="text" id="note" name="note" class="form-select" aria-describedby="noteHelp"
+            asp-for="@Model.Note">
+        <div id="noteHelp" class="form-text">Можно добавить заметку</div>
+    </div>
+    <div class="mb-3">
         <button type="submit" class="btn btn-primary">Сохранить</button>
         <a class="btn btn-secondary" asp-area="" asp-page="/Transactions/Index">Отмена</a>
     </div>
