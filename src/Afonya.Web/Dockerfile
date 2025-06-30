@@ -2,6 +2,16 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 5000
 
+RUN apt-get update && \
+    apt-get install -y locales && \
+    echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen && \
+    update-locale LANG=ru_RU.UTF-8
+
+ENV LANG=ru_RU.UTF-8 \
+    LANGUAGE=ru_RU:ru \
+    LC_ALL=ru_RU.UTF-8
+
 ENV ASPNETCORE_URLS=http://+:5000
 
 USER app
