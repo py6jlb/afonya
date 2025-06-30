@@ -62,7 +62,7 @@ public class IndexModel : PageModel
         {
             new() {
                 Value = "",
-                Text = "Все"
+                Text = "Все категории"
             }
         };
         c.AddRange(categories.Select(x => new SelectListItem

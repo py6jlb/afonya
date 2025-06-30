@@ -6,12 +6,12 @@
 
 <div itemid="=content">
     <div class="container-fluid">
-        <form method="post" class="row mb-3">
-            <div class="col-1">
-                <button type="submit" class="btn btn-primary">Обновить</button>
-            </div>
-            <div class="col-2">
+        <form method="post" class="d-flex flex-row">
+            <div class="mb-2">
                 <input type="month" name="date" class="form-control" id="date" asp-for="@Model.Date">
+            </div>
+            <div class="mb-2 ms-2">
+                <button type="submit" class="btn btn-primary">Обновить</button>
             </div>
         </form>
         <ul class="nav nav-tabs">
