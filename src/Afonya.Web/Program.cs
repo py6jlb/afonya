@@ -26,5 +26,6 @@ app.UseAuthorization();
 app.UseProblemDetails();
 app.UseReverseProxy();
 
+app.UseSession();
 app.MapRazorPages().RequireAuthorization();
 app.Run();

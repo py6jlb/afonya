@@ -98,6 +98,9 @@ public static class WebApplicationBuilderExtensions
             cfg.AddOpenBehavior(typeof(BotAuthBehavior<,>));
         });
         builder.Services.AddHostedService<Starter>();
+
+        builder.Services.AddSession();
+        builder.Services.AddMemoryCache();
         builder.Services.AddRazorPages().AddRazorPagesOptions(opt =>
         {
             opt.Conventions.AddPageRoute("/Transactions/Index", "");

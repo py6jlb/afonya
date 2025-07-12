@@ -27,16 +27,20 @@ namespace Afonya.Web.Pages.Statistics
         public int Year { get; set; }
         public StatisticsDto Statistics { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            if (Month == 0)
+            if (Month == 0 || Year == 0)
             {
-                Month = DateTime.Now.Month;
-            }
+                Month = HttpContext.Session.GetInt32("Month") ?? DateTime.Now.Month;
+                HttpContext.Session.SetInt32("Month", Month);
+                Year = HttpContext.Session.GetInt32("Year") ?? DateTime.Now.Year;
+                HttpContext.Session.SetInt32("Year", Year);
 
-            if (Year == 0)
-            {
-                Year = DateTime.Now.Year;
+                return RedirectToPage($"/Statistics/Index", new
+                {
+                    month = Month,
+                    year = Year
+                });
             }
 
             Date = new DateTime(Year, Month, 1, 0, 0, 0);
@@ -48,12 +52,17 @@ namespace Afonya.Web.Pages.Statistics
             };
             var r = await _mediator.Send(request);
             Statistics = r;
+
+            return Page();
         }
 
         public IActionResult OnPost()
         {
             var month = Date.Month;
             var year = Date.Year;
+
+            HttpContext.Session.SetInt32("Year", year);
+            HttpContext.Session.SetInt32("Month", month);
             return RedirectToPage($"/Statistics/Index", new { month = month, year = year });
         }
     }

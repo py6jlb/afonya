@@ -6,8 +6,8 @@
 
 <div itemid="=content">
     <div class="container-fluid">
-        <h4 class="p-2 mb-1 font-weight-bold">Пользователи</h4>
-        <a class="p-2 link-primary" asp-area="" asp-page="/Users/AddUser">добавить нового</a>
+        <h4 class="mb-1 font-weight-bold">Пользователи</h4>
+        <a class="link-primary" asp-area="" asp-page="/Users/AddUser">добавить нового</a>
         @if (Model?.Users?.Count() > 0)
         {
             <table class="table">

@@ -24,7 +24,7 @@ public class IndexModel : PageModel
     public DateTime Date { get; set; }
 
     [BindProperty(SupportsGet = true)]
-    public string Category { get; set; }
+    public string? Category { get; set; }
 
     [BindProperty(SupportsGet = true)]
     public int Month { get; set; }
@@ -35,24 +35,34 @@ public class IndexModel : PageModel
     public IEnumerable<MoneyTransactionDto>? Transactions { get; set; }
     public IEnumerable<SelectListItem>? Categories { get; set; }
 
-    public async Task OnGetAsync()
+    public async Task<IActionResult> OnGetAsync()
     {
-        if (Month == 0)
+        if (Month == 0 || Year == 0)
         {
-            Month = DateTime.Now.Month;
-        }
+            Month = HttpContext.Session.GetInt32("Month") ?? DateTime.Now.Month;
+            HttpContext.Session.SetInt32("Month", Month);
+            Year = HttpContext.Session.GetInt32("Year") ?? DateTime.Now.Year;
+            HttpContext.Session.SetInt32("Year", Year);
 
-        if (Year == 0)
-        {
-            Year = DateTime.Now.Year;
+            Category ??= HttpContext.Session.GetString("Category");
+            if (Category != null)
+            {
+                HttpContext.Session.SetString("Category", Category);
+            }
+
+            return RedirectToPage($"/Transactions/Index", new
+            {
+                month = Month,
+                year = Year,
+                category = Category
+            });
         }
 
         Date = new DateTime(Year, Month, 1, 0, 0, 0);
-
         Transactions = await _mediator.Send(new GetMoneyTransactionsQuery
         {
-            Month = Month,
-            Year = Year,
+            Month = Date.Month,
+            Year = Date.Year,
             User = null,
             Category = Category
         });
@@ -72,12 +82,22 @@ public class IndexModel : PageModel
         }));
 
         Categories = c;
+
+        return Page();
     }
 
     public IActionResult OnPost()
     {
         var month = Date.Month;
         var year = Date.Year;
-        return RedirectToPage($"/Transactions/Index", new { month = month, year = year, category = Category });
+
+        HttpContext.Session.SetInt32("Year", year);
+        HttpContext.Session.SetInt32("Month", month);
+        if (Category != null)
+        {
+            HttpContext.Session.SetString("Category", Category);
+        }
+
+        return RedirectToPage($"/Transactions/Index", new { month, year, category = Category });
     }
 }
